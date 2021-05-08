@@ -631,7 +631,7 @@ Section1.Button1.MouseButton1Click:Connect(function()
     if ButtonStates.Section1[1] then
         OpenObject(Section1.Button1, 0.5)
         
-        ContextActionService:BindAction("Aimbot", (function(a, b) if b == Enum.UserInputState.Begin then Aimbot() end end), false, Enum.Keycode.R)
+        ContextActionService:BindAction("Aimbot", (function(a, b) if b == Enum.UserInputState.Begin then Aimbot() end end), false, Enum.KeyCode.R)
     else
         CloseObject(Section1.Button1, 0.5)
         
