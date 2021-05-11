@@ -750,7 +750,7 @@ Section1.Button1.MouseButton1Click:Connect(function()
         
         
         
-        local aimbconnec = UserInputService.InputBegan:connect(function(e)
+        aimbconnec = UserInputService.InputBegan:connect(function(e)
             if e.KeyCode == Hotkeys.Aimbot then
                 Aimbot()
             end
