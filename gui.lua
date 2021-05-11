@@ -1,4 +1,4 @@
---[[Hoops Gui v1.0.0]]--
+--[[Hoops Gui v1.1.0]]--
 --[[Made by topit]]--
 
 
@@ -6,8 +6,9 @@
 --Framework variables--
 local VerticalPositions = {
 	Section1 = {40, 90},
-	Section2 = {170, 220},
-	Section3 = {300}
+	Section2 = {170},
+	Section3 = {250, 300},
+	Section4 = {380}
 
 }
 
@@ -83,13 +84,16 @@ elseif SelectedTheme == 4 then
 elseif SelectedTheme == 5 then
     SelectedTheme = Theme_Space
 end
-local version = "1.0.0"
+local version = "1.1.0"
 local Dragging = {}
 
 local ButtonStates = {
     Section1 = {false, false, false, false, false},
-    Section2 = {false, false, false, false, false}
+    Section3 = {false, false, false, false, false}
+}
 
+local Hotkeys = {
+    Aimbot = Enum.KeyCode.R
 }
 
 local basketballinstance = nil
@@ -101,8 +105,12 @@ for i,v in pairs(game.Workspace:GetDescendants()) do
 end
 
 local tpconnec = nil
-local Chance = 1
-local Showndesc = false
+local aimbconnec = nil
+
+
+local AimbotSpeed = 2
+local ShownStealdesc = false
+local ShownAimbotdesc = false
 
 --Services
 local PlayerService        = game:GetService("Players")
@@ -141,9 +149,7 @@ local Section2 = {}
 Section2.Title         = Instance.new("TextLabel")
 Section2.Button1       = Instance.new("TextButton")
 Section2.Button2       = Instance.new("TextButton")
-Section2.Button3       = Instance.new("TextButton")
-Section2.Button4       = Instance.new("TextButton")
-Section2.Button5       = Instance.new("TextButton")
+
 
 local Section3 = {}
 Section3.Title         = Instance.new("TextLabel")
@@ -152,6 +158,16 @@ Section3.Button2       = Instance.new("TextButton")
 Section3.Button3       = Instance.new("TextButton")
 Section3.Button4       = Instance.new("TextButton")
 Section3.Button5       = Instance.new("TextButton")
+Section3.Button6       = Instance.new("TextButton")
+
+local Section4 = {}
+Section4.Title         = Instance.new("TextLabel")
+Section4.Button1       = Instance.new("TextBox")
+Section4.Button2       = Instance.new("TextButton")
+Section4.Button3       = Instance.new("TextButton")
+Section4.Button4       = Instance.new("TextButton")
+Section4.Button5       = Instance.new("TextButton")
+
 
 --[[Properties]]--
 
@@ -179,7 +195,7 @@ Framework.Menu.BorderColor3 = SelectedTheme[3]
 Framework.Menu.AnchorPoint = Vector2.new(0,1)
 Framework.Menu.Position = UDim2.new(0, 0, 1, 0)
 Framework.Menu.Size = UDim2.new(0, 400, 0, 200)
-Framework.Menu.CanvasSize = UDim2.new(0, 350, 0, 400)
+Framework.Menu.CanvasSize = UDim2.new(0, 350, 0, 600)
 Framework.Menu.ScrollBarImageTransparency = 0.5
 Framework.Menu.Active = true
 Framework.Menu.Visible = true
@@ -236,7 +252,7 @@ Framework.Close.ZIndex = 450
 Section1.Title.Parent = Framework.Menu
 Section1.Title.Position = UDim2.new(0, 10, 0, VerticalPositions.Section1[1] - 35)
 Section1.Title.Font = Enum.Font.Nunito
-Section1.Title.Text = "Basketball modules"
+Section1.Title.Text = "Basketball modules - toggleable"
 Section1.Title.Size = UDim2.new(0, 270, 0, 35)
 Section1.Title.TextColor3 = SelectedTheme[8]
 Section1.Title.TextSize = 19
@@ -287,7 +303,7 @@ Section1.Button3.ZIndex = 400
 Section2.Title.Parent = Framework.Menu
 Section2.Title.Position = UDim2.new(0, 10, 0, VerticalPositions.Section2[1] - 35)
 Section2.Title.Font = Enum.Font.Nunito
-Section2.Title.Text = "Player modules"
+Section2.Title.Text = "Basketball modules - single fire"
 Section2.Title.Size = UDim2.new(0, 270, 0, 35)
 Section2.Title.TextColor3 = SelectedTheme[8]
 Section2.Title.TextSize = 19
@@ -301,8 +317,8 @@ Section2.Button1.BackgroundColor3 = SelectedTheme[4]
 Section2.Button1.BorderColor3 = SelectedTheme[3]
 Section2.Button1.Position = UDim2.new(0.05, 0, 0, VerticalPositions.Section2[1])
 Section2.Button1.Font = Enum.Font.Nunito
-Section2.Button1.Text = "Infinite stamina"
-Section2.Button1.Size = UDim2.new(0, 225, 0, 25)
+Section2.Button1.Text = "Layup"
+Section2.Button1.Size = UDim2.new(0, 100, 0, 25)
 Section2.Button1.TextColor3 = SelectedTheme[8]
 Section2.Button1.TextSize = 19
 Section2.Button1.TextXAlignment = Enum.TextXAlignment.Center
@@ -312,9 +328,9 @@ Section2.Button1.ZIndex = 400
 Section2.Button2.Parent = Framework.Menu
 Section2.Button2.BackgroundColor3 = SelectedTheme[4]
 Section2.Button2.BorderColor3 = SelectedTheme[3]
-Section2.Button2.Position = UDim2.new(0.65, 0, 0, VerticalPositions.Section2[1])
+Section2.Button2.Position = UDim2.new(0.35, 0, 0, VerticalPositions.Section2[1])
 Section2.Button2.Font = Enum.Font.Nunito
-Section2.Button2.Text = "Noslowdown"
+Section2.Button2.Text = "Pass to self"
 Section2.Button2.Size = UDim2.new(0, 100, 0, 25)
 Section2.Button2.TextColor3 = SelectedTheme[8]
 Section2.Button2.TextSize = 19
@@ -322,31 +338,111 @@ Section2.Button2.TextXAlignment = Enum.TextXAlignment.Center
 Section2.Button2.TextYAlignment = Enum.TextYAlignment.Center
 Section2.Button2.ZIndex = 400
 
-Section2.Button3.Parent = Framework.Menu
-Section2.Button3.BackgroundColor3 = SelectedTheme[4]
-Section2.Button3.BorderColor3 = SelectedTheme[3]
-Section2.Button3.Position = UDim2.new(0.05, 0, 0, VerticalPositions.Section2[2])
-Section2.Button3.Font = Enum.Font.Nunito
-Section2.Button3.Text = "Ctrl-click TP"
-Section2.Button3.Size = UDim2.new(0, 100, 0, 25)
-Section2.Button3.TextColor3 = SelectedTheme[8]
-Section2.Button3.TextSize = 19
-Section2.Button3.TextXAlignment = Enum.TextXAlignment.Center
-Section2.Button3.TextYAlignment = Enum.TextYAlignment.Center
-Section2.Button3.ZIndex = 400
 
-Section2.Button4.Parent = Framework.Menu
-Section2.Button4.BackgroundColor3 = SelectedTheme[4]
-Section2.Button4.BorderColor3 = SelectedTheme[3]
-Section2.Button4.Position = UDim2.new(0.35, 0, 0, VerticalPositions.Section2[2])
-Section2.Button4.Font = Enum.Font.Nunito
-Section2.Button4.Text = "Auto grab"
-Section2.Button4.Size = UDim2.new(0, 100, 0, 25)
-Section2.Button4.TextColor3 = SelectedTheme[8]
-Section2.Button4.TextSize = 19
-Section2.Button4.TextXAlignment = Enum.TextXAlignment.Center
-Section2.Button4.TextYAlignment = Enum.TextYAlignment.Center
-Section2.Button4.ZIndex = 400
+Section3.Title.Parent = Framework.Menu
+Section3.Title.Position = UDim2.new(0, 10, 0, VerticalPositions.Section3[1] - 35)
+Section3.Title.Font = Enum.Font.Nunito
+Section3.Title.Text = "Player modules"
+Section3.Title.Size = UDim2.new(0, 270, 0, 35)
+Section3.Title.TextColor3 = SelectedTheme[8]
+Section3.Title.TextSize = 19
+Section3.Title.TextXAlignment = Enum.TextXAlignment.Left
+Section3.Title.TextYAlignment = Enum.TextYAlignment.Top
+Section3.Title.ZIndex = 400
+Section3.Title.BackgroundTransparency = 1
+
+Section3.Button1.Parent = Framework.Menu
+Section3.Button1.BackgroundColor3 = SelectedTheme[4]
+Section3.Button1.BorderColor3 = SelectedTheme[3]
+Section3.Button1.Position = UDim2.new(0.05, 0, 0, VerticalPositions.Section3[1])
+Section3.Button1.Font = Enum.Font.Nunito
+Section3.Button1.Text = "Infinite stamina"
+Section3.Button1.Size = UDim2.new(0, 225, 0, 25)
+Section3.Button1.TextColor3 = SelectedTheme[8]
+Section3.Button1.TextSize = 19
+Section3.Button1.TextXAlignment = Enum.TextXAlignment.Center
+Section3.Button1.TextYAlignment = Enum.TextYAlignment.Center
+Section3.Button1.ZIndex = 400
+
+Section3.Button2.Parent = Framework.Menu
+Section3.Button2.BackgroundColor3 = SelectedTheme[4]
+Section3.Button2.BorderColor3 = SelectedTheme[3]
+Section3.Button2.Position = UDim2.new(0.65, 0, 0, VerticalPositions.Section3[1])
+Section3.Button2.Font = Enum.Font.Nunito
+Section3.Button2.Text = "Noslowdown"
+Section3.Button2.Size = UDim2.new(0, 100, 0, 25)
+Section3.Button2.TextColor3 = SelectedTheme[8]
+Section3.Button2.TextSize = 19
+Section3.Button2.TextXAlignment = Enum.TextXAlignment.Center
+Section3.Button2.TextYAlignment = Enum.TextYAlignment.Center
+Section3.Button2.ZIndex = 400
+
+Section3.Button3.Parent = Framework.Menu
+Section3.Button3.BackgroundColor3 = SelectedTheme[4]
+Section3.Button3.BorderColor3 = SelectedTheme[3]
+Section3.Button3.Position = UDim2.new(0.05, 0, 0, VerticalPositions.Section3[2])
+Section3.Button3.Font = Enum.Font.Nunito
+Section3.Button3.Text = "Ctrl-click TP"
+Section3.Button3.Size = UDim2.new(0, 100, 0, 25)
+Section3.Button3.TextColor3 = SelectedTheme[8]
+Section3.Button3.TextSize = 19
+Section3.Button3.TextXAlignment = Enum.TextXAlignment.Center
+Section3.Button3.TextYAlignment = Enum.TextYAlignment.Center
+Section3.Button3.ZIndex = 400
+
+Section3.Button4.Parent = Framework.Menu
+Section3.Button4.BackgroundColor3 = SelectedTheme[4]
+Section3.Button4.BorderColor3 = SelectedTheme[3]
+Section3.Button4.Position = UDim2.new(0.35, 0, 0, VerticalPositions.Section3[2])
+Section3.Button4.Font = Enum.Font.Nunito
+Section3.Button4.Text = "Auto grab"
+Section3.Button4.Size = UDim2.new(0, 100, 0, 25)
+Section3.Button4.TextColor3 = SelectedTheme[8]
+Section3.Button4.TextSize = 19
+Section3.Button4.TextXAlignment = Enum.TextXAlignment.Center
+Section3.Button4.TextYAlignment = Enum.TextYAlignment.Center
+Section3.Button4.ZIndex = 400
+
+Section3.Button5.Parent = Framework.Menu
+Section3.Button5.BackgroundColor3 = SelectedTheme[4]
+Section3.Button5.BorderColor3 = SelectedTheme[3]
+Section3.Button5.Position = UDim2.new(0.65, 0, 0, VerticalPositions.Section3[2])
+Section3.Button5.Font = Enum.Font.Nunito
+Section3.Button5.Text = "Hitbox exp."
+Section3.Button5.Size = UDim2.new(0, 100, 0, 25)
+Section3.Button5.TextColor3 = SelectedTheme[8]
+Section3.Button5.TextSize = 19
+Section3.Button5.TextXAlignment = Enum.TextXAlignment.Center
+Section3.Button5.TextYAlignment = Enum.TextYAlignment.Center
+Section3.Button5.ZIndex = 400
+
+
+Section4.Title.Parent = Framework.Menu
+Section4.Title.Position = UDim2.new(0, 10, 0, VerticalPositions.Section4[1] - 35)
+Section4.Title.Font = Enum.Font.Nunito
+Section4.Title.Text = "Hotkeys"
+Section4.Title.Size = UDim2.new(0, 270, 0, 35)
+Section4.Title.TextColor3 = SelectedTheme[8]
+Section4.Title.TextSize = 19
+Section4.Title.TextXAlignment = Enum.TextXAlignment.Left
+Section4.Title.TextYAlignment = Enum.TextYAlignment.Top
+Section4.Title.ZIndex = 400
+Section4.Title.BackgroundTransparency = 1
+
+Section4.Button1.Parent = Framework.Menu
+Section4.Button1.BackgroundColor3 = SelectedTheme[4]
+Section4.Button1.BorderColor3 = SelectedTheme[3]
+Section4.Button1.Position = UDim2.new(0.05, 0, 0, VerticalPositions.Section4[1])
+Section4.Button1.Font = Enum.Font.Nunito
+Section4.Button1.Text = "Aimbot trigger keybind: R"
+Section4.Button1.PlaceholderText = "Release to set keybind"
+Section4.Button1.Size = UDim2.new(0, 340, 0, 25)
+Section4.Button1.TextColor3 = SelectedTheme[8]
+Section4.Button1.TextSize = 19
+Section4.Button1.TextXAlignment = Enum.TextXAlignment.Center
+Section4.Button1.TextYAlignment = Enum.TextYAlignment.Center
+Section4.Button1.ZIndex = 400
+
 
 --[[Functions]]--
 local function OpenObject(object, timing, dir)
@@ -448,14 +544,17 @@ local function FadeOut(object, timing)
     end
 end
 
-local function Message(text, position, size, delay)
+local function Message(text, position, size, delay, clickevent)
     text = text or nil
     delay = delay or 2
     size = size or UDim2.new(0, 150, 0, 50)
     position = position or UDim2.new(0.9, 0, 0.89, 0)
+    clickevent = clickevent or (function() end)
+    
+    
     local sc = Instance.new("ScreenGui")
     sc.Parent = game.CoreGui
-    local MessageFrame = Instance.new("Frame")
+    local MessageFrame = Instance.new("ScrollingFrame")
     local MessageLabel = Instance.new("TextButton")
     
     MessageFrame.Parent = sc
@@ -465,24 +564,26 @@ local function Message(text, position, size, delay)
     MessageFrame.Position = UDim2.new(position.X.Scale, position.X.Offset, 1.3, position.Y.Offset)
     MessageFrame.Size = size
     MessageFrame.ZIndex = 200
+    MessageFrame.CanvasSize = UDim2.new(0, 0)
     
     MessageLabel.Parent = MessageFrame
     MessageLabel.BackgroundTransparency = 1
     MessageLabel.BorderSizePixel = 0
     MessageLabel.TextColor3 = SelectedTheme[8]
-    MessageLabel.Position = UDim2.new(0.5, -(size.X.Offset / 2), 0.5, -(size.Y.Offset / 2))
-    MessageLabel.Size = size
+    MessageLabel.Position = UDim2.new(0.5, -(size.X.Offset / 2), 0, 5)
+    MessageLabel.Size = UDim2.new(0, size.X.Offset, 0, 25)
     MessageLabel.Font = Enum.Font.Nunito
     MessageLabel.Text = text
     MessageLabel.RichText = true
-    MessageLabel.TextScaled = true
+    MessageLabel.TextScaled = false
     MessageLabel.ZIndex = 300
     MessageLabel.AutoButtonColor = false
+    MessageLabel.TextYAlignment = Enum.TextYAlignment.Top
     
-    MessageLabel.MouseButton1Click:Connect(function()
-        setclipboard(MessageLabel.Text:gsub("%D",""))
-        
-    end)
+    MessageFrame.AutomaticCanvasSize = Enum.AutomaticSize.Y
+    
+    
+    MessageLabel.MouseButton1Click:Connect(clickevent)
     
     local anim = coroutine.wrap(function() 
         TweenPosition(MessageFrame, UDim2.new(position.X.Scale, position.X.Offset, position.Y.Scale, position.Y.Offset), 0.75)
@@ -544,7 +645,7 @@ local function CreateDropdown(name, params, x, y, bigboy)
             params[2] = i - 2
 
 
-            Chance = params[2]
+            AimbotSpeed = params[2]
             
             TweenSize(Frame, UDim2.new(0, 340, 0, 25), 0.5)
             TweenPosition(Frame, UDim2.new(x, 0, 0, y), 0.5)
@@ -580,11 +681,12 @@ end
 
 local function Aimbot()
     ReplicatedStorage.Ball.StartShooting:FireServer()
-    wait(0.5)
-    if Chance == 1 then
+    if AimbotSpeed == 1 then
+        wait(0.5)
         ReplicatedStorage.Ball.EndShooting:InvokeServer(true,"Perfect")
     else
-        ReplicatedStorage.Ball.EndShooting:InvokeServer(true)
+        wait()
+        ReplicatedStorage.Ball.EndShooting:InvokeServer(true, "Perfect")
     end
 end
 
@@ -596,6 +698,14 @@ Framework.Close.MouseButton1Click:Connect(function()
     FadeOut(Framework.Bar, 1)
     wait(0.5)
     screen:Destroy()
+    
+    
+    --ContextActionService:UnbindAction("Aimbot")
+    pcall(function() aimbconnec:Disconnect() end)
+    RunService:UnbindFromRenderStep("Spamthrow")
+    RunService:UnbindFromRenderStep("InfStamina")
+    RunService:UnbindFromRenderStep("Noslowdown")
+    RunService:UnbindFromRenderStep("Auto-grab")
 end)
 
 Framework.Bar.InputBegan:Connect(function(input)
@@ -628,14 +738,29 @@ end)
 
 Section1.Button1.MouseButton1Click:Connect(function()
     ButtonStates.Section1[1] = not ButtonStates.Section1[1]
+    
+    if not ShownAimbotdesc then
+        ShownAimbotdesc = true
+        Message("<font size='20'>Tap R once to use the aimbot.<br/>Aimbot does not always get the ball in.<br/>If problems persist, switch to a new keybind.</font>", UDim2.new(Framework.Bar.Position.X.Scale, Framework.Bar.Position.X.Offset + 50, Framework.Bar.Position.Y.Scale, Framework.Bar.Position.Y.Offset - 125), UDim2.new(0, 300, 0, 100), 6)
+    end
+    
+    
     if ButtonStates.Section1[1] then
         OpenObject(Section1.Button1, 0.5)
         
-        ContextActionService:BindAction("Aimbot", (function(a, b) if b == Enum.UserInputState.Begin then Aimbot() end end), false, Enum.KeyCode.R)
+        
+        
+        local aimbconnec = UserInputService.InputBegan:connect(function(e)
+            if e.KeyCode == Enum.KeyCode.R then
+                Aimbot()
+            end
+        end)
+
+        --ContextActionService:BindAction("Aimbot", (function(a, b) if b == Enum.UserInputState.Begin then Aimbot() end end), false, Hotkeys.Aimbot)
     else
         CloseObject(Section1.Button1, 0.5)
         
-        ContextActionService:UnbindAction("Aimbot")
+        pcall(function() aimbconnec:Disconnect() end)
     end
 end)
 
@@ -652,6 +777,7 @@ Section1.Button2.MouseButton1Click:Connect(function()
         CloseObject(Section1.Button2, 0.5)
         
         RunService:UnbindFromRenderStep("Spamthrow")
+        
     end
 end)
 
@@ -681,41 +807,53 @@ Section1.Button3.MouseButton1Click:Connect(function()
 end)
 
 Section2.Button1.MouseButton1Click:Connect(function()
-    ButtonStates.Section2[1] = not ButtonStates.Section2[1]
-    if ButtonStates.Section2[1] then
-        OpenObject(Section2.Button1, 0.5)
+    ReplicatedStorage.Ball.Layup:FireServer("Layup") 
+end)
+
+Section2.Button2.MouseButton1Click:Connect(function()
+    plr.PlayerScripts.Events.Ball.SetDribblingState:Fire(true)
+end)
+
+Section3.Button1.MouseButton1Click:Connect(function()
+    ButtonStates.Section3[1] = not ButtonStates.Section3[1]
+    if ButtonStates.Section3[1] then
+        OpenObject(Section3.Button1, 0.5)
         
         RunService:BindToRenderStep("InfStamina", Enum.RenderPriority.Character.Value + 1, function()
         	pcall(function() plr.PlayerScripts.Events.Player.Stamina.Stamina.Value = 6969 end)
         end)
     else
-        CloseObject(Section2.Button1, 0.5)
+        CloseObject(Section3.Button1, 0.5)
         
         RunService:UnbindFromRenderStep("InfStamina")
     end
 end)
 
-Section2.Button2.MouseButton1Click:Connect(function()
-    ButtonStates.Section2[2] = not ButtonStates.Section2[2]
-    if ButtonStates.Section2[2] then
-        OpenObject(Section2.Button2, 0.5)
+Section3.Button2.MouseButton1Click:Connect(function()
+    ButtonStates.Section3[2] = not ButtonStates.Section3[2]
+    if ButtonStates.Section3[2] then
+        OpenObject(Section3.Button2, 0.5)
         
         RunService:BindToRenderStep("Noslowdown", Enum.RenderPriority.Character.Value + 1, function()
+        	plr.PlayerScripts.Events.Player.DisableControls:Fire(false)
         	if plr.Character.Humanoid.WalkSpeed < 16 then
         	    plr.Character.Humanoid.WalkSpeed = 16
         	end
         end)
     else
-        CloseObject(Section2.Button2, 0.5)
+        CloseObject(Section3.Button2, 0.5)
         
         RunService:UnbindFromRenderStep("Noslowdown")
     end
 end)
 
-Section2.Button3.MouseButton1Click:Connect(function()
-    ButtonStates.Section2[3] = not ButtonStates.Section2[3]
-    if ButtonStates.Section2[3] then
-        OpenObject(Section2.Button3, 0.5)
+
+
+
+Section3.Button3.MouseButton1Click:Connect(function()
+    ButtonStates.Section3[3] = not ButtonStates.Section3[3]
+    if ButtonStates.Section3[3] then
+        OpenObject(Section3.Button3, 0.5)
         
         tpconnec = UserInputService.InputBegan:Connect(function(inputobject) 
             if inputobject.UserInputType == Enum.UserInputType.MouseButton1 and inputobject:IsModifierKeyDown(Enum.ModifierKey.Ctrl) then 
@@ -723,20 +861,20 @@ Section2.Button3.MouseButton1Click:Connect(function()
             end
         end)
     else
-        CloseObject(Section2.Button3, 0.5)
+        CloseObject(Section3.Button3, 0.5)
         
         tpconnec:Disconnect()
     end
 end)
 
-Section2.Button4.MouseButton1Click:Connect(function()
-    ButtonStates.Section2[4] = not ButtonStates.Section2[4]
-    if not Showndesc then
-        Showndesc = true
-        Message("Spam steal when next to the person with the ball, and you will pick it up automatically", UDim2.new(Framework.Bar.Position.X.Scale, Framework.Bar.Position.X.Offset + 50, Framework.Bar.Position.Y.Scale, Framework.Bar.Position.Y.Offset - 125), UDim2.new(0, 300, 0, 100))
+Section3.Button4.MouseButton1Click:Connect(function()
+    ButtonStates.Section3[4] = not ButtonStates.Section3[4]
+    if not ShownStealdesc then
+        ShownStealdesc = true
+        Message("<font size='20'>Spam steal when next to the person<br/>with the ball, and you should pick it up<br/>automatically</font>", UDim2.new(Framework.Bar.Position.X.Scale, Framework.Bar.Position.X.Offset + 50, Framework.Bar.Position.Y.Scale, Framework.Bar.Position.Y.Offset - 125), UDim2.new(0, 300, 0, 100), 3)
     end
-    if ButtonStates.Section2[4] then
-        OpenObject(Section2.Button4, 0.5)
+    if ButtonStates.Section3[4] then
+        OpenObject(Section3.Button4, 0.5)
         
         if basketballinstance == nil then
             for i,v in pairs(game.Workspace:GetDescendants()) do 
@@ -753,9 +891,57 @@ Section2.Button4.MouseButton1Click:Connect(function()
             end)
         end
     else
-        CloseObject(Section2.Button4, 0.5)
+        CloseObject(Section3.Button4, 0.5)
         
         RunService:UnbindFromRenderStep("Auto-grab")
+    end
+end)
+
+Section3.Button5.MouseButton1Click:Connect(function()
+    ButtonStates.Section3[5] = not ButtonStates.Section3[5]
+    if ButtonStates.Section3[5] then
+        OpenObject(Section3.Button5, 0.5)
+        
+        --plr.Character["Right Arm"].Size     = Vector3.new(8,5,5)
+        --plr.Character["Left Arm"].Size      = Vector3.new(8,5,5)
+        --plr.Character["Right Leg"].Size     = Vector3.new(8,2,5)
+        --plr.Character["Left Leg"].Size      = Vector3.new(8,2,5)
+        --plr.Character["Torso"].Size         = Vector3.new(5,5,5)
+        plr.Character.HumanoidRootPart.Size = Vector3.new(7.5,2,7.5)
+        plr.Character.HumanoidRootPart.Transparency = 0.5
+    
+    else
+        CloseObject(Section3.Button5, 0.5)
+        
+        --plr.Character["Right Arm"].Size     = Vector3.new(1,2,1)
+        --plr.Character["Left Arm"].Size      = Vector3.new(1,2,1)
+        --plr.Character["Right Leg"].Size     = Vector3.new(1,2,1)
+        --plr.Character["Left Leg"].Size      = Vector3.new(1,2,1)
+        --plr.Character["Torso"].Size         = Vector3.new(2,2,1)
+        plr.Character.HumanoidRootPart.Size = Vector3.new(2,2,1)
+        plr.Character.HumanoidRootPart.Transparency = 1
+        
+    end
+end)
+
+
+Section4.Button1.FocusLost:Connect(function()
+    local txt = Section4.Button1.Text
+    local ptxt = txt:gsub("[^a-z,0-9]",""):sub(1,1)
+    
+    if ptxt == "" then
+        Hotkeys.Aimbot = Enum.KeyCode.R
+        Section4.Button1.Text = "Aimbot trigger keybind: R"
+        return
+    end
+    local kctx = Enum.KeyCode[ptxt:upper()]
+    Section4.Button1.Text = "Aimbot trigger keybind: "..ptxt:upper()
+    Hotkeys.Aimbot = kctx
+    
+    
+    ContextActionService:UnbindAction("Aimbot")
+    if ButtonStates.Section1[1] then
+        ContextActionService:BindAction("Aimbot", (function(a, b) if b == Enum.UserInputState.Begin then Aimbot() end end), false, Hotkeys.Aimbot)
     end
 end)
 
@@ -785,7 +971,7 @@ end
 if SelectedTheme == Theme_Space then
     AddStars(250)
 end
-CreateDropdown("Ball accuracy",{false, 1, "Mostly perfect", "Realistic"}, 0.05, VerticalPositions.Section1[2], true)
+CreateDropdown("Aimbot speed",{false, 2, "Instant", "Realistic"}, 0.05, VerticalPositions.Section1[2], true)
 
 
 
@@ -803,9 +989,9 @@ end
 
 if game.PlaceId == 360589910 then
     TweenPosition(Framework.Bar, UDim2.new(0.65, 0, 0.7, 0), 0.75)
-    Message("Loaded Hoops GUI v"..version)
+    Message("<font size='20'>Loaded Hoops GUI v"..version.."</font><br/><font size='15'>-Added instant aimbot mode<br/>-Made aimbot rebindable<br/>-Added hitbox expander<br/>-Probably fixed a few bugs<br/>-Added click to layup<br/>-Improved noslowdown<br/>-Added pass to self</font><br/><br/><font size='20'>Want to join the discord?<br/>Click to copy the invite!<br/><b>https://discord.gg/a3JEr9Z6jY</b></font>", UDim2.new(0.875, 0, 0.75, 0), UDim2.new(0, 200, 0, 200), 4, (function() setclipboard("https://discord.gg/a3JEr9Z6jY") end))
 else
-    Message("Not in the Hoops game; click to copy game ID (360589910)", UDim2.new(0.8, 0, 0.89, 0), UDim2.new(0, 200, 0, 75), 5)
+    Message("<font size='20'>Not in the Hoops <br/>game; click to copy<br/>game link</font>", UDim2.new(0.8, 0, 0.89, 0), UDim2.new(0, 200, 0, 75), 5, function() setclipboard("https://www.roblox.com/games/360589910/Hoops-Demo-Basketball") end)
     wait(5)
     screen:Destroy()
 end
