@@ -751,7 +751,7 @@ Section1.Button1.MouseButton1Click:Connect(function()
         
         
         local aimbconnec = UserInputService.InputBegan:connect(function(e)
-            if e.KeyCode == Enum.KeyCode.R then
+            if e.KeyCode == Hotkeys.Aimbot then
                 Aimbot()
             end
         end)
