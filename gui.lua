@@ -1,4 +1,4 @@
---[[Hoops Gui v1.1.0]]--
+--[[Hoops Gui v1.1.1]]--
 --[[Made by topit]]--
 
 
@@ -84,7 +84,7 @@ elseif SelectedTheme == 4 then
 elseif SelectedTheme == 5 then
     SelectedTheme = Theme_Space
 end
-local version = "1.1.0"
+local version = "1.1.1"
 local Dragging = {}
 
 local ButtonStates = {
@@ -106,7 +106,7 @@ end
 
 local tpconnec = nil
 local aimbconnec = nil
-
+local stopmoveoverconnec = nil
 
 local AimbotSpeed = 2
 local ShownStealdesc = false
@@ -834,16 +834,25 @@ Section3.Button2.MouseButton1Click:Connect(function()
     if ButtonStates.Section3[2] then
         OpenObject(Section3.Button2, 0.5)
         
+        plr.PlayerScripts.Events.Player.DisableControls:Fire(false)
+        
+        stopmoveoverconnec = plr.PlayerScripts.Events.Player.DisableControls.Event:Connect(function(e)
+            if e == true then
+                plr.PlayerScripts.Events.Player.DisableControls:Fire(false)
+            end
+        end)
+        
         RunService:BindToRenderStep("Noslowdown", Enum.RenderPriority.Character.Value + 1, function()
-        	plr.PlayerScripts.Events.Player.DisableControls:Fire(false)
         	if plr.Character.Humanoid.WalkSpeed < 16 then
         	    plr.Character.Humanoid.WalkSpeed = 16
         	end
         end)
+        
     else
         CloseObject(Section3.Button2, 0.5)
         
         RunService:UnbindFromRenderStep("Noslowdown")
+        pcall(function() stopmoveoverconnec:Disconnect() end)
     end
 end)
 
