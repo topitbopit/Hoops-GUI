@@ -48,7 +48,8 @@
 <i><br/>Fix 2 - Different GUI</i>
 </font>
 <font size='15'>
-<br/>The Jeff Hoops aimbot was sourced from the tactbaon hoops gui.
-<br/>Although JH originally used a modded version of the tactbaon method,
-<br/>it was replaced with the tactbaon version just in case it worked better.
+<br/>The Jeff Hoops aimbot was sourced from the tactbacon hoops gui.
+<br/>Although JH originally used a modded version of the tactbacon method,
+<br/>it was replaced with the tactbacon version just in case it worked better.
+<br/>You can get tactbacon from https://pastebin.com/raw/fkvu1Shr
 </font>
