@@ -1,22 +1,2 @@
-<br/>
-<font size='32'><b><i>Updates</i></b></font>
-<br/>
-<font size='25'><b>v1</b>
-</font>
-<font size='15'>
-<br/>-Added airstrafe (source unknown, sorry! thanks failsock for sending)
-<br/>-Added clientside ball tp; <font color='rgb(255,255,0)'>may not work properly or just glitch your game</font>
-<br/>-Added break game module that might break the game, or do nothing
-<br/>-Added misc category
-<br/>-Added loop tp to ball module that teleports you to the ball when available.
-<br/>-Added spam team select (for the team select screen)
-<br/>-Added esp color setting
-<br/>-Added this <font color='rgb(255,0,0)'>s</font><font color='rgb(255,128,0)'>n</font><font color='rgb(128,255,0)'>a</font><font color='rgb(0,255,128)'>z</font><font color='rgb(0,128,255)'>z</font><font color='rgb(0,0,255)'>y</font> help menu
-<br/>-Updated hitbox expander to maybe work slightly better; <font color='rgb(255,255,0)'>still not finished</font>
-<br/>-Updated pass to self to maybe work slightly better; <font color='rgb(255,255,0)'>still not finished</font>
-<br/>-Renamed aimbot speed to aimbot delay
-<br/>-If your exploit doesn't support autograb, pass to self, or anything with <i>firetouchinterest</i> it notifies you
-<br/>-Added better error handling, so maybe less lag if something fails?
-<br/>-Did a performance improvement with messageboxes
-</font>
-<br/>
+<!-- Updates -->
+<br/><font size='32'><b><i>Updates</i></b></font><br/><font size='25'><b>v1</b></font><font size='15'><br/>-Added airstrafe (source unknown, sorry! thanks failsock for sending)<br/>-Added clientside ball tp; <font color='rgb(255,255,0)'>may not work properly or just glitch your game</font><br/>-Added break game module that might break the game, or do nothing<br/>-Added misc category<br/>-Added loop tp to ball module that teleports you to the ball when available.<br/>-Added spam team select (for the team select screen)<br/>-Added esp color setting<br/>-Added this <font color='rgb(255,0,0)'>s</font><font color='rgb(255,128,0)'>n</font><font color='rgb(128,255,0)'>a</font><font color='rgb(0,255,128)'>z</font><font color='rgb(0,128,255)'>z</font><font color='rgb(0,0,255)'>y</font> help menu<br/>-Updated hitbox expander to maybe work slightly better; <font color='rgb(255,255,0)'>still not finished</font><br/>-Updated pass to self to maybe work slightly better; <font color='rgb(255,255,0)'>still not finished</font><br/>-Renamed aimbot speed to aimbot delay<br/>-If your exploit doesn't support autograb, pass to self, or anything with <i>firetouchinterest</i> it notifies you<br/>-Added better error handling, so maybe less lag if something fails?<br/>-Did a performance improvement with messageboxes</font><br/><!-- Q/A --><font size='32'><b><i>Q and A</i></b></font><br/><font size='25'><b>My aimbot won't work!</b></font><font size='15'><br/>This is a very common problem that I get alot of messages about.<br/>Jeff Hoops doesn't use an actual \"aimbot\".<br/>It exploits how a perfect shot is sent to the server differently than a normal shot.<br/>Whenever you use aimbot, instead of sending a normal shot event it sends a perfect shot event.<br/>However, perfect shots don't always go in, <font color='rgb(255,255,0)'>meaning you cannot shoot across the map.</font><br/>Luckily, there are ways to fix this.</font><font size='17'><i><br/>Fix 1 - Instant mode</i></font><font size='15'><br/>If you have the delay setting as 0.5s, set it to instant.<br/>When you need to shoot, press and hold R as long as you would to get a green.<br/>If this does not work, rebind aimbot to a different unused key.<font size='17'><i><br/>Fix 2 - Different GUI</i></font><font size='15'><br/>The Jeff Hoops aimbot was sourced from the tactbaon hoops gui.<br/>Although JH originally used a modded version of the tactbaon method,<br/>it was replaced with the tactbaon version just in case it worked better.</font>
