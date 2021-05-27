@@ -14,7 +14,7 @@
 
 <br/>
 <font size='20'>
-	Here&apos;s a list of the features:
+	Here&apos;s a list of the features in version 1.3.1:
 </font>
 
 <br/>
@@ -79,7 +79,7 @@
 		</ul>
 		<li>Tactbacon aimbot</li>
 		<ul>
-			<li><br/>SLoads the aimbot tactbacon uses; probably works better than toggleable aimbot.</li>
+			<li>Loads the aimbot tactbacon uses; probably works better than toggleable aimbot.</li>
 		</ul>
 	</ul>
 	<li>Player modules</li>
@@ -113,7 +113,7 @@
 		</ul>
 		<li>No jump cooldown</li>
 		<ul>
-			<li><br/>Lets you jump without a cooldown.</li>
+			<li>Lets you jump without a cooldown.</li>
 		</ul>
 	</ul>
 	<li>Misc modules</li>
@@ -138,7 +138,7 @@
 		</ul>
 		<li>Scan for exploiters</li>
 		<ul>
-			<li><br/>Scans for and flags detected exploiters.</li>
+			<li>Scans for and flags detected exploiters.</li>
 		</ul>
 	</ul>
 	<li>Settings</li>
