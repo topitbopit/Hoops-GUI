@@ -77,6 +77,10 @@
 		<ul>
 			<li>Essentially instant aimbot</li>
 		</ul>
+		<li>Tactbacon aimbot</li>
+		<ul>
+			<li><br/>SLoads the aimbot tactbacon uses; probably works better than toggleable aimbot.</li>
+		</ul>
 	</ul>
 	<li>Player modules</li>
 	<ul>
@@ -107,6 +111,10 @@
 		<ul>
 			<li>Slightly faster than sprinting, but barely.</li>
 		</ul>
+		<li>No jump cooldown</li>
+		<ul>
+			<li><br/>Lets you jump without a cooldown.</li>
+		</ul>
 	</ul>
 	<li>Misc modules</li>
 	<ul>
@@ -119,10 +127,6 @@
 			<li>Stops you from being sent to the AFK screen.
 			<br/><b>Do not enable on the AFK screen!</b></li>
 		</ul>
-		<li>Fix modules</li>
-		<ul>
-			<li>Fixes any modules that might not be working. Recently became deprecated.</li>
-		</ul>
 		<li>Nightmode</li>
 		<ul>
 			<li>Removes fullbright and makes everything darker, but adds a few cool lights.</li>
@@ -131,6 +135,10 @@
 		<ul>
 			<li><i>Currently in beta; might not always work.</i>
 			<br/>May or may not disable player grade.</li>
+		</ul>
+		<li>Scan for exploiters</li>
+		<ul>
+			<li><br/>Scans for and flags detected exploiters.</li>
 		</ul>
 	</ul>
 	<li>Settings</li>
