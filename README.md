@@ -14,7 +14,7 @@
 
 <br/>
 <font size='20'>
-	Here&apos;s a list of the features in version 1.3.1:
+	Here&apos;s a list of the features in version 1.3.2:
 </font>
 
 <br/>
@@ -61,6 +61,11 @@
 		<li>Ball cam</li>
 		<ul>
 			<li>Makes your camera focus on the ball.</li>
+		</ul>
+		<li>Ball fly</li>
+		<ul>
+			<li><i>Currently in beta; might not always work.</b></i>
+			<br/>Makes you fly towards the enemy hoop, in the perfect spot for a layup to 100% go in.</li>
 		</ul>
 	</ul>
 	<li>Basketball modules (single-fire)</li>
@@ -136,9 +141,9 @@
 			<li><i>Currently in beta; might not always work.</i>
 			<br/>May or may not disable player grade.</li>
 		</ul>
-		<li>Scan for exploiters</li>
+		<li>Switch servers</li>
 		<ul>
-			<li>Scans for and flags detected exploiters.</li>
+			<li>Switches you to a differents server.</li>
 		</ul>
 	</ul>
 	<li>Settings</li>
