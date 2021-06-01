@@ -9,9 +9,9 @@
 	is a GUI for the Roblox game Hoops Demo (https://www.roblox.com/games/360589910/Hoops-Demo-Basketball).
 	<br/>Jeff&apos;s Hoops contains a bunch of powerful and constantly updating features.
 	<br/>With modules ranging from insanely powerful to completely dumb, it&apos;s hard to find something that isn&apos;t supported.
-	<br/>If something is not currently in the script, it is most likely being developed!
+	<br/>If something is not currently in the script, it is most likely being developed.
 </font>
-
+<br/>
 <br/>
 <font size='20'>
 	<i>Jeff tags are supported!</i>
