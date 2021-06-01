@@ -14,7 +14,7 @@
 
 <br/>
 <font size='20'>
-	Here&apos;s a list of the features in version 1.3.2:
+	Here&apos;s a list of the features in version 1.3.3:
 </font>
 
 <br/>
@@ -95,15 +95,18 @@
 		</ul>
 		<li>Noslowdown</li>
 		<ul>
-			<li>Stops you from slowing down</li>
+			<li><i>Barely obvious</i>
+			<br/>Stops you from slowing down</li>
 		</ul>
 		<li>Ctrl-click TP</li>
 		<ul>
-			<li>When you press control and click, you teleport to your mouse</li>
+			<li><i>Insanely obvious!</i>
+			<br/>When you press control and click, you teleport to your mouse</li>
 		</ul>
 		<li>Auto-grab</li>
 		<ul>
-			<li><i>Requires <b>firetouchinterest().</b></i>
+			<li><i>Very obvious</i>
+			<br/><i>Requires <b>firetouchinterest().</b></i>
 			<br/>Instantly grabs the ball when you stand next to it for long enough.
 			<br/>Works best when standing next to your hoop / the enemy hoop.</li>
 		</ul>
@@ -114,11 +117,18 @@
 		</ul>
 		<li>Speedhack</li>
 		<ul>
-			<li>Slightly faster than sprinting, but barely.</li>
+			<li><i>Slightly obvious</i>
+			<br/>Faster than sprinting by 2 walkspeed.</li>
 		</ul>
 		<li>No jump cooldown</li>
 		<ul>
-			<li>Lets you jump without a cooldown.</li>
+			<li><i>Slightly obvious</i>
+			<br/>Lets you jump without a cooldown.</li>
+		</ul>
+		<li>Bhop</li>
+		<ul>
+			<li><i>Insanely obvious!</i>
+			<br/>Hops around super fast with a speedboost, like minecraft bhop.</li>
 		</ul>
 	</ul>
 	<li>Misc modules</li>
@@ -143,7 +153,7 @@
 		</ul>
 		<li>Switch servers</li>
 		<ul>
-			<li>Switches you to a differents server.</li>
+			<li>Switches you to a different server.</li>
 		</ul>
 	</ul>
 	<li>Settings</li>
