@@ -21,7 +21,7 @@ MessageLabel.TextColor3 = Color3.fromRGB(200, 200, 255)
 MessageLabel.Position = UDim2.new(0.5, -225, 0.5, -75)
 MessageLabel.Size = UDim2.new(0, 450, 0, 150)
 MessageLabel.Font = Enum.Font.Nunito
-MessageLabel.Text = "This Jeff Hoops GUI link has been updated to a new one. Please download the new bootstrapper!<br/><font color = 'rgb(0, 0, 255)'>https://raw.githubusercontent.com/topitbopit/Hoops-GUI/main/direct_bootstrapper.lua</font>, or join the discord (<font color = 'rgb(0, 0, 255)'>https://discord.gg/a3JEr9Z6jY</font>) to get the script there<br/><i>Click to continue</i>"
+MessageLabel.Text = "This Jeff Hoops GUI link has been updated to a new one. Please download the new bootstrapper!<br/><font color = 'rgb(0, 0, 255)'>https://raw.githubusercontent.com/topitbopit/Hoops-GUI/main/script.lua</font>, or join the discord (<font color = 'rgb(0, 0, 255)'>https://discord.gg/a3JEr9Z6jY</font>) to get the script there<br/><i>Click to continue</i>"
 MessageLabel.RichText = true
 MessageLabel.TextScaled = true
 MessageLabel.ZIndex = 300
