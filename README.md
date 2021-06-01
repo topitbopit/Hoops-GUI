@@ -14,6 +14,7 @@
 
 <br/>
 <font size='20'>
+	<i>Jeff tags are supported!</i>
 	Here&apos;s a list of the features in version 1.3.3:
 </font>
 
