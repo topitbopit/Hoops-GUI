@@ -14,8 +14,9 @@
 <br/>
 <br/>
 <font size='40'>
-	#This README is currently not up to date. It will be updated later.
+	This README is currently not up to date. It will be updated later.
 </font>
+<br/>
 <br/>
 <font size='20'>
 	<i>Jeff tags are supported!</i>
