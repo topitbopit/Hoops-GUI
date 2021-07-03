@@ -1,7 +1,7 @@
 
 
 loadstring(game:HttpGetAsync('https://raw.githubusercontent.com/topitbopit/Jeff-2.3-Framework/main/jtags.lua'))()
-JFR = loadstring(game:HttpGet('https://raw.githubusercontent.com/topitbopit/Jeff-2.3-Framework/main/lib.lua'))()
+local JFR = loadstring(game:HttpGet('https://raw.githubusercontent.com/topitbopit/Jeff-2.3-Framework/main/lib.lua'))()
 
 
 
@@ -187,7 +187,7 @@ JFR.NewButton("180", page, {Position = UDim2.new(0.075, 0, 0, y), Size = UDim2.n
                 pos.D = 500
                 pos.MaxForce = Vector3.new(150000, 150000, 150000)
                 pos.Parent = game.ReplicatedStorage.GameBall.Value
-                pos.Position = Vector3.new(offrimpos.X / 1.05, offrimpos.Y, offrimpos.Z) + Vector3.new(0, 3.5, 0) 
+                pos.Position = Vector3.new(offrimpos.X / 1.05, offrimpos.Y, offrimpos.Z) + Vector3.new(0, 4.5, 0) 
                 
                 wait(0.15)
                 pos:Destroy()
