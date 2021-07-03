@@ -77,9 +77,7 @@ JFR.NewBoard("Outline2", bg, {Position = UDim2.new(0, 0, 0, 50), Size = UDim2.ne
 --Menus
 local page = JFR.NewMenu("Page", bg, {Size = UDim2.new(0, 500, 0, 350), Position = UDim2.new(0, 0, 0, 50), CanvasSize = UDim2.new(0, 100, 0, 5555), Invisible = false, AnchorPoint = Vector2.new(0, 0)})
 
-JFR.NewText("Text", page, {Position = UDim2.new(0, 5, 0, -15), Size = UDim2.new(0, 400, 0, 2345), Text = "Loading...", ZIndex = 190, TextSize = 25})
-
-JFR.GetInstance("Text").Text = "$noshadow"..game:HttpGet("https://raw.githubusercontent.com/topitbopit/Hoops-GUI/main/help_information.txt")
+JFR.NewText("Text", page, {Position = UDim2.new(0, 5, 0, -15), Size = UDim2.new(0, 400, 0, 5555), Text = "$noshadowLoading...", ZIndex = 190, TextSize = 25})
 
 JFR.NewButton("CloseButton", bg, {Position = UDim2.new(1, -30, 0, 5), Size = UDim2.new(0, 25, 0, 25), BackgroundColor3 = JFR.Theme.shade7, Text = "X", TextSize = 14}, {on = function()
     JFR.TweenPosition(parentb, UDim2.new(parentb.Position.X.Scale, parentb.Position.X.Offset, 1.1, 0), 0.75, Enum.EasingDirection.In)
@@ -129,4 +127,4 @@ dragarea.InputEnded:Connect(function(input)
 end)
 JFR.Ready(UDim2.new(0.5, -250, 0.5, -200))
 
-
+JFR.GetInstance("Text").Text = game:HttpGet("https://raw.githubusercontent.com/topitbopit/Hoops-GUI/main/help_information.txt")
