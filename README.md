@@ -1,6 +1,6 @@
 <h1>
 	<b>
-		Jeff&apos;s Hoops GUI
+		Jeff&apos;s Hoops GUI (README INACCURATE)
 	</b>
 </h1>
 
