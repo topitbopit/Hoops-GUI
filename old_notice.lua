@@ -124,9 +124,9 @@ tl(f, 23, 0)
 tl(g, 23, 0)
 
 twn(a, {Position = UDim2.new(0.35, 0, 0.35, 0)})
-twn(i, {Size = UDim2.new(0, 0, 0, 10)}, 20, "Out", "Linear")
+twn(i, {Size = UDim2.new(0, 0, 0, 10)}, 45, "Out", "Linear")
 
-wait(20)
+wait(45)
 
 
 twn(a, {Position = UDim2.new(0.35, 0, 1, 0)}, nil, "In")
