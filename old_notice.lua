@@ -43,7 +43,7 @@ b.BackgroundColor3 = Color3.fromRGB(24, 24, 26)
 b.Parent = a
 
 local c = Instance.new("TextLabel")
-c.Text = "This jeff hoops version you are using is currently outdated."
+c.Text = "All pre-2.0.0 jeff hoops versions have been deprecated."
 c.TextScaled = true
 c.TextColor3 = Color3.new(1, 1, 1)
 c.Size = UDim2.new(1, 0, 1, 0)
@@ -53,7 +53,7 @@ c.Font = Enum.Font.SourceSansLight
 c.Parent = b
 
 local d = Instance.new("TextLabel")
-d.Text = "Join the discord for update information, latest script, and more"
+d.Text = "Join the new discord for the latest script"
 d.TextScaled = true
 d.TextColor3 = Color3.new(1, 1, 1)
 d.Size = UDim2.new(1, 0, 0.1, 0)
@@ -63,7 +63,7 @@ d.Font = Enum.Font.SourceSansLight
 d.Parent = a
 
 local e = Instance.new("TextLabel")
-e.Text = "Or just use the updated script"
+e.Text = "Or just use the updated link"
 e.TextScaled = true
 e.TextColor3 = Color3.new(1, 1, 1)
 e.Size = UDim2.new(1, 0, 0.1, 0)
@@ -83,7 +83,7 @@ f.Font = Enum.Font.SourceSansLight
 f.Parent = a
 
 local g = Instance.new("TextBox")
-g.Text = "https://discord.gg/a3JEr9Z6jY"
+g.Text = "https://discord.gg/Gn9vWr8DJC"
 g.TextScaled = true
 g.TextColor3 = Color3.new(1, 1, 1)
 g.Size = UDim2.new(0.4, 0, 0.1, 0)
@@ -124,9 +124,9 @@ tl(f, 23, 0)
 tl(g, 23, 0)
 
 twn(a, {Position = UDim2.new(0.35, 0, 0.35, 0)})
-twn(i, {Size = UDim2.new(0, 0, 0, 10)}, 33, "Out", "Linear")
+twn(i, {Size = UDim2.new(0, 0, 0, 10)}, 35, "Out", "Linear")
 
-wait(33)
+wait(35)
 
 
 twn(a, {Position = UDim2.new(0.35, 0, 1, 0)}, nil, "In")
