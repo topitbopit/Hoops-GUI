@@ -10,6 +10,7 @@ local uis = game:GetService("UserInputService")
 local rs = game:GetService("RunService")
 local ctx = game:GetService("ContextActionService")
 local vim = game:GetService("VirtualInputManager")
+local ts = game:GetService("TweenService")
 -- grab some stuff
 
 local cframe = CFrame.new
@@ -35,8 +36,12 @@ local function FindFastChild(instance, name)
     local a,b = pcall(function() return instance[name] end)
 
     return (a and b) or nil
+end
 
-     -- this better be faster than ffc
+local function twn(object, dest)
+    local tween = ts:Create(object, TweenInfo.new(0.25, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), dest)
+    tween:Play()
+    return tween
 end
 
 -- { UI } --
@@ -85,125 +90,134 @@ local m_misc = window:NewMenu("Misc")
 
 
 m_home:NewLabel("Jeff Hoops made by topit")
-local h_discord = m_home:NewButton("Join the discord")
-local h_changelog = m_home:NewButton("View changelog")
+  local h_discord = m_home:NewButton("Join the discord")
+  local h_changelog = m_home:NewButton("View changelog")
+  h_discord:SetTooltip("Click to copy the discord invite")
+  h_changelog:SetTooltip("View the changelog [WIP]")
+
 m_home:NewSection("Config")
-local h_loadcfg = m_home:NewButton("Load config")
-local h_savecfg = m_home:NewButton("Save config")
+  local h_loadcfg = m_home:NewButton("Load config")
+  local h_savecfg = m_home:NewButton("Save config")
+  h_loadcfg:SetTooltip("Click to open a file")
+  h_savecfg:SetTooltip("Click to save a file")
+
 m_home:NewLabel()
 m_home:NewTrim()
 m_home:NewLabel("Version 3.0.0-DEV.1; UI version "..ui.Version)
 
-h_discord:SetTooltip("Click to copy the discord invite")
-h_changelog:SetTooltip("View the changelog [WIP]")
-h_loadcfg:SetTooltip("Click to open a file")
-h_savecfg:SetTooltip("Click to save a file")
 
 
 m_ball:NewSection("Aimbot / Auto green")
-local b_aimbot = m_ball:NewToggle("Aimbot") --aimbot
-b_aimbot:SetTooltip("Tries to fake a green. Doesn't work every time.")
-
-local b_aimbotm = m_ball:NewDropdown("Aimbot mode",{"One press","Classic"}) --aimbot mode
-b_aimbotm:SetTooltip("Changes the aimbot method.\nOne press: fakes a jump shot\nClassic: hold-R-until-you-red aimbot")
-
-local b_aimbotd = m_ball:NewToggle("Custom delay") --aimbot delay
-b_aimbotd:SetTooltip("Uses the inputted delay instead of predicting what the delay should be.")
-
-local b_aimbotdamt = m_ball:NewSlider("Custom delay (MS)",475,550,505) --aimbot delay amount
-
-local b_autogreen = m_ball:NewToggle("Auto green")
-b_autogreen:SetTooltip("Tries to get a green for you.")
-local b_autogreenm = m_ball:NewDropdown("Auto green method",{"Bar cutter","Public","Keyrelease"})
-b_autogreenm:SetTooltip("Uses a different auto green method.\nBar cutter: More consistent version of public + looks cool\nPublic: Can work well, may depend on ping\nKey: Uses keyrelease, may not work as well as others")
-
+  local b_aimbot = m_ball:NewToggle("Aimbot") --aimbot
+  local b_aimbotm = m_ball:NewDropdown("Aimbot mode",{"One press","Classic"}) --aimbot mode
+  local b_aimbotd = m_ball:NewToggle("Custom delay") --aimbot delay
+  local b_aimbotdamt = m_ball:NewSlider("Custom delay (MS)",475,550,505) --aimbot delay amount
+  local b_autogreen = m_ball:NewToggle("Auto green")
+  local b_autogreenm = m_ball:NewDropdown("Auto green method",{"Bar cutter","Public","Keyrelease"})
+  b_aimbotm:SetTooltip("Changes the aimbot method.\nOne press: fakes a jump shot\nClassic: hold-R-until-you-red aimbot")
+  b_aimbot:SetTooltip("Tries to fake you getting a green. Doesn't work every time.")
+  b_aimbotd:SetTooltip("Uses the inputted delay instead of predicting what the delay should be.")
+  b_autogreen:SetTooltip("Tries to get a green for you. Not always 100%, depends on ping and distance.")
+  b_autogreenm:SetTooltip("Uses a different auto green method.\nBar cutter: Looks cool, might work as well as public\nPublic: Can work well\nKey: Uses keyrelease, may not work as well as others")
+  
 m_ball:NewSection("OP")
-local b_autoinbound = m_ball:NewToggle("Auto inbound")
-b_autoinbound:SetTooltip("Teleports you to the inbound circle.")
-local b_powerdunk = m_ball:NewToggle("Power dunks")
-b_powerdunk:SetTooltip("Classic power dunks, also lets you air strafe.")
-local b_autograb = m_ball:NewToggle("Auto grab")
-b_autograb:SetTooltip("Sorta like an HBE, but way better.")
-local b_fly = m_ball:NewToggle("Ball fly")
-b_fly:SetTooltip("Flies you to the hoop when you pickup the ball")
-
+  local b_powerdunk = m_ball:NewToggle("Power dunks")
+  local b_fly = m_ball:NewToggle("Ball fly")
+  local b_autoinbound = m_ball:NewToggle("Auto inbound")
+  local b_autograb = m_ball:NewToggle("Auto grab")
+  b_powerdunk:SetTooltip("Classic power dunks, also lets you air strafe.")
+  b_fly:SetTooltip("Flies you to the hoop when you pickup the ball")
+  b_autoinbound:SetTooltip("Teleports you to the inbound circle.")
+  b_autograb:SetTooltip("Sorta like an HBE, but way better.")
 
 m_ball:NewSection("Render")
-local b_cam = m_ball:NewToggle("Ball cam")
-local b_velocity = m_ball:NewToggle("Velocity")
-b_velocity:SetTooltip("'Predicts' where the ball is going.")
-b_velocity:Assert("Drawing")
+  local b_velocity = m_ball:NewToggle("Velocity")
+  local b_highlight = m_ball:NewToggle("Highlight")
+  local b_cam = m_ball:NewToggle("Ball cam")
+  b_velocity:SetTooltip("'Predicts' where the ball is going.")
+  b_velocity:Assert("Drawing")
+  b_highlight:SetTooltip("Highlights the ball so you know where it is at all times.")
 
-local b_highlight = m_ball:NewToggle("Highlight")
-b_highlight:SetTooltip("Highlights the ball so you know where it is at all times.")
+  m_ball:NewSection("Troll")
+  local b_spamshoot = m_ball:NewToggle("Spam shoot")
+  b_spamshoot:SetTooltip("Spam shoots the ball when it can.\nNote that this will lag your game when used!")
 
-m_ball:NewSection("Troll")
-local b_spamshoot = m_ball:NewToggle("Spam shoot")
-b_spamshoot:SetTooltip("Spam shoots the ball when it can.\nNote that this will lag your game when used!")
+  m_ball:NewSection("Work in progress")
+  local b_autolayup = m_ball:NewToggle("Auto layup")
+  b_autolayup:SetTooltip("Automatically layups when you're close to the hoop. Gives 3 points for some reason.")
 
-m_ball:NewSection("Work in progress")
-local b_autolayup = m_ball:NewToggle("Auto layup")
-b_autolayup:SetTooltip("Automatically layups when you're close to the hoop. Gives 3 points for some reason.")
 
 
 m_player:NewSection("Movement")
-local p_infstam = m_player:NewToggle("Infinite stamina")
-local p_noslow = m_player:NewToggle("Noslowdown")
-local p_cctp = m_player:NewToggle("Ctrl+Click teleport")
-local p_speed = m_player:NewToggle("Legit speedhack")
-local p_njcd = m_player:NewToggle("No jump cooldown")
-local p_bhop = m_player:NewToggle("Bhop")
-local p_jumpboost = m_player:NewToggle("Jump boost")
-local p_jumpboostamt = m_player:NewSlider("Jump boost amount", 1, 150, 75)
-
-
-p_infstam:SetTooltip("Classic infinite stamina. Hides the stamina bar.")
-p_noslow:SetTooltip("Prevents you from being slowed down.")
-p_cctp:SetTooltip("Classic ctrl + click tp.")
-p_speed:SetTooltip("Speed thats slightly faster than normal sprinting.")
-p_njcd:SetTooltip("Bypasses the jump cooldown. Also has less jump delay (0.25 -> 0.02s).")
+  local p_infstam = m_player:NewToggle("Infinite stamina")
+  local p_stamspeed = m_player:NewToggle("Custom stamina drain")
+  local p_stamspeedamt = m_player:NewSlider("Stamina drain speed",0,10,10)
+  local p_noslow = m_player:NewToggle("Noslowdown")
+  local p_cctp = m_player:NewToggle("Ctrl+Click teleport")
+  local p_speed = m_player:NewToggle("Legit speedhack")
+  local p_njcd = m_player:NewToggle("No jump cooldown")
+  local p_bhop = m_player:NewToggle("Bhop")
+  local p_jumpboost = m_player:NewToggle("Jump boost")
+  local p_jumpboostamt = m_player:NewSlider("Jump boost amount", 1, 150, 75)
+  p_infstam:SetTooltip("Classic infinite stamina. Hides the stamina bar.")
+  p_stamspeed:SetTooltip("Changes how fast or slow your stamina drains.")
+  p_stamspeedamt:SetTooltip("How fast or slow your stamina drains. 0 would freeze stamina, 10 would make it normal.")
+  p_noslow:SetTooltip("Prevents you from being slowed down.")
+  p_cctp:SetTooltip("Classic ctrl + click tp.")
+  p_speed:SetTooltip("Speed thats slightly faster than normal sprinting.")
+  p_njcd:SetTooltip("Emulates a jump, bypassing the cooldown. Also has less jump delay (0.25s -> 0.02s).")
 
 m_player:NewSection("Steals")
-local p_hbe = m_player:NewToggle("Hitbox expander")
-local p_hbesize = m_player:NewSlider("Hitbox expander size", 5, 20, 5)
-local p_stealaura = m_player:NewToggle("Steal aura")
-local p_stealauras = m_player:NewSlider("Steal aura speed", 1, 15, 1)
-local p_antisteal = m_player:NewToggle("Anti-steal")
-
-p_hbe:SetTooltip("Your average HBE, but more customizable.")
-p_hbesize:SetTooltip("Controls the size of the HBE.")
-p_stealaura:SetTooltip("Can make whoever you walk into drop the ball. Has a side effect with animations.")
-p_stealauras:SetTooltip("Controls how fast others drop the ball. Don't use a number higher than 3!!")
-p_antisteal:SetTooltip("Spam G when you're not shooting to prevent most steals.")
-
+  local p_hbe = m_player:NewToggle("Hitbox expander")
+  local p_hbesize = m_player:NewSlider("Hitbox expander size", 5, 20, 5)
+  local p_stealaura = m_player:NewToggle("Steal aura")
+  local p_stealauras = m_player:NewSlider("Steal aura speed", 1, 15, 1)
+  local p_antisteal = m_player:NewToggle("Anti-steal")
+  p_hbe:SetTooltip("Your average HBE, but more customizable.")
+  p_hbesize:SetTooltip("Controls the size of the HBE.")
+  p_stealaura:SetTooltip("Can make whoever you walk into drop the ball. Has a side effect with animations.")
+  p_stealauras:SetTooltip("Controls how fast others drop the ball. Don't use a number higher than 3!!")
+  p_antisteal:SetTooltip("Spam G when you're not shooting to prevent steals. Stop spamming before you shoot, or else it'll glitch.")
 
 m_player:NewSection("OP")
-local p_nodelay = m_player:NewToggle("No delay")
-p_nodelay:Assert("debug")
-p_nodelay:SetTooltip("Removes steal delay. Will effect other things eventually.")
+  local p_nodelay = m_player:NewToggle("No delay")
+  p_nodelay:Assert("debug")
+  p_nodelay:SetTooltip("Removes steal delay. Will effect other things eventually.")
 
 m_player:NewSection("Troll")
-local p_tptoball = m_player:NewToggle("TP to ball")
-
+  local p_tptoball = m_player:NewToggle("TP to ball")
+  local p_tptoballmode = m_player:NewDropdown("TP to ball mode",{"Always","When not holding","When teams not holding","When other"})
+  p_tptoball:SetTooltip("Teleports you to the ball")
+  
 m_player:NewSection("Misc")
-local p_antivoid = m_player:NewToggle("Anti-void")
-local p_bounds = m_player:NewToggle("Bounds")
+  local p_antivoid = m_player:NewToggle("Anti-void")
+  local p_bounds = m_player:NewToggle("Bounds")
+
+  
+
+m_misc:NewSection("Game")
+  local m_fixgame = m_misc:NewButton("Fix game")
+  local m_deafen = m_misc:NewToggle("Deafen")
+  local m_antiplr = m_misc:NewToggle("Anti-playergrade")
+  m_fixgame:SetTooltip("Fixes a lot of issues the game may have.")
+  m_deafen:SetTooltip("Removes some loud game sounds, like the cheering and buzzer.")
+  m_antiplr:SetTooltip("Removes playergrade related remotes and scripts, possibly preventing player grade drops.")
+
+m_misc:NewSection("Render")
+  local m_nightmode = m_misc:NewToggle("Nightmode")
+  local m_cstamgui = m_misc:NewToggle("Custom stamina bar")
+  m_nightmode:SetTooltip("Makes the court dark with lights")
+  
+m_misc:NewSection("Server")
+  local m_rejoin = m_misc:NewButton("Rejoin")
+  local m_shop = m_misc:NewButton("Serverhop")
+  local m_priv = m_misc:NewButton("Join smallest server")
 
 p_antivoid:SetTooltip("If you fall under the map, you get kicked from the server. Antivoid teleports you up if you fall under.")
 p_bounds:SetTooltip("Makes boundaries around the court so you don't foul. Still a WIP")
 
-m_misc:NewSection("Game")
 
-local m_antiafk = m_misc:NewButton("Anti AFK")
-local m_fixgame = m_misc:NewButton("Fix game")
-local m_deafen = m_misc:NewToggle("Deafen")
-local m_nightmode = m_misc:NewToggle("Nightmode")
-local m_antiplr = m_misc:NewToggle("Anti playergrade")
-
-m_misc:NewSection("Server")
-local m_rejoin = m_misc:NewButton("Rejoin")
-local m_shop = m_misc:NewButton("Serverhop")
-local m_priv = m_misc:NewButton("Join smallest server")
+p_stamspeed:Hide("Unfinished")
 
 b_cam:Hide("Unfinished")
 b_aimbot:Hide("Unfinished")
@@ -217,14 +231,15 @@ p_tptoball:Hide("Unfinished")
 p_antivoid:Hide("Unfinished")
 p_bounds:Hide("Unfinished")
 
-m_antiafk:Hide("Unfinished")
 m_fixgame:Hide("Unfinished")
 m_deafen:Hide("Unfinished")
-m_nightmode:Hide("Unfinished")
 m_antiplr:Hide("Unfinished")
+m_nightmode:Hide("Unfinished")
+m_cstamgui:Hide("Unfinished")
 m_rejoin:Hide("Unfinished")
 m_shop:Hide("Unfinished")
 m_priv:Hide("Unfinished")
+
 
 -- { Variables & Callbacks } --
 
@@ -251,19 +266,13 @@ connections["BallUpdate"] = ballpointer:GetPropertyChangedSignal("Value"):Connec
 end)
 
 --home
-
 do 
     h_discord.OnClick:Connect(function() 
         setclipboard("https://discord.gg/Gn9vWr8DJC")
         ui:NewNotification("Discord","Copied invite to clipboard!",3)
     
     end)
-
-
-
 end
-
-
 
 
 --stamina
@@ -301,6 +310,24 @@ do
 
         local a = FindFastChild(plr.Character, "Head")
         if a then a.StaminaBar.Enabled = true end
+    end)
+end
+-- custom drain
+do 
+    p_stamspeed.OnEnable:Connect(function() 
+        --get script
+        local sc = FindFastChild(plr.Character, "Movement") and plr.Character["Movement"]["Sprinting"]
+        connections["SS1"] = plr.CharacterAdded:Connect(function(c) 
+            sc = c:WaitForChild("Movement",5)
+            twait(0.02)
+            sc = sc["Sprinting"]
+        end)
+        
+    end)
+    
+    p_stamspeed.OnDisable:Connect(function() 
+    
+    
     end)
 end
 --noslow
@@ -598,7 +625,7 @@ do
 			h.Transparency = 0.7
 
 			connections["HBE2"]:Disconnect()
-			connections["HBE2"] = p_hbesize.OnValueChange:Connect(function(size) 
+			connections["HBE2"] = p_hbesize.OnValueChanged:Connect(function(size) 
             	h.Size = vector(size, 2, size)
         	end)
         end)
@@ -609,10 +636,11 @@ do
         end
         
         local size = p_hbesize:GetValue()
+        print(size)
         h.Size = vector(size, 2, size)
         h.Transparency = 0.7
         
-        connections["HBE2"] = p_hbesize.OnValueChange:Connect(function(size) 
+        connections["HBE2"] = p_hbesize.OnValueChanged:Connect(function(size) 
             h.Size = vector(size, 2, size)
         end)
         
@@ -630,7 +658,6 @@ do
     
     end)
 end
-
 -- speedhack
 do 
     p_speed.OnEnable:Connect(function()
@@ -662,7 +689,6 @@ do
         
     end)
 end
-
 -- njcd
 do 
     local leftside = workspace.Floor.LeftSide.Stand.Hoop.GoalDetection
@@ -734,9 +760,6 @@ do
         ctx:UnbindAction("JH3-NJCD")
     end)
 end
-
-
-
 
 -- AUTO GREEN
 do 
@@ -879,7 +902,36 @@ do
     end)
 
 end
+-- antisteal
+do 
+    p_antisteal.OnEnable:Connect(function() 
+        local start = replicated.Ball.StartShooting
+        local stop = replicated.Ball.EndShooting
+        
+        connections["AS1"] = uis.InputBegan:Connect(function(io, gpe) 
+            if io.KeyCode == Enum.KeyCode.G then 
+                if gpe then return end
+                tspawn(function() 
+                    local id = mrandom(0,1500)
+                    warn("[AS] New thread",id)
+                    start:FireServer()
+                    stop:InvokeServer()
+                    start:FireServer()
+                    stop:InvokeServer()
+                    warn("[AS] Ended",id)
+                end)
+            end
+        end)
+        
+        ui:NewNotification("Antisteal","Spam G while you aren't shooting to prevent steals.",3)
+    end)
 
+    p_antisteal.OnDisable:Connect(function() 
+        connections["AS1"]:Disconnect()
+    
+    
+    end)
+end
 
 
 
@@ -893,11 +945,173 @@ ui:Ready()
 
 
 ui.Exiting:Connect(function() 
-    for i,v in pairs(ui:GetAllToggles()) do
+    for i,v in ipairs(ui:GetAllToggles()) do
         if v:GetState() == true then
             v:Disable() 
         end
     end
+    
+    for i,v in ipairs(connections) do
+        v:Disconnect() 
+    end
 end)
+
+
+
+-- custom afk
+
+do 
+    
+    local function handle() 
+        -- get remotes and other stuff
+        local clientafk1 = plr.PlayerScripts.Events.Player.IsAFK -- bindables that do clientside
+        local clientafk2 = plr.PlayerScripts.Resetting.SetState -- afk handling
+        
+        local returning = replicated.Player.AFK.IsReturning -- server remotes that 
+        local away = replicated.Player.AFK.IsAway -- actually make you afk
+        
+        local afktext1 = plr.PlayerGui.AFK.Manual -- the afk messages 
+        local afktext2 = plr.PlayerGui.AFK.Automatic -- that might show up
+        
+        
+        -- get where sidebuttons are located
+        local afkbutton = plr.PlayerGui.Sidebar.Container
+        
+        
+        for _,child in ipairs(afkbutton:GetChildren()) do
+            if child.ClassName == "TextButton" then
+                local t = FindFastChild(child, "Top")
+                
+                -- check for a button with AFK (normal hoops text)
+                if t and t.Text:match("AFK") then
+                    afkbutton = child
+                    break
+                end
+            end
+        end
+        
+        
+        if afkbutton.ClassName ~= "TextButton" then
+            -- if button isnt found then check again
+            
+            afkbutton = plr.PlayerGui.Sidebar.Container
+            for _,child in ipairs(afkbutton:GetChildren()) do
+                if child.ClassName == "TextButton" then
+                    local t = FindFastChild(child, "Top")
+                    
+                    if t.Text:match("View") == nil and t.Text:match("Wear") == nil then
+                        
+                        -- if the text doesnt have View and Wear then
+                        -- its probably the afk button
+                        
+                        afkbutton = child
+                        break
+                    end
+                end
+            end
+        end
+        
+        -- get the old button
+        local old = afkbutton
+        
+        -- copy it to a new button and parent the new button to container
+        afkbutton = old:Clone()
+        afkbutton.Parent = plr.PlayerGui.Sidebar.Container
+        -- hide it 
+        afkbutton.Position = UDim2.new(-2, 0, 2, 20)
+        
+        -- handle deleting some instances if found and warning if not
+        do 
+            local a = FindFastChild(afkbutton, "ButtonActive");
+            local b = FindFastChild(afkbutton, "Clicked");
+            local c = FindFastChild(afkbutton, "Arrow");
+            
+            (a and a.Destroy or warn)(a or "[CUSTOM AFK] Button missing ButtonActive boolvalue");
+            (b and b.Destroy or warn)(b or "[CUSTOM AFK] Button missing Clicked bindable");
+            (c and c.Destroy or warn)(c or "[CUSTOM AFK] Button missing Arrow");
+        end
+        
+        -- handle mouse events, self explanatory
+        do 
+            local bcolor1 = color3(255, 170, 0)
+            local bcolor2 = color3(229, 153, 0)
+            local bcolor3 = color3(191, 127, 0)
+            
+            afkbutton.MouseEnter:Connect(function() 
+                afkbutton.Top.BackgroundColor3 = bcolor2
+                afkbutton.Bottom.BackgroundColor3 = bcolor3
+            end)
+            
+            afkbutton.MouseLeave:Connect(function() 
+                afkbutton.Top.BackgroundColor3 = bcolor1
+                afkbutton.Bottom.BackgroundColor3 = bcolor2
+                
+                afkbutton.Top.Position = UDim2.new(0, 0, 0, 0)
+            end)
+            
+            
+            afkbutton.MouseButton1Down:Connect(function() 
+                afkbutton.Top.Position = UDim2.new(0, 0, 0.05, 0)
+            end)
+            
+            afkbutton.MouseButton1Up:Connect(function() 
+                afkbutton.Top.Position = UDim2.new(0, 0, 0, 0)
+            end)
+            
+            afkbutton.MouseButton1Click:Connect(function() 
+                if plr.Character then
+                    clientafk1:Fire(true)
+                    clientafk2:Fire("AFK", true)
+                    away:FireServer()
+                    
+                    afkbutton.Top.Text = "Click to return"
+                else 
+                    clientafk1:Fire(false)
+                    clientafk2:Fire("AFK", false)
+                    returning:FireServer()
+                    
+                    afkbutton.Top.Text = "Click to go AFK"
+                    
+                    plr.CharacterAdded:Wait()
+                    twait(0.04)
+                    workspace.CurrentCamera.CameraSubject = FindFastChild(plr.Character, "Humanoid")
+                end
+            end)
+            
+            afkbutton.Top.BackgroundColor3 = bcolor1
+            afkbutton.Bottom.BackgroundColor3 = bcolor2
+            
+        end
+        
+        -- animate the older button out and delete it
+        tspawn(function()
+            local t = twn(old,{Position = UDim2.new(-2, 0, 2, 20)})
+            t.Completed:Wait()
+            old:Destroy()
+        end)
+        -- disable the normal afk script
+        pcall(function() 
+            plr.PlayerScripts.GameControl["AFK - Client"].Disabled = true
+        end)
+        -- animate the newer button in after a short delay
+        tdelay(0.3, function() twn(afkbutton, {Position = UDim2.new(0, 0, 2, 20)}) end)
+        
+        
+        
+        -- override afk message
+        afktext1.Visible = true
+        afktext2.Visible = false
+        afktext1.Text = "Jeff Hoops custom AFK loaded."
+        
+        wait(3)
+        
+        afktext1.Visible = false
+    end
+    
+    -- finish
+    handle()
+end
+
+
 
 
