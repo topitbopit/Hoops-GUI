@@ -30,6 +30,9 @@ local cresume = coroutine.resume
 local tinsert = table.insert
 local tremove = table.remove
 
+local mfloor = math.floor
+local mceil = math.ceil
+local mabs = math.abs
 local mrandom = math.random
 
 local function FindFastChild(instance, name)
@@ -38,8 +41,8 @@ local function FindFastChild(instance, name)
     return (a and b) or nil
 end
 
-local function twn(object, dest)
-    local tween = ts:Create(object, TweenInfo.new(0.25, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), dest)
+local function twn(object, dest, time)
+    local tween = ts:Create(object, TweenInfo.new(time, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), dest)
     tween:Play()
     return tween
 end
@@ -103,7 +106,7 @@ m_home:NewSection("Config")
 
 m_home:NewLabel()
 m_home:NewTrim()
-m_home:NewLabel("Version 3.0.0-BETA.2; UI version "..ui.Version)
+m_home:NewLabel("Version 3.0.0-BETA.3; UI version "..ui.Version)
 
 
 
@@ -183,6 +186,8 @@ m_player:NewSection("OP")
   local p_nodelay = m_player:NewToggle("No delay")
   p_nodelay:Assert("debug")
   p_nodelay:SetTooltip("Removes steal delay. Will effect other things eventually.")
+  local p_autoblock = m_player:NewToggle("Auto block")
+  p_autoblock:SetTooltip("Automatically jumps towards players that are about to shoot")
 
 m_player:NewSection("Troll")
   local p_tptoball = m_player:NewToggle("TP to ball")
@@ -207,6 +212,7 @@ m_misc:NewSection("Render")
   local m_nightmode = m_misc:NewToggle("Nightmode")
   local m_cstamgui = m_misc:NewToggle("Custom stamina bar")
   m_nightmode:SetTooltip("Makes the court dark with lights")
+  m_cstamgui:SetTooltip("Uses a custom stamina bar")
   
 m_misc:NewSection("Server")
   local m_rejoin = m_misc:NewButton("Rejoin")
@@ -218,7 +224,6 @@ p_bounds:SetTooltip("Makes boundaries around the court so you don't foul. Still 
 
 
 p_stamspeed:Hide("Unfinished")
-
 b_cam:Hide("Unfinished")
 b_aimbot:Hide("Unfinished")
 b_velocity:Hide("Unfinished")
@@ -235,7 +240,6 @@ m_fixgame:Hide("Unfinished")
 m_deafen:Hide("Unfinished")
 m_antiplr:Hide("Unfinished")
 m_nightmode:Hide("Unfinished")
-m_cstamgui:Hide("Unfinished")
 m_rejoin:Hide("Unfinished")
 m_shop:Hide("Unfinished")
 m_priv:Hide("Unfinished")
@@ -254,7 +258,7 @@ local gameball = ballpointer.Value
 
 local statepointer = replicated.Scoreboard.GameState
 
-local scall = (syn and syn.secure_call) or (secure_call) or warn("Your exploit doesn't support secure call!")
+local scall = (syn and syn.secure_call) or (secure_call or securecall) or warn("Your exploit doesn't support secure call!")
 -- secure call will definitely not be needed
 
 
@@ -292,24 +296,48 @@ do
             if h then
                 -- how has nobody thought of this yet
                 -- makes it look better
-
-                h.StaminaBar.Enabled = false
+                
+                local bar1 = FindFastChild(h, "StaminaBar")
+                local bar2 = FindFastChild(h, "JHStaminaBar")
+                
+                if bar1 then bar1.Enabled = false end
+                if bar2 then bar2.Enabled = false end
+                
+                
             else
-                warn("Oopsies; infinite stamina couldn't work properly") --?????
+                warn("Oopsies; infinite stamina couldn't work properly")
             end
 
         end)
 
-        local a = FindFastChild(plr.Character, "Head")
-        if a then a.StaminaBar.Enabled = false end
+        local h = FindFastChild(plr.Character, "Head")
+        if h then 
+            local bar1 = FindFastChild(h, "StaminaBar")
+            local bar2 = FindFastChild(h, "JHStaminaBar")
+            
+            if bar1 then bar1.Enabled = false end
+            if bar2 then bar2.Enabled = false end
+        end
     end)
 
     p_infstam.OnDisable:Connect(function()
         rs:UnbindFromRenderStep("JH3-IS")
         connections["IS"]:Disconnect()
 
-        local a = FindFastChild(plr.Character, "Head")
-        if a then a.StaminaBar.Enabled = true end
+        local h = FindFastChild(plr.Character, "Head")
+        if h then 
+            if m_cstamgui:IsEnabled() then
+                local bar1 = FindFastChild(h, "StaminaBar")
+                local bar2 = FindFastChild(h, "JHStaminaBar")
+                
+                if bar1 then bar1.Enabled = false end
+                if bar2 then bar2.Enabled = true end
+            else
+                local bar1 = FindFastChild(h, "StaminaBar")
+                
+                if bar1 then bar1.Enabled = true end
+            end
+        end
     end)
 end
 -- custom drain
@@ -463,7 +491,7 @@ do
             twait(0.05)
             if threads > 50 then
                 -- if too many yielding threads then wait
-                twait(0.15)
+                twait(0.1)
             end
         end
     end)
@@ -508,12 +536,9 @@ do
 
     b_autoinbound.OnDisable:Connect(function()
         connections["IB"]:Disconnect()
-        -- cleanup ez
     end)
 
     b_autoinbound:Assert("firetouchinterest")
-    -- ee skiddies get fucked
-    -- use comet or krnl
 end
 --power dunks
 do 
@@ -521,7 +546,7 @@ do
         local new = PhysicalProperties.new(100, 0.3, 0.5)
         
         -- whoever made power dunks originally
-        -- just pasted inf yield lmao 
+        -- just pasted inf yield kek
 
         while b_powerdunk:GetState() do
             for i,v in pairs(plr.Character:GetChildren()) do
@@ -534,7 +559,7 @@ do
             twait(10) 
             -- change properties on spawn and on enable is better
             -- but it's easier this way and is still more performant
-            -- than < 3.0.0 (which did it per frame)
+            -- than < 3.0.0
         end
     end)
 
@@ -933,6 +958,365 @@ do
     end)
 end
 
+--auto block
+do 
+    p_autoblock.OnEnable:Connect(function() 
+        local c = plr.Character
+        
+        local hum = FindFastChild(c, "Humanoid")
+        local humrp = FindFastChild(c, "HumanoidRootPart")
+        local anim
+        
+        if not hum then 
+            p_autoblock:Hide("Waiting for character respawn...") 
+            plr.CharacterAdded:Wait()
+            
+            twait(0.05)
+            
+            hum = FindFastChild(c, "Humanoid")
+            humrp = FindFastChild(c, "HumanoidRootPart")
+        end
+        
+        anim = hum:LoadAnimation(c["BallControl"]["Defense - Client"].Block)
+        
+        connections["AB1"] = plr.CharacterAdded:Connect(function(c) 
+            -- get humanoid
+            hum = c:WaitForChild("Humanoid", 3)
+            -- wait for other instances
+            twait(0.05)
+            -- get humrp and load anim
+            humrp = FindFastChild(plr.Character, "HumanoidRootPart")
+            anim = hum:LoadAnimation(c:WaitForChild("BallControl", 3)["Defense - Client"].Block)
+        end)
+        
+        local function jump() 
+            --printconsole("[JUMP] Got call", 0, 255, 0)
+            if hum.FloorMaterial == Enum.Material.Air then
+                --printconsole("[JUMP] Returning", 255, 0, 0)
+                --printconsole("[JUMP] Current material,parent: "..tostring(hum.FloorMaterial)..","..tostring(hum.Parent), 192, 192, 192)
+                return
+            end 
+            
+            rs:BindToRenderStep("JH3-AB",900,function() 
+                hum:Move(cframe(humrp.Position, gameball.Position).LookVector)
+            end)
+            twait(0.1)
+            anim:play(0.25)
+            twait(0.02)
+            
+            hum.JumpPower = 18.64
+            hum.Jump = true
+            twait(0.02)
+            hum.JumpPower = 0
+            twait(0.2)
+            rs:UnbindFromRenderStep("JH3-AB")
+            --printconsole("[JUMP] Finished", 192, 192, 192)
+        end
+        
+        
+        tspawn(function() 
+            --printconsole("[LOOP] Starting checks",192,192,192)
+            while p_autoblock:IsEnabled() do
+                twait(0.02)
+                for _,p in ipairs(players:GetPlayers()) do
+                    if p == plr then continue end
+                    --if p.TeamColor == gameball.TeamColor.Value then continue end 
+                    
+                    pcall(function()
+                        local h = p.Character.HumanoidRootPart 
+                        if (h.Position - humrp.Position).Magnitude < 27 then
+                            h.Transparency = 0
+                            local hum = p.Character.Humanoid
+                            
+                            for _,track in ipairs(hum:GetPlayingAnimationTracks()) do
+                                local id = track.Animation.AnimationId
+                                if id:match("376938580") or id:match("470725369") or id:match("125750702") then
+                                    if gameball.Parent ~= p.Character then 
+                                        --printconsole("[LOOP] False positive, cancelling + delaying",255,0,0)
+                                        twait(0.15)
+                                        break 
+                                    end
+                                    --they're jumpshotting so jump after them
+                                    --printconsole("[LOOP] Someones shooting - waiting",255,0,255)
+                                    twait(0.17)
+                                    --printconsole("[LOOP] Jumping",255,0,255)
+                                    jump()
+                                    twait(1)
+                                    --printconsole("[LOOP] Rescanning",192,192,192)
+                                    break
+                                end
+                            end
+                        else
+                            h.Transparency = 1
+                        end
+                    end)
+                end
+            end
+        end)
+    end)
+    
+    p_autoblock.OnDisable:Connect(function() 
+        connections["AB1"]:Disconnect()
+        rs:UnbindFromRenderStep("JH3-AB")
+    end)
+end
+
+do 
+
+    m_fixgame.OnClick:Connect(function() 
+        ui:NewNotification("Fix game","Successfully fixed any issues. Check console for more details",4)
+    end)
+    
+end
+
+-- nightmode
+do 
+    
+    m_nightmode.OnEnable:Connect(function() 
+        local d = {}
+        
+        d[1]=FindFastChild(workspace,"JH3-Nightmode")
+        d[2]=FindFastChild(gameball,"Spotlight")
+        d[3]=FindFastChild(lighting,"JH3-Bloom")
+        for _,i in ipairs(d) do i:Destroy()end
+        
+        lighting.Ambient = Color3.fromRGB(1, 1, 1)
+        lighting.Brightness = 0.1
+        lighting.GlobalShadows = true
+        lighting.TimeOfDay = 1
+        
+        local jhfolder = Instance.new("Folder")
+        
+        jhfolder.Name = "JHoops Nightmode"
+        jhfolder.Parent = game.Workspace
+        
+        local bloom = Instance.new("BloomEffect")
+        bloom.Intensity = 1.5
+        bloom.Threshold = 0.85
+        bloom.Name = "JH3-Bloom"
+        bloom.Parent = lighting
+        
+        local shadow = Instance.new("Part")
+        shadow.Anchored = true
+        shadow.Position = game.Workspace.Floor.CenterLine.Position + Vector3.new(0, 300, 0)
+        shadow.Name = "ShadowEffect"
+        shadow.CanCollide = false
+        shadow.Transparency = 0
+        shadow.Color = Color3.fromRGB(0, 0, 0)
+        shadow.Size = Vector3.new(2345, 500, 2345)
+        shadow.Parent = jhfolder
+        shadow.BottomSurface = Enum.SurfaceType.SmoothNoOutlines
+        
+        
+        local light = Instance.new("PointLight")
+        light.Parent = ReplicatedStorage.GameBall.Value
+        light.Color = Color3.fromRGB(255, 255, 235 + math.random(10, 20))
+        light.Brightness = 2
+        light.Range = math.random(19,21)
+        light.Shadows = true
+        for z = -2, 2 do 
+            for x = -2, 2 do
+                local p1 = Instance.new("Part")
+                p1.Anchored = true
+                p1.Position = game.Workspace.Floor.CenterLine.Position + Vector3.new(29 * x, 35, 29 * z)
+                p1.Name = "LightPart_1"
+                p1.CanCollide = false
+                p1.Transparency = 0
+                p1.Parent = jhfolder
+                p1.Color = Color3.fromRGB(2, 2, 8)
+                p1.Size = Vector3.new(4, 5, 4)
+                p1.Rotation = Vector3.new(0, 0, 90)
+                p1.TopSurface = Enum.SurfaceType.Smooth
+                p1.BottomSurface = Enum.SurfaceType.Smooth
+                p1.Shape = Enum.PartType.Cylinder
+                
+                local p2 = p1:Clone()
+                p2.Name = "LightPart_2"
+                p2.Material = Enum.Material.Neon
+                p2.Size = Vector3.new(3, 4, 3)
+                p2.Parent = p1
+                p2.Position = p1.Position - Vector3.new(0, 1, 0)
+                p2.Shape = Enum.PartType.Cylinder
+                
+                local light = Instance.new("SpotLight")
+                light.Parent = p2
+                light.Color = Color3.fromRGB(255, 255, 235 + math.random(10, 20))
+                light.Brightness = 6
+                light.Range = math.random(31,35)
+                light.Shadows = true
+                light.Angle = 90 
+                light.Face = Enum.NormalId.Left
+                
+                p2.Color = light.Color
+                
+                
+            end
+        end 
+        
+    
+    end)
+    
+    
+    m_nightmode.OnDisable:Connect(function() 
+    
+        lighting.Brightness = 1
+        lighting.Ambient = Color3.fromRGB(127, 127, 127)
+        lighting.GlobalShadows = false
+        lighting.TimeOfDay = 14
+    
+    
+    end)
+end
+
+
+-- custom stamina 
+do 
+    local stambarui
+    m_cstamgui.OnEnable:Connect(function() 
+        
+        local c1 = color3n(0, 0.9, 0.2)--color3n(0, 0.9, 0.1)
+        local c2 = color3n(0.9, 0, 0.2)--color3n(0.9, 0, 0.1)
+
+        local staminavalue = plr.PlayerScripts.Events.Player.Stamina.Stamina
+        
+        local function enable(h) 
+            stambarui = Instance.new("BillboardGui")
+            stambarui.AlwaysOnTop = true
+            stambarui.Size = UDim2.new(4, 0, 0.6, 0)
+            stambarui.StudsOffsetWorldSpace = vector(0, 1.25, 0)
+            stambarui.Parent = h
+            
+            local bg = Instance.new("Frame")
+            bg.BackgroundColor3 = color3n(0.13, 0.13, 0.15)
+            bg.BorderColor3 = color3n(0.03, 0.03, 0.05)
+            bg.Size = UDim2.new(1, 0, 1, 0)
+            bg.BorderSizePixel = 0
+            bg.ClipsDescendants = true
+            bg.ZIndex = 2
+            bg.Parent = stambarui
+            
+            local backframe = Instance.new("Frame")
+            backframe.BackgroundColor3 = color3n(0.03, 0.03, 0.05)
+            backframe.BorderColor3 = color3n(0.13, 0.13, 0.15)
+            backframe.Size = UDim2.new(1, 2, 1, 2)
+            backframe.Position = UDim2.new(0, -1, 0, -1)
+            backframe.BorderSizePixel = 1
+            backframe.ClipsDescendants = false
+            backframe.ZIndex = 0
+            backframe.Parent = stambarui
+            
+            local shadow = Instance.new("ImageLabel")
+            shadow.BackgroundTransparency = 1
+            shadow.Image = "rbxassetid://7603818383"
+            shadow.ImageColor3 = Color3.new(0, 0, 0)
+            shadow.ImageTransparency = 0.15
+            shadow.Position = UDim2.new(0.5, 0, 0.5, 0)
+            shadow.AnchorPoint = vector2(0.5, 0.5)
+            shadow.Size = UDim2.new(1, 20, 1, 20)
+            shadow.SliceCenter = Rect.new(15, 15, 175, 175)
+            shadow.SliceScale = 1.3
+            shadow.ScaleType = Enum.ScaleType.Slice
+            shadow.ZIndex = 0
+            shadow.Parent = backframe
+            
+            local shade = Instance.new("Frame")
+            shade.Position = UDim2.new(0, 0, 0, 0)
+            shade.Size = UDim2.new(1, 0, 0, 5)
+            shade.Position = UDim2.new(0, 0, 1, -5)
+            shade.BorderSizePixel = 0
+            shade.BackgroundColor3 = color3n(0, 0, 0)
+            shade.BackgroundTransparency = 0.9
+            shade.ZIndex = 15
+            shade.Parent = bg
+            
+            local stambar = Instance.new("Frame")
+            stambar.AnchorPoint = vector2(1, 0)
+            stambar.Position = UDim2.new(1, 0, 0, 0)
+            stambar.Size = UDim2.new(1, 0, 1, 0)
+            stambar.BorderSizePixel = 0
+            stambar.BackgroundColor3 = c1
+            stambar.ZIndex = 5
+            stambar.Parent = bg
+    
+            local tlabel = Instance.new("TextLabel")
+            tlabel.Font = Enum.Font.Nunito
+            tlabel.Text = "<i>100%</i>"
+            tlabel.RichText = true
+            tlabel.TextColor3 = color3n(0, 0, 0)
+            tlabel.BackgroundTransparency = 1
+            tlabel.TextTransparency = 0.2
+            tlabel.TextStrokeTransparency = 1
+            tlabel.TextXAlignment = Enum.TextXAlignment.Right
+            tlabel.Size = UDim2.new(1, 0, 1, 0)
+            tlabel.Position = UDim2.new(0, 0, 0, 0)
+            tlabel.TextScaled = true
+            tlabel.AnchorPoint = vector2(0, 0)
+            tlabel.Parent = stambar
+            tlabel.ZIndex = 6
+    
+            connections["STAM1"] =  staminavalue.Changed:Connect(function(val) 
+                local amnt = val / 1000
+                
+                stambar.Position = UDim2.new(amnt, 0, 0, 0)
+                stambar.BackgroundColor3 = c2:Lerp(c1, amnt)
+                
+                local n = tostring(mfloor((amnt*100)+0.5))
+    
+                tlabel.Text = "<i>"..n.."%</i>" 
+                
+                if tlabel.Text:match("0") then
+                    tlabel.TextTransparency = 0
+                    twn(tlabel, {TextTransparency = 0.2}, 1) 
+                    
+                end
+                
+                local a,b = mabs(mfloor(val) - 495), mabs(mfloor(val) - 505)
+                
+                if a < 5 then
+                    twn(tlabel, {Position = UDim2.new(0.3, 0, 0, 0), TextColor3 = color3n(1, 1, 1)}, 1)
+                elseif b < 5 then
+                    twn(tlabel, {Position = UDim2.new(0, 0, 0, 0), TextColor3 = color3n(0, 0, 0)}, 1)
+                end
+            end)
+        end
+        
+        local h = FindFastChild(plr.Character, "Head")
+        if h then
+            local bar1 = FindFastChild(h, "StaminaBar")
+            if bar1 then bar1.Enabled = false end
+        
+            enable(h)
+        end
+        
+        connections["STAM2"] = plr.CharacterAdded:Connect(function(c) 
+            h = c:WaitForChild("Head", 5)
+            connections["STAM1"]:Disconnect()
+            
+            if h then
+                local bar1 = h:WaitForChild("StaminaBar",2)
+                bar1.Enabled = false
+                
+                enable(h)
+            end
+        
+        end)
+    end)
+
+    m_cstamgui.OnDisable:Connect(function() 
+        stambarui:Destroy()
+        connections["STAM1"]:Disconnect()
+        connections["STAM2"]:Disconnect()
+        
+        local bar1 = FindFastChild(plr.Character.Head, "StaminaBar")
+        
+        if bar1 then 
+            if p_infstam:IsEnabled() then return end
+            bar1.Enabled = true 
+        end
+        
+    end)
+
+end
 
 
 
@@ -1085,7 +1469,7 @@ do
         
         -- animate the older button out and delete it
         tspawn(function()
-            local t = twn(old,{Position = UDim2.new(-2, 0, 2, 20)})
+            local t = twn(old,{Position = UDim2.new(-2, 0, 2, 20)}, 0.3)
             t.Completed:Wait()
             old:Destroy()
         end)
@@ -1094,7 +1478,7 @@ do
             plr.PlayerScripts.GameControl["AFK - Client"].Disabled = true
         end)
         -- animate the newer button in after a short delay
-        tdelay(0.3, function() twn(afkbutton, {Position = UDim2.new(0, 0, 2, 20)}) end)
+        tdelay(0.3, function() twn(afkbutton, {Position = UDim2.new(0, 0, 2, 20)}, 0.3) end)
         
         
         
@@ -1111,7 +1495,4 @@ do
     -- finish
     handle()
 end
-
-
-
 
