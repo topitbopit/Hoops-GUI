@@ -53,6 +53,7 @@ local ui = loadstring(game:HttpGet('https://raw.githubusercontent.com/topitbopit
 
 ui:SetColors("legacy") -- 
 ui.TooltipX = 25
+ui.ScrollSpeed = 250
 
 if game.PlaceId ~= 360589910 then 
 	ui:NewMessagebox("Oopsies","The game you're in isn't Hoops Demo. Teleport there?", {
@@ -154,7 +155,7 @@ m_ball:NewSection("Render")
 m_player:NewSection("Movement")
   local p_infstam = m_player:NewToggle("Infinite stamina")
   local p_stamspeed = m_player:NewToggle("Custom stamina drain")
-  local p_stamspeedamt = m_player:NewSlider("Stamina drain speed",0,10,10)
+  local p_stamspeedamt = m_player:NewSlider("Stamina drain speed",0,20,20)
   local p_noslow = m_player:NewToggle("Noslowdown")
   local p_cctp = m_player:NewToggle("Ctrl+Click teleport")
   local p_speed = m_player:NewToggle("Legit speedhack")
@@ -164,12 +165,17 @@ m_player:NewSection("Movement")
   local p_jumpboostamt = m_player:NewSlider("Jump boost amount", 1, 150, 75)
   p_infstam:SetTooltip("Classic infinite stamina. Hides the stamina bar.")
   p_stamspeed:SetTooltip("Changes how fast or slow your stamina drains.")
-  p_stamspeedamt:SetTooltip("How fast or slow your stamina drains. 0 would freeze stamina, 10 would make it normal.")
+  p_stamspeedamt:SetTooltip("How fast or slow your stamina drains. 0 would freeze stamina, 20 would make it normal.")
   p_noslow:SetTooltip("Prevents you from being slowed down.")
   p_cctp:SetTooltip("Classic ctrl + click tp.")
   p_speed:SetTooltip("Speed thats slightly faster than normal sprinting.")
   p_njcd:SetTooltip("Emulates a jump, bypassing the cooldown. Also has less jump delay (0.25s -> 0.02s).")
 
+  p_stamspeed:Assert('getconstant')
+  p_stamspeed:Assert("setconstant")
+  p_stamspeed:Assert('getgc')
+  p_stamspeed:Assert('islclosure')
+  
 m_player:NewSection("Steals")
   local p_hbe = m_player:NewToggle("Hitbox expander")
   local p_hbesize = m_player:NewSlider("Hitbox expander size", 5, 20, 5)
@@ -224,7 +230,7 @@ p_antivoid:SetTooltip("If you fall under the map, you get kicked from the server
 p_bounds:SetTooltip("Makes boundaries around the court so you don't foul. Still a WIP")
 
 
-p_stamspeed:Hide("Unfinished")
+--p_stamspeed:Hide("Unfinished")
 b_cam:Hide("Unfinished")
 b_aimbot:Hide("Unfinished")
 b_velocity:Hide("Unfinished")
@@ -342,20 +348,78 @@ do
 end
 -- custom drain
 do 
+    local funcs = {}
     p_stamspeed.OnEnable:Connect(function() 
         --get script
-        local sc = FindFastChild(plr.Character, "Movement") and plr.Character["Movement"]["Sprinting"]
+        
+        funcs = {}
         connections["SS1"] = plr.CharacterAdded:Connect(function(c) 
-            sc = c:WaitForChild("Movement",5)
-            twait(0.02)
-            sc = sc["Sprinting"]
+            p_stamspeed:Hide("Waiting...")
+            twait(0.5)
+            p_stamspeed:Unhide()
+            if connections["SS2"] then connections["SS2"]:Disconnect() end
+            
+            funcs = {}
+            
+            for _,proto in ipairs(getgc()) do
+                if type(proto) == "function" and islclosure(proto) then
+                    pcall(function() 
+                        local c1 = getconstant(proto, 1)
+                        local c2 = getconstant(proto, 2)
+                        local c3 = getconstant(proto, 3)
+                        local c4 = getconstant(proto, 4)
+                        
+                        if type(c4) == "number" and tostring(c3) == "wait" then
+                            if c2 == 0 and c1 == "Value" then
+                                tinsert(funcs, proto)
+                                setconstant(proto, 4, p_stamspeedamt:GetValue()*0.1)
+                            end
+                        end
+                    end)
+                end
+            end
+            
+            connections["SS2"] = p_stamspeedamt.OnValueChanged:Connect(function(val) 
+                for _,proto in ipairs(funcs) do
+                    setconstant(proto, 4, val*0.1)
+                end
+            end)
         end)
         
+        for i,proto in ipairs(getgc()) do
+            if type(proto) == "function" and islclosure(proto) then
+                pcall(function() 
+                    local c1 = getconstant(proto, 1)
+                    local c2 = getconstant(proto, 2)
+                    local c3 = getconstant(proto, 3)
+                    local c4 = getconstant(proto, 4)
+                    
+                    if type(c4) == "number" and tostring(c3) == "wait" then
+                        if c2 == 0 and c1 == "Value" then
+                            tinsert(funcs, proto)
+                            setconstant(proto, 4, p_stamspeedamt:GetValue()*0.1)
+                        end
+                    end
+                end)
+            end
+        end
+        
+        connections["SS2"] = p_stamspeedamt.OnValueChanged:Connect(function(val) 
+            for _,proto in ipairs(funcs) do
+                setconstant(proto, 4, val*0.1)
+            end
+        end)
     end)
     
     p_stamspeed.OnDisable:Connect(function() 
-    
-    
+        for _,proto in ipairs(funcs) do
+            setconstant(proto, 4, 2.083)
+        end
+        
+        connections["SS1"]:Disconnect()
+        connections["SS2"]:Disconnect()
+        
+        funcs = {}
     end)
 end
 --noslow
@@ -781,8 +845,8 @@ do
     end)
     
     p_njcd.OnDisable:Connect(function() 
-        connections["NJCD2"]:Disconnect()
         ctx:UnbindAction("JH3-NJCD")
+        connections["NJCD2"]:Disconnect()
     end)
 end
 
@@ -1024,8 +1088,7 @@ do
                     
                     pcall(function()
                         local h = p.Character.HumanoidRootPart 
-                        if (h.Position - humrp.Position).Magnitude < 27 then
-                            h.Transparency = 0
+                        if (h.Position - humrp.Position).Magnitude < 17 then
                             local hum = p.Character.Humanoid
                             
                             for _,track in ipairs(hum:GetPlayingAnimationTracks()) do
@@ -1046,8 +1109,6 @@ do
                                     break
                                 end
                             end
-                        else
-                            h.Transparency = 1
                         end
                     end)
                 end
@@ -1056,8 +1117,9 @@ do
     end)
     
     p_autoblock.OnDisable:Connect(function() 
-        connections["AB1"]:Disconnect()
         rs:UnbindFromRenderStep("JH3-AB")
+        connections["AB1"]:Disconnect()
+        
     end)
 end
 
@@ -1160,7 +1222,7 @@ do
                     
                     local light = Instance.new("SpotLight")
                     light.Color = color3(255, 255, 245)
-                    light.Brightness = 0.2
+                    light.Brightness = 0.4
                     light.Range = 70
                     light.Shadows = true
                     light.Angle = 80
@@ -1171,7 +1233,7 @@ do
                     
                     local light = Instance.new("SpotLight")
                     light.Color = color3(255, 255, 235)
-                    light.Brightness = 0.1
+                    light.Brightness = 0.3
                     light.Range = 55
                     light.Shadows = true
                     light.Angle = 85
@@ -1354,8 +1416,10 @@ do
 
     m_cstamgui.OnDisable:Connect(function() 
         stambarui:Destroy()
-        connections["STAM1"]:Disconnect()
-        connections["STAM2"]:Disconnect()
+        pcall(function() 
+            connections["STAM1"]:Disconnect()
+            connections["STAM2"]:Disconnect()
+        end)
         
         local bar1 = FindFastChild(plr.Character.Head, "StaminaBar")
         
