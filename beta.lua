@@ -106,7 +106,7 @@ m_home:NewSection("Config")
 
 m_home:NewLabel()
 m_home:NewTrim()
-m_home:NewLabel("Version 3.0.0-BETA.3; UI version "..ui.Version)
+m_home:NewLabel("Version 3.0.0-BETA.4; UI version "..ui.Version)
 
 
 
@@ -213,6 +213,7 @@ m_misc:NewSection("Render")
   local m_cstamgui = m_misc:NewToggle("Custom stamina bar")
   m_nightmode:SetTooltip("Makes the court dark with lights")
   m_cstamgui:SetTooltip("Uses a custom stamina bar")
+  m_nightmode:Assert("sethiddenproperty")
   
 m_misc:NewSection("Server")
   local m_rejoin = m_misc:NewButton("Rejoin")
@@ -239,7 +240,6 @@ p_bounds:Hide("Unfinished")
 m_fixgame:Hide("Unfinished")
 m_deafen:Hide("Unfinished")
 m_antiplr:Hide("Unfinished")
-m_nightmode:Hide("Unfinished")
 m_rejoin:Hide("Unfinished")
 m_shop:Hide("Unfinished")
 m_priv:Hide("Unfinished")
@@ -1020,7 +1020,7 @@ do
                 twait(0.02)
                 for _,p in ipairs(players:GetPlayers()) do
                     if p == plr then continue end
-                    --if p.TeamColor == gameball.TeamColor.Value then continue end 
+                    if p.TeamColor == gameball.TeamColor.Value then continue end 
                     
                     pcall(function()
                         local h = p.Character.HumanoidRootPart 
@@ -1074,91 +1074,141 @@ do
     
     m_nightmode.OnEnable:Connect(function() 
         local d = {}
+        sethiddenproperty(game.Lighting, "Technology",Enum.Technology.Future)
         
-        d[1]=FindFastChild(workspace,"JH3-Nightmode")
-        d[2]=FindFastChild(gameball,"Spotlight")
-        d[3]=FindFastChild(lighting,"JH3-Bloom")
+        tinsert(d,FindFastChild(workspace,"JH3-Nightmode"))
+        tinsert(d,FindFastChild(gameball,"Spotlight"))
+        tinsert(d,FindFastChild(lighting,"JH3-Bloom"))
         for _,i in ipairs(d) do i:Destroy()end
         
-        lighting.Ambient = Color3.fromRGB(1, 1, 1)
+        lighting.Ambient = color3(5, 5, 6)
         lighting.Brightness = 0.1
         lighting.GlobalShadows = true
         lighting.TimeOfDay = 1
         
         local jhfolder = Instance.new("Folder")
-        
-        jhfolder.Name = "JHoops Nightmode"
-        jhfolder.Parent = game.Workspace
+        jhfolder.Name = "JH3-Nightmode"
+        jhfolder.Parent = workspace
         
         local bloom = Instance.new("BloomEffect")
-        bloom.Intensity = 1.5
-        bloom.Threshold = 0.85
+        bloom.Intensity = 1.2
+        bloom.Threshold = 0.8
+        bloom.Size = 500
         bloom.Name = "JH3-Bloom"
         bloom.Parent = lighting
         
         local shadow = Instance.new("Part")
+        shadow.Position = vector(0,300,0)
         shadow.Anchored = true
-        shadow.Position = game.Workspace.Floor.CenterLine.Position + Vector3.new(0, 300, 0)
-        shadow.Name = "ShadowEffect"
+        shadow.Name = "shadow"
         shadow.CanCollide = false
         shadow.Transparency = 0
-        shadow.Color = Color3.fromRGB(0, 0, 0)
-        shadow.Size = Vector3.new(2345, 500, 2345)
-        shadow.Parent = jhfolder
+        shadow.Color = color3(0, 0, 0)
+        shadow.Size = vector(3000, 500, 3000)
         shadow.BottomSurface = Enum.SurfaceType.SmoothNoOutlines
+        shadow.Parent = jhfolder
         
+        local spot = Instance.new("Part")
+        spot.Anchored = true
+        spot.CanCollide = false
+        spot.Name = "aimball"
+        spot.Transparency = 1 
+        spot.Size = vector(1,1,1)
+        spot.Position = vector(0, 20, 0)
+        spot.Parent = jhfolder
         
-        local light = Instance.new("PointLight")
-        light.Parent = ReplicatedStorage.GameBall.Value
-        light.Color = Color3.fromRGB(255, 255, 235 + math.random(10, 20))
-        light.Brightness = 2
-        light.Range = math.random(19,21)
+        local light = Instance.new("SpotLight")
+        light.Color = color3(255, 255, 253)
+        light.Brightness = 1.7
+        light.Range = 999
         light.Shadows = true
-        for z = -2, 2 do 
-            for x = -2, 2 do
-                local p1 = Instance.new("Part")
-                p1.Anchored = true
-                p1.Position = game.Workspace.Floor.CenterLine.Position + Vector3.new(29 * x, 35, 29 * z)
-                p1.Name = "LightPart_1"
-                p1.CanCollide = false
-                p1.Transparency = 0
-                p1.Parent = jhfolder
-                p1.Color = Color3.fromRGB(2, 2, 8)
-                p1.Size = Vector3.new(4, 5, 4)
-                p1.Rotation = Vector3.new(0, 0, 90)
-                p1.TopSurface = Enum.SurfaceType.Smooth
-                p1.BottomSurface = Enum.SurfaceType.Smooth
-                p1.Shape = Enum.PartType.Cylinder
-                
-                local p2 = p1:Clone()
-                p2.Name = "LightPart_2"
-                p2.Material = Enum.Material.Neon
-                p2.Size = Vector3.new(3, 4, 3)
-                p2.Parent = p1
-                p2.Position = p1.Position - Vector3.new(0, 1, 0)
-                p2.Shape = Enum.PartType.Cylinder
-                
-                local light = Instance.new("SpotLight")
-                light.Parent = p2
-                light.Color = Color3.fromRGB(255, 255, 235 + math.random(10, 20))
-                light.Brightness = 6
-                light.Range = math.random(31,35)
-                light.Shadows = true
-                light.Angle = 90 
-                light.Face = Enum.NormalId.Left
-                
-                p2.Color = light.Color
-                
-                
-            end
+        light.Angle = 50
+        light.Face = Enum.NormalId.Front
+        light.Parent = spot
+        
+        for z = -3, 3 do 
+            tspawn(function()
+                for x = -3, 3 do
+                    local p1 = Instance.new("Part")
+                    p1.Anchored = true
+                    p1.Position = vector(35 * x, 60, 35 * z)
+                    p1.Name = "1"
+                    p1.CanCollide = false
+                    p1.Transparency = 0
+                    p1.Color = color3(2,2,8)
+                    p1.Size = vector(43, 4, 4)
+                    p1.Rotation = vector(z*6, 0, 90)
+                    p1.TopSurface = Enum.SurfaceType.Smooth
+                    p1.BottomSurface = Enum.SurfaceType.Smooth
+                    p1.Shape = Enum.PartType.Cylinder
+                    p1.Parent = jhfolder
+                    
+                    local p2 = p1:Clone()
+                    p2.Name = "2"
+                    p2.Material = Enum.Material.Neon
+                    p2.Size = vector(1, 3.5, 3.5)
+                    p2.Anchored = false
+                    p2.Shape = Enum.PartType.Cylinder
+                    p2.Parent = p1
+                    
+                    local weld = Instance.new("Weld")
+                    weld.Part0 = p1
+                    weld.Part1 = p2
+                    weld.C0 = cframe(-21.5,0,0)
+                    weld.C1 = cframe(0,0,0)
+                    weld.Parent = p2
+                    
+                    local light = Instance.new("SpotLight")
+                    light.Color = color3(255, 255, 245)
+                    light.Brightness = 0.2
+                    light.Range = 70
+                    light.Shadows = true
+                    light.Angle = 80
+                    light.Face = Enum.NormalId.Left
+                    light.Parent = p2
+                    
+                    p2.Color = light.Color
+                    
+                    local light = Instance.new("SpotLight")
+                    light.Color = color3(255, 255, 235)
+                    light.Brightness = 0.1
+                    light.Range = 55
+                    light.Shadows = true
+                    light.Angle = 85
+                    light.Face = Enum.NormalId.Left
+                    light.Parent = p2
+                    
+                    
+                    twait(0.05)
+                    p2.Anchored = true
+                    
+                    
+                end
+            end)
         end 
         
-    
+        tspawn(function() 
+            while m_nightmode:IsEnabled() do
+                twait(0.1)
+                twn(spot, 
+                {CFrame = cframe(
+                    vector(0, 20, 0), 
+                    gameball.Position+vector(0,1,0)
+                )}, 1)
+                
+            end
+        end)
     end)
     
     
     m_nightmode.OnDisable:Connect(function() 
-    
+        local d = {}
+        tinsert(d,FindFastChild(workspace,"JH3-Nightmode"))
+        tinsert(d,FindFastChild(gameball,"Spotlight"))
+        tinsert(d,FindFastChild(lighting,"JH3-Bloom"))
+        for _,i in ipairs(d) do i:Destroy()end
+        sethiddenproperty(game.Lighting, "Technology",Enum.Technology.Compatibility)
+        
         lighting.Brightness = 1
         lighting.Ambient = Color3.fromRGB(127, 127, 127)
         lighting.GlobalShadows = false
