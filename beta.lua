@@ -107,7 +107,7 @@ m_home:NewSection("Config")
 
 m_home:NewLabel()
 m_home:NewTrim()
-m_home:NewLabel("Version 3.0.0-BETA.4; UI version "..ui.Version)
+m_home:NewLabel("Version 3.0.0-BETA.5; UI version "..ui.Version)
 
 
 
