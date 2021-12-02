@@ -1,7 +1,2624 @@
-if not game:IsLoaded()then game.Loaded:Wait()end;local a=game:GetService("Players")local b=game:GetService("ReplicatedStorage")local c=game:GetService("Lighting")local d=game:GetService("UserInputService")local e=game:GetService("RunService")local f=game:GetService("ContextActionService")local g=game:GetService("VirtualInputManager")local h=game:GetService("TweenService")local i=CFrame.new;local j=Vector3.new;local k=Vector2.new;local l=Color3.new;local m=Color3.fromRGB;local n=task.wait;local o=task.delay;local p=task.spawn;local q=coroutine.wrap;local r=coroutine.create;local s=coroutine.resume;local t=table.insert;local u=table.remove;local v=table.foreach;local w=math.floor;local x=math.ceil;local y=math.abs;local z=math.random;local function A(B,C)local D,E=pcall(function()return B[C]end)return D and E or nil end;local function F(G,H,I)local J=h:Create(G,TweenInfo.new(I,Enum.EasingStyle.Exponential,Enum.EasingDirection.Out),H)J:Play()return J end;local function K(L,M,N)local O=workspace:Raycast(L,i(L,M).LookVector*20,N)if O then local P=O.Instance;return not(P and true or false)end;return true end;local Q=loadstring(game:HttpGet('https://raw.githubusercontent.com/topitbopit/rblx/main/ui-stuff/jeff_2.lua'))()Q:SetColors("legacy")Q.TooltipX=25;Q.ScrollSpeed=250;if game.PlaceId~=360589910 then Q:NewMessagebox("Oopsies","The game you're in isn't Hoops Demo. Teleport there?",{{Text="Yes",Callback=function(R)R:FadeText("Hold on...","Trying to teleport...")local h=game:GetService("TeleportService")local S,T=pcall(function()h:Teleport(360589910,a.LocalPlayer)end)if S then S:Close()else R:FadeText("Something went wrong","Couldn't teleport; "..T)end end},{Text="No",Callback=function(R)R:FadeText("Ok","See you later")wait(2)R:Close()end}},80,-30)return end;local U=Q:NewWindow("Jeff Hoops",400,300)local V=U:NewMenu("Home")local W=U:NewMenu("Ball")local X=U:NewMenu("Player")local Y=U:NewMenu("Misc")V:NewLabel("Jeff Hoops made by topit")local Z=V:NewButton("Join the discord")local _=V:NewButton("View changelog")Z:SetTooltip("Click to copy the discord invite")_:SetTooltip("View the changelog [WIP]")V:NewSection("Config")local a0=V:NewButton("Load config")local a1=V:NewButton("Save config")a0:SetTooltip("Click to open a file")a1:SetTooltip("Click to save a file")V:NewLabel()V:NewTrim()V:NewLabel("Version 3.0.0-BETA.6; UI version "..Q.Version)W:NewSection("Aimbot / Auto green")local a2=W:NewToggle("Aimbot")local a3=W:NewDropdown("Aimbot mode",{"One press","Classic"})local a4=W:NewToggle("Custom delay")local a5=W:NewSlider("Custom delay (MS)",475,550,505)local a6=W:NewToggle("Auto green")local a7=W:NewDropdown("Auto green method",{"Bar cutter","Public","Keyrelease"})a3:SetTooltip("Changes the aimbot method.\nOne press: fakes a jump shot\nClassic: hold-R-until-you-red aimbot")a2:SetTooltip("Tries to fake you getting a green. Doesn't work every time.")a4:SetTooltip("Uses the inputted delay instead of predicting what the delay should be.")a6:SetTooltip("Tries to get a green for you. Not always 100%, depends on ping and distance.")a7:SetTooltip("Uses a different auto green method.\nBar cutter: Looks cool, might work as well as public\nPublic: Can work well\nKey: Uses keyrelease, may not work as well as others")W:NewSection("OP")local a8=W:NewToggle("Power dunks")local a9=W:NewToggle("Better dunks")local aa=W:NewToggle("Ball fly")local ab=W:NewToggle("Auto inbound")local ac=W:NewToggle("Auto grab")a8:SetTooltip("Classic power dunks, also lets you air strafe.")a9:SetTooltip("Gives you more consistent dunks. Works well with most dunk animations")aa:SetTooltip("Flies you to the hoop when you pickup the ball")ab:SetTooltip("Teleports you to the inbound circle.")ac:SetTooltip("Sorta like an HBE, but way better.")W:NewSection("Render")local ad=W:NewToggle("Ball prediction")local ae=W:NewDropdown("Prediction style",{"Drawing","Simple","GUI"})local af=W:NewToggle("Highlight")local ag=W:NewToggle("Ball cam")ad:SetTooltip("Shows where the ball is gonna land. Doesn't include collisions.")ae:SetTooltip("The prediction style.\nDrawing: Coolest but may lag, requires drawing library\nSimple: Simple mode that won't lag\nGUI: Uses billboard guis, shows where the ball collides")af:SetTooltip("Highlights the ball so you know where it is at all times.")ag:SetTooltip("Custom ball cam")W:NewSection("Troll")local ah=W:NewToggle("Spam shoot")ah:SetTooltip("Spam shoots the ball when it can.\nNote that this will lag your game when used!")W:NewSection("Work in progress")local ai=W:NewToggle("Auto layup")ai:SetTooltip("Automatically layups when you're close to the hoop. Gives 3 points for some reason.")X:NewSection("Movement")local aj=X:NewToggle("Infinite stamina")local ak=X:NewToggle("Custom stamina drain")local al=X:NewSlider("Stamina drain speed",0,20,20)local am=X:NewToggle("Noslowdown")local an=X:NewToggle("Ctrl+Click teleport")local ao=X:NewToggle("Legit speedhack")local ap=X:NewToggle("No jump cooldown")local aq=X:NewToggle("Jump boost")local ar=X:NewSlider("Jump boost amount",1,150,75)aj:SetTooltip("Classic infinite stamina. Hides the stamina bar.")ak:SetTooltip("Changes how fast or slow your stamina drains.")al:SetTooltip("How fast or slow your stamina drains. 0 would freeze stamina, 20 would make it normal.")am:SetTooltip("Prevents you from being slowed down.")an:SetTooltip("Classic ctrl + click tp.")ao:SetTooltip("Speed thats slightly faster than normal sprinting.")ap:SetTooltip("Emulates a jump, bypassing the cooldown. Also has less jump delay (0.25s -> 0.02s).")ak:Assert('getconstant')ak:Assert("setconstant")ak:Assert('getgc')ak:Assert('islclosure')X:NewSection("Steals")local as=X:NewToggle("Hitbox expander")local at=X:NewToggle("Hitbox expander [other team]")local au=X:NewSlider("Hitbox expander size",5,20,5)local av=X:NewToggle("Steal aura")local aw=X:NewToggle("Anti-steal")as:SetTooltip("Your average HBE, but more customizable.")au:SetTooltip("Controls the size of the HBE.")av:SetTooltip("Should make whoever you walk into drop the ball. Uses animations, so it might be obvious.")aw:SetTooltip("Spam G when you're not shooting to prevent steals. Stop spamming before you shoot, or else it'll glitch.")av:Assert("firetouchinterest")X:NewSection("OP")local ax=X:NewToggle("No delay")local ay=X:NewToggle("Auto block")local az=X:NewToggle("Auto block facing check")local aA=X:NewSlider("Auto block range",5,25,17)ax:Assert("setconstant")ax:SetTooltip("Removes steal delay. Will effect other things eventually.")ay:SetTooltip("Automatically jumps towards players that are about to shoot")az:SetTooltip("Only jumps towards the ball if you are facing towards the shooter, and not away")aA:SetTooltip("Only jumps towards players within this radius (magnitude check)")X:NewSection("Troll")local aB=X:NewToggle("TP to ball")local aC=X:NewDropdown("TP to ball mode",{"Always","When not holding","When teams not holding","When other team holding"})aB:SetTooltip("Teleports you to the ball")local aD=X:NewButton("Force everyone to face you")aD:SetTooltip("Makes everyone look at you as if you were passing to them")X:NewSection("Misc")local aE=X:NewToggle("Anti-void")local aF=X:NewToggle("Bounds")Y:NewSection("Panic")local aG=Y:NewToggle("Hide GUI")local aH=Y:NewButton("Panic")aG:SetTooltip("When enabled, the GUI gets disabled until untoggled (hotkey) or you say /e enable. Useful for screensharing")aH:SetTooltip("Immediately disables all enabled modules")Y:NewSection("Game")local aI=Y:NewButton("Fix game")local aJ=Y:NewToggle("Deafen")local aK=Y:NewToggle("Anti-playergrade")aI:SetTooltip("Fixes a lot of issues the game may have.")aJ:SetTooltip("Removes some loud game sounds, like the cheering and buzzer.")aK:SetTooltip("Removes playergrade related remotes and scripts, possibly preventing player grade drops.")Y:NewSection("Render")local aL=Y:NewToggle("Nightmode")local aM=Y:NewToggle("Custom stamina bar")aL:SetTooltip("Makes the court dark with lights")aM:SetTooltip("Uses a custom stamina bar")aL:Assert("sethiddenproperty")Y:NewSection("Server")local aN=Y:NewButton("Rejoin")local aO=Y:NewButton("Serverhop")local aP=Y:NewButton("Join smallest server")aE:SetTooltip("If you fall under the map, you get kicked from the server. Antivoid teleports you up if you fall under.")aF:SetTooltip("Makes boundaries around the court so you don't foul. Still a WIP")ag:Hide("Unfinished")a2:Hide("Unfinished")af:Hide("Unfinished")ai:Hide("Unfinished")aE:Hide("Unfinished")aF:Hide("Unfinished")aK:Hide("Unfinished")aN:Hide("Unfinished")aO:Hide("Unfinished")aP:Hide("Unfinished")local aQ=a.LocalPlayer;local aR=aQ:GetMouse()local aS=require(b.Modules.RimPositions)local aT=require(aQ.PlayerScripts.Modules.LoadAnimations)local aU=b.GameBall;local aV=aU.Value;local aW=b.Scoreboard.GameState;local aX=syn and syn.secure_call or(secure_call or securecall)or warn("Your exploit doesn't support secure call!")local aY={}aY["BUP"]=aU:GetPropertyChangedSignal("Value"):Connect(function()aV=aU.Value end)do Z.OnClick:Connect(function()setclipboard("https://discord.gg/Gn9vWr8DJC")Q:NewNotification("Discord","Copied invite to clipboard!",3)end)end;do aj.OnEnable:Connect(function()local aZ=aQ.PlayerScripts.Events.Player.Stamina.Stamina;e:BindToRenderStep("JH3-IS",600,function()aZ.Value=1050 end)aY["IS"]=aQ.CharacterAdded:Connect(function(a_)local b0=a_:WaitForChild("Head",4)if b0 then local b1=A(b0,"StaminaBar")local b2=A(b0,"JHStaminaBar")if b1 then b1.Enabled=false end;if b2 then b2.Enabled=false end else warn("Oopsies; infinite stamina couldn't work properly")end end)local b0=A(aQ.Character,"Head")if b0 then local b1=A(b0,"StaminaBar")local b2=A(b0,"JHStaminaBar")if b1 then b1.Enabled=false end;if b2 then b2.Enabled=false end end end)aj.OnDisable:Connect(function()e:UnbindFromRenderStep("JH3-IS")aY["IS"]:Disconnect()local b0=A(aQ.Character,"Head")if b0 then if aM:IsEnabled()then local b1=A(b0,"StaminaBar")local b2=A(b0,"JHStaminaBar")if b1 then b1.Enabled=false end;if b2 then b2.Enabled=true end else local b1=A(b0,"StaminaBar")if b1 then b1.Enabled=true end end end end)end;do local b3={}ak.OnEnable:Connect(function()b3={}aY["SS1"]=aQ.CharacterAdded:Connect(function(b4)ak:Hide("Waiting...")n(0.5)ak:Unhide()if aY["SS2"]then aY["SS2"]:Disconnect()end;b3={}for b5,b6 in ipairs(getgc())do if type(b6)=="function"and islclosure(b6)then pcall(function()local b7=getconstant(b6,1)local b8=getconstant(b6,2)local b9=getconstant(b6,3)local ba=getconstant(b6,4)if type(ba)=="number"and tostring(b9)=="wait"then if b8==0 and b7=="Value"then t(b3,b6)setconstant(b6,4,al:GetValue()*0.1)end end end)end end;aY["SS2"]=al.OnValueChanged:Connect(function(bb)for b5,b6 in ipairs(b3)do setconstant(b6,4,bb*0.1)end end)end)for bc,b6 in ipairs(getgc())do if type(b6)=="function"and islclosure(b6)then pcall(function()local b7=getconstant(b6,1)local b8=getconstant(b6,2)local b9=getconstant(b6,3)local ba=getconstant(b6,4)if type(ba)=="number"and tostring(b9)=="wait"then if b8==0 and b7=="Value"then t(b3,b6)setconstant(b6,4,al:GetValue()*0.1)end end end)end end;aY["SS2"]=al.OnValueChanged:Connect(function(bb)for b5,b6 in ipairs(b3)do setconstant(b6,4,bb*0.1)end end)end)ak.OnDisable:Connect(function()for b5,b6 in ipairs(b3)do setconstant(b6,4,2.083)end;aY["SS1"]:Disconnect()aY["SS2"]:Disconnect()b3={}end)end;do am.OnEnable:Connect(function()local bd=aQ.PlayerScripts.Events.Player.DisableControls;local be=A(aQ.Character,"Humanoid")local bf=A(aQ.Character,"HumanoidRootPart")bd:Fire(false)aY["NS1"]=aQ.CharacterAdded:Connect(function(a_)be=a_:WaitForChild("Humanoid",5)bf=A(a_,"HumanoidRootPart")if not bf then n(0.05)bf=A(a_,"HumanoidRootPart")if not bf then warn("[NOSLOW] Couldn't get humanoidrootpart; try resetting and re-enabling.")end end;aY["NS2"]:Disconnect()aY["NS2"]=bf:GetPropertyChangedSignal("Anchored"):Connect(function()bf.Anchored=false end)end)aY["NS2"]=bf:GetPropertyChangedSignal("Anchored"):Connect(function()bf.Anchored=false end)e:BindToRenderStep("JH3-NS",605,function()pcall(function()if be.WalkSpeed<16 then be.WalkSpeed=16 end end)end)end)am.OnDisable:Connect(function()e:UnbindFromRenderStep("JH3-NS")aY["NS1"]:Disconnect()aY["NS2"]:Disconnect()end)end;do ac.OnEnable:Connect(function()local bg=A(aQ.Character,"Left Arm")aY["AG"]=aQ.CharacterAdded:Connect(function(a_)bg=a_:WaitForChild("Left Arm",4)end)e:BindToRenderStep("JH3-AG",700,function()pcall(firetouchinterest,bg,aV,1)pcall(firetouchinterest,bg,aV,0)end)end)ac.OnDisable:Connect(function()aY["AG"]:Disconnect()e:UnbindFromRenderStep("JH3-AG")end)ac:Assert("firetouchinterest")end;do local bh={}local bi=0;ad.OnEnable:Connect(function()local bj=j(0,workspace.Gravity,0)local bk=ae:GetSelection()if bk=="Drawing"then if Drawing==nil then bi=0;Q:NewNotification("Oopsies","Your exploit doesn't have Drawing!",3)ad:Disable()return end;bi=1;local bl=workspace.CurrentCamera;local bm=bl.WorldToViewportPoint;for bc=1,15 do local bn=Drawing.new("Line")bn.Color=l(0.2,0.2,1)bn.Thickness=5;bn.Visible=true;t(bh,bn)end;p(function()n(0.1)local bo=RaycastParams.new()bo.FilterDescendantsInstances={aV}bo.FilterType=Enum.RaycastFilterType.Blacklist;n(0.05)while ad:IsEnabled()do for bp,bq in ipairs(bh)do local br=bp*0.06;local bs=aV.Position+aV.Velocity*1.4*br-bj*br^2;local bt=K(bs,bl.CFrame.Position,bo)if bt==false then for bc=bp,#bh do bh[bc].Visible=false end;break end;local bu,bv=bm(bl,bs)if bv==false then for bc=bp,#bh do bh[bc].Visible=false end;break end;local br=(bp+1)*0.06;local bw=aV.Position+aV.Velocity*1.4*br-bj*br^2;local bx=K(bw,bl.CFrame.Position,bo)if bx==false then for bc=bp,#bh do bh[bc].Visible=false end;break end;local by,bz=bm(bl,bw)if bz==false then for bc=bp,#bh do bh[bc].Visible=false end;break end;bq.Visible=true;bq.To=k(bu.X,bu.Y)bq.From=k(by.X,by.Y)end;n()n()end end)elseif bk=="Simple"then bi=2;for bc=1,35 do local bA=aV:Clone()bA:ClearAllChildren()bA.Anchored=true;bA.Transparency=0.6;bA.CanCollide=false;bA.Shape=Enum.PartType.Ball;bA.Size=j(.4,.4,.4)bA.Material=Enum.Material.Neon;bA.Color=l(1,1,1)bA.Parent=workspace;t(bh,bA)end;p(function()while ad:IsEnabled()do for bp,bq in ipairs(bh)do local br=bp*0.05;bq.Position=aV.Position+aV.Velocity*1.4*br-bj*br^2 end;n(0.01)end end)elseif bk=="GUI"then bi=3;for bc=1,20 do local bB=Instance.new("Part")bB.Anchored=true;bB.Transparency=1;bB.CanCollide=false;bB.Size=j(.1,.1,.1)bB.Position=j(0,5,0)bB.Parent=workspace;local D=Instance.new("BillboardGui")D.Size=UDim2.new(0.3,3,0.3,3)D.LightInfluence=0.2;D.Enabled=true;D.Name="g"D.Parent=bB;local bC=Instance.new("Frame")bC.BackgroundColor3=l(0.2,0.2,1)bC.BorderColor3=l(0.1,0.1,0.1)bC.BorderSizePixel=1;bC.Size=UDim2.new(1,0,1,0)bC.BackgroundTransparency=0.1;bC.Name="f"bC.Parent=D;t(bh,bB)end;p(function()local bo=RaycastParams.new()bo.FilterDescendantsInstances={aV}bo.FilterType=Enum.RaycastFilterType.Blacklist;local bl=workspace.CurrentCamera;while ad:IsEnabled()do for bp,bq in ipairs(bh)do local br=bp*0.04;local bs=aV.Position+aV.Velocity*1.4*br-bj*br^2;bq.Position=bs end;n()end end)end end)ad.OnDisable:Connect(function()if bi==1 then n(0.5)for b5,bq in ipairs(bh)do for bD=1,3 do pcall(function()bq:Remove()end)end end;bh={}else for b5,bq in ipairs(bh)do bq:Destroy()end;bh={}end end)ae.OnSelection:Connect(function()if ad:IsEnabled()then ad:Disable()ad:Enable()end end)end;do an.OnEnable:Connect(function()aY["CCTP"]=aR.Button1Down:Connect(function()if d:IsKeyDown(Enum.KeyCode.LeftControl)then local bE=A(aQ.Character,"HumanoidRootPart")if not bE then return end;pcall(function()aR.TargetFilter=workspace.RestrictedCircle end)local bF=bE.CFrame.LookVector;local P=aR.Hit.Position+j(0,3,0)bE.CFrame=i(P,P+bF)end end)end)an.OnDisable:Connect(function()aY["CCTP"]:Disconnect()end)end;do ah.OnEnable:Connect(function()local bG=b.Ball.StartShooting;local bH=b.Ball.EndShooting;local bI=0;while ah:IsEnabled()do bG:FireServer()bI=bI+1;s(r(function()bH:InvokeServer(true,"Perfect")bI=bI-1 end))n(0.05)if bI>50 then n(0.1)end end end)end;do ab.OnEnable:Connect(function()aY["IB"]=workspace.ChildAdded:Connect(function(b4)if b4.Name=="ThrowIn"then print("New circle")local bJ=workspace:WaitForChild("RestrictedCircle",5)if bJ.Display.BrickColor==aQ.TeamColor then print("Is on team")local bf=A(aQ.Character,"HumanoidRootPart")if not bf then warn("Can't inbound; character not alive")Q:NewNotification("Inbound","Couldn't take inbound, character's not alive",4)return end;if aV.Parent==workspace then bf.CFrame=b4.CFrame end end end end)end)ab.OnDisable:Connect(function()aY["IB"]:Disconnect()end)ab:Assert("firetouchinterest")end;do a8.OnEnable:Connect(function()local bK=PhysicalProperties.new(100,0.3,0.5)while a8:IsEnabled()do for bc,bL in ipairs(aQ.Character:GetChildren())do if A(bL,"CustomPhysicalProperties")then bL.CustomPhysicalProperties=bK end end;n(10)end end)a8.OnDisable:Connect(function()local bK=PhysicalProperties.new(0.7,0.3,0)for bc,bL in ipairs(aQ.Character:GetChildren())do if A(bL,"CustomPhysicalProperties")then bL.CustomPhysicalProperties=bK end end end)end;do local bM;aa.OnEnable:Connect(function()local bN=aS.GetOffensiveRim(aQ)bM=Instance.new("BodyPosition")bM.Parent=aV;bM.D=125;bM.MaxForce=j(999999,999999,999999)bM.Position=j(bN.X/1.1,bN.Y,bN.Z)while aa:IsEnabled()do pcall(function()local bN=aS.GetOffensiveRim(aQ)bM.Position=j(bN.X/1.1,bN.Y,bN.Z)bM.Parent=aV end)n(20)end end)aa.OnDisable:Connect(function()bM:Destroy()end)end;do ax.OnEnable:Connect(function()local a_=aQ.Character;aY["ND"]=aQ.CharacterAdded:Connect(function(b4)end)if not A(a_,"BallControl")then warn("[ND] No character, waiting until next spawn to enable")return end;local R=getsenv(a_["BallControl"]["Defense - Client"])["Steal_Ball"]setconstant(R,31,0)end)ax.OnDisable:Connect(function()aY["ND"]:Disconnect()local a_=aQ.Character;if not A(a_,"BallControl")then Q:NewMessagebox("Oopsies","You have to be spawned in!")ax:Disable()return end;local R=getsenv(a_["BallControl"]["Defense - Client"])["Steal_Ball"]setconstant(R,31,1.2)end)end;do as.OnEnable:Connect(function()local b0=A(aQ.Character,"HumanoidRootPart")aY["HBE1"]=aQ.CharacterAdded:Connect(function(b4)local b0=b4:WaitForChild("HumanoidRootPart",3)if not b0 then warn("[HBE] Couldn't apply HBE properly! Try resetting")Q:NewNotification("Oopsies","Something went wrong, check your console "..(syn and getsynasset and"(internal synapse ui)"or"(F9 or insert)"),3)return end;local bO=au:GetValue()b0.Size=j(bO,2,bO)b0.Transparency=0.7;aY["HBE2"]:Disconnect()aY["HBE2"]=au.OnValueChanged:Connect(function(bO)b0.Size=j(bO,2,bO)end)end)if not b0 then warn("[HBE] No character, waiting until respawn")return end;local bO=au:GetValue()b0.Size=j(bO,2,bO)b0.Transparency=0.7;aY["HBE2"]=au.OnValueChanged:Connect(function(bO)b0.Size=j(bO,2,bO)end)end)as.OnDisable:Connect(function()local b0=A(aQ.Character,"HumanoidRootPart")if b0 then b0.Size=j(2,2,1)b0.Transparency=1 end;aY["HBE1"]:Disconnect()aY["HBE2"]:Disconnect()end)local bP={}at.OnEnable:Connect(function()for b5,P in ipairs(a:GetPlayers())do if P==aQ then continue end;local bQ=P.CharacterAdded:Connect(function(b4)if P.Team~=aQ.Team then local bf=b4:WaitForChild("HumanoidRootPart",5)bf.Size=j(au:GetValue(),2,au:GetValue())bf.Transparency=0.7 end end)t(bP,bQ)local bf=A(P.Character,"HumanoidRootPart")if bf and P.Team~=aQ.Team then bf.Size=j(au:GetValue(),2,au:GetValue())bf.Transparency=0.7 end end;aY["OHBE1"]=au.OnValueChanged:Connect(function()for b5,P in ipairs(a:GetPlayers())do if P==aQ then continue end;local bf=A(P.Character,"HumanoidRootPart")if bf and P.Team~=aQ.Team then bf.Size=j(au:GetValue(),2,au:GetValue())bf.Transparency=0.7 end end end)end)at.OnDisable:Connect(function()for b5,bQ in ipairs(bP)do bQ:Disconnect()end;for b5,P in ipairs(a:GetPlayers())do if P==aQ then continue end;local bf=A(P.Character,"HumanoidRootPart")if bf then bf.Size=j(2,2,1)bf.Transparency=1 end end;if aY["OHBE1"]then aY["OHBE1"]:Disconnect()end end)end;do ao.OnEnable:Connect(function()local be=A(aQ.Character,"Humanoid")aY["SPD"]=aQ.CharacterAdded:Connect(function(b4)be=b4:WaitForChild("Humanoid",4)if not be then warn("[SPD] Humanoid not found; speedhack won't work. Try resetting.")end end)e:BindToRenderStep("JH3-SPD",1400,function()pcall(function()be.WalkSpeed=21 end)end)end)ao.OnDisable:Connect(function()e:UnbindFromRenderStep("JH3-SPD")local be=A(aQ.Character,"Humanoid")if not be then return end;if d:IsKeyDown("LeftShift")then be.WalkSpeed=20 else be.WalkSpeed=16 end end)end;do local bR=workspace.Floor.LeftSide.Stand.Hoop.GoalDetection;local bS=workspace.Floor.RightSide.Stand.Hoop.GoalDetection;ap.OnEnable:Connect(function()local function hook(b4)local be=A(b4,"Humanoid")or b4:WaitForChild("Humanoid",3)local bf=A(b4,"HumanoidRootPart")local bT=be:LoadAnimation(b4.BallControl["Defense - Client"].Block)if not be then warn("[NJCD] Oopsies; something went wrong. Try disabling no jump cd, resetting, and re-enabling. [1]")end;if not bf then warn("[NJCD] Oopsies; something went wrong. Try disabling no jump cd, resetting, and re-enabling. [2]")end;if not bT then warn("[NJCD] Oopsies; something went wrong. Try disabling no jump cd, resetting, and re-enabling. [3]")end;f:UnbindAction("JH3-NJCD")f:BindActionAtPriority("JH3-NJCD",function(b5,bU)if bU==Enum.UserInputState.Begin then if be.FloorMaterial==Enum.Material.Air then return end;bT:play(0.25)n(0.02)if(bf.Position-bR.Position).Magnitude<10 then be.JumpPower=21.52 elseif(bf.Position-bS.Position).Magnitude<10 then be.JumpPower=21.52 else be.JumpPower=18.64 end;be.Jump=true;n(0.02)be.JumpPower=0 end end,false,999999,Enum.KeyCode.Space)end;aY["NJCD2"]=aQ.CharacterAdded:Connect(function(b4)hook(b4)end)if A(aQ.Character,"Humanoid")then hook(aQ.Character)end end)ap.OnDisable:Connect(function()f:UnbindAction("JH3-NJCD")aY["NJCD2"]:Disconnect()end)end;do a6.OnEnable:Connect(function()local T=a7:GetSelectedOption()if T=="Keyrelease"then aY["AG1"]=workspace.ChildAdded:Connect(function(b4)if b4.Name~="ShotMeter"then return end;if A(aQ.Character,"Basketball")or aW.Value=="Free Throw"then local bV=A(b4,"SurfaceGui")or b4:WaitForChild("SurfaceGui",3)bV=A(bV,"Circle")or bV:WaitForChild("Circle",3)local bW;n(0.02)local bX=bV:GetChildren()for bc,bL in pairs(bX)do if bL.BackgroundColor3.R==1 then if tonumber(bL.Name)>15 then bW=bV[bL.Name-2]break end end end;if not bW then bW=bV["130"]end;bW.BackgroundColor3=l(0.27,0.14,0.76)aY["AG2"]=bW:GetPropertyChangedSignal("BackgroundColor3"):Connect(function()keyrelease(0x52)aY["AG2"]:Disconnect()end)end end)elseif T=="Bar cutter"then aY["AG1"]=workspace.ChildAdded:Connect(function(b4)if b4.Name~="ShotMeter"then return end;if A(aQ.Character,"Basketball")or aW.Value=="Free Throw"then local bV=A(b4,"SurfaceGui")or b4:WaitForChild("SurfaceGui",3)bV=A(bV,"Circle")or bV:WaitForChild("Circle",3)bV:WaitForChild("1",2)bV.Visible=false;local bW;n(0.02)local bX=bV:GetChildren()for bc,bL in ipairs(bX)do if bL.BackgroundColor3.R==1 then if tonumber(bL.Name)>15 then bW=bV[bL.Name]break end end end;if not bW then bW=bV["134"]end;n()for bD=bW.Name,200 do bV[bD]:Destroy()end;bV.Visible=true end end)elseif T=="Public"then aY["AG1"]=workspace.ChildAdded:Connect(function(b4)if b4.Name~="ShotMeter"then return end;if A(aQ.Character,"Basketball")or aW.Value=="Free Throw"then local bV=A(b4,"SurfaceGui")or b4:WaitForChild("SurfaceGui",3)bV=A(bV,"Circle")or bV:WaitForChild("Circle",3)local bW;n(0.02)local bX=bV:GetChildren()for bc,bL in pairs(bX)do if bL.BackgroundColor3.R==1 then if tonumber(bL.Name)>15 then bW=bV[bL.Name]break end end end;if not bW then bW=bV["134"]end;bW.BackgroundColor3=l(0.27,0.14,0.76)bW.Name="amoung pequeno"end end)end end)a6.OnDisable:Connect(function()aY["AG1"]:Disconnect()end)a7.OnSelection:Connect(function()if a6:IsEnabled()then a6:Disable()a6:Enable()end end)end;do local bY=false;av.OnEnable:Connect(function()local b4=aQ.Character;local b0=A(b4,"Humanoid")local bf=A(b4,"HumanoidRootPart")aY["STA"]=aQ.CharacterAdded:Connect(function(b4)bY=true;b0=b4:WaitForChild("Humanoid",3)bf=b4:WaitForChild("HumanoidRootPart",3)n(0.1)local D=b0:LoadAnimation(b4.BallControl["Defense - Client"].Steal.Left)local E=b0:LoadAnimation(b4.BallControl["Defense - Client"].Steal.Right)p(function()while bY do D:Play(0,0.1,0.2)n(0.001)E:Play(0,0.1,0.2)for b5,P in ipairs(a:GetPlayers())do if P==aQ then continue end;pcall(function()local bZ=P.Character.HumanoidRootPart;firetouchinterest(bf,bZ,1)firetouchinterest(bf,bZ,0)end)end;n(0.001)end end)end)if b0 then bY=true;local D=b0:LoadAnimation(b4.BallControl["Defense - Client"].Steal.Left)local E=b0:LoadAnimation(b4.BallControl["Defense - Client"].Steal.Right)p(function()while bY do D:Play(0,0.05,0.2)n()E:Play(0,0.05,0.2)for b5,P in ipairs(a:GetPlayers())do if P==aQ then continue end;pcall(function()local bZ=P.Character.HumanoidRootPart;firetouchinterest(bf,bZ,1)firetouchinterest(bf,bZ,0)end)end;n()end end)end end)av.OnDisable:Connect(function()bY=false;if aY["STA"]then aY["STA"]:Disconnect()end end)end;do aw.OnEnable:Connect(function()local b_=b.Ball.StartShooting;local c0=b.Ball.EndShooting;aY["AS1"]=d.InputBegan:Connect(function(c1,c2)if c1.KeyCode==Enum.KeyCode.G then if c2 then return end;p(function()local c3=z(0,1500)warn("[AS] New thread",c3)b_:FireServer()c0:InvokeServer()b_:FireServer()c0:InvokeServer()warn("[AS] Ended",c3)end)end end)Q:NewNotification("Antisteal","Spam G while you aren't shooting to prevent steals.",3)end)aw.OnDisable:Connect(function()aY["AS1"]:Disconnect()end)end;do ay.OnEnable:Connect(function()local b4=aQ.Character;local be=A(b4,"Humanoid")local bf=A(b4,"HumanoidRootPart")local bT;if not be then ay:Hide("Waiting for character respawn...")aQ.CharacterAdded:Wait()n(0.05)be=A(b4,"Humanoid")bf=A(b4,"HumanoidRootPart")end;bT=be:LoadAnimation(b4["BallControl"]["Defense - Client"].Block)aY["AB1"]=aQ.CharacterAdded:Connect(function(b4)be=b4:WaitForChild("Humanoid",3)n(0.05)bf=A(aQ.Character,"HumanoidRootPart")bT=be:LoadAnimation(b4:WaitForChild("BallControl",3)["Defense - Client"].Block)end)local function c4()if be.FloorMaterial==Enum.Material.Air then return end;e:BindToRenderStep("JH3-AB",900,function()be:Move(i(bf.Position,aV.Position).LookVector)end)n(0.1)bT:play(0.25)n(0.02)be.JumpPower=18.64;be.Jump=true;n(0.02)be.JumpPower=0;n(0.2)e:UnbindFromRenderStep("JH3-AB")end;p(function()while ay:IsEnabled()do n(0.02)for b5,P in ipairs(a:GetPlayers())do if P==aQ then continue end;if P.TeamColor==aQ.TeamColor then continue end;pcall(function()local b0=P.Character.HumanoidRootPart;if(b0.Position-bf.Position).Magnitude<aA:GetValue()then local be=P.Character.Humanoid;for b5,c5 in ipairs(be:GetPlayingAnimationTracks())do local c3=c5.Animation.AnimationId;if c3:match("376938580")or c3:match("470725369")or c3:match("125750702")then if aV.PlayerWhoShot.Value~=P and aV.Parent~=P.Character then print("[AUTO BLOCK] False positive, cancelling + delaying")n(0.15)return end;if az:IsEnabled()then local c6=bf.CFrame.LookVector:Cross(b0.CFrame.LookVector).Magnitude;if c6>0.5 then print("[AUTO BLOCK] Face check failed")return end end;n(0.17)c4()n(1)break end end end end)end end end)end)ay.OnDisable:Connect(function()e:UnbindFromRenderStep("JH3-AB")aY["AB1"]:Disconnect()end)end;do a9.OnEnable:Connect(function()local be=A(aQ.Character,"Humanoid")local c7=b.Ball.Dunk.End;local function c8(b0)aY["bd2"]=b0.AnimationPlayed:Connect(function(c9)if not c9 then return end;local c3=c9.Animation.AnimationId;if c3:match("470209556")or c3:match("470698510")then n(0.3)c7:FireServer()end end)end;aY["bd1"]=aQ.CharacterAdded:Connect(function(b4)be=b4:WaitForChild("Humanoid",4)aY["bd2"]:Disconnect()c8(be)end)if be then c8(be)end end)a9.OnDisable:Connect(function()if aY["bd2"]then aY["bd2"]:Disconnect()end;if aY["bd1"]then aY["bd1"]:Disconnect()end end)end;do local ca=b.Player.Passing.ForceReceiverLook;aD.OnClick:Connect(function()for b5,P in ipairs(a:GetPlayers())do ca:FireServer(P)end end)end;do local cb=Instance.new("BodyForce")cb.Force=j(0,ar:GetValue(),0)cb.Name="艺簋蚉缉詢綄胹證"aq.OnEnable:Connect(function()if cb==nil then cb=Instance.new("BodyForce")cb.Force=j(0,ar:GetValue(),0)cb.Name="艺簋蚉缉詢綄胹證"end;aY["BOOST1"]=aQ.CharacterAdded:Connect(function(b4)cb.Parent=b4:WaitForChild("HumanoidRootPart",5)hook(b4)end)local function hook(b4)printconsole("Hooking "..tostring(b4).."...",64,64,255)if aY["BOOST2"]then aY["BOOST2"]:Disconnect()end;aY["BOOST2"]=b4.ChildAdded:Connect(function(cc)printconsole("Child being added: "..cc.Name,255,64,255)if cc.Name=="Basketball"then printconsole("Removed boost",64,255,64)cb.Parent=nil;local cd=true;while cd do local cc=b4.ChildRemoved:Wait()printconsole("Child being removed: "..cc.Name,255,64,255)if cc.Name=="Basketball"then printconsole("Adding back boost",64,255,64)n(0.6)cb.Parent=b4.HumanoidRootPart;printconsole("Added back boost",64,255,64)cd=false;break end end end end)printconsole("Hooked",64,64,255)end;local b4=aQ.Character;if b4 then hook(b4)local E=A(b4,"Basketball")if not E then cb.Parent=b4.HumanoidRootPart end end end)aq.OnDisable:Connect(function()cb.Parent=nil;aY["BOOST1"]:Disconnect()aY["BOOST2"]:Disconnect()end)ar.OnValueChanged:Connect(function(bL)cb.Force=j(0,bL,0)end)end;do aI.OnClick:Connect(function()local bl=workspace.CurrentCamera;local be=A(aQ.Character,"Humanoid")local bf=A(aQ.Character,"HumanoidRootPart")if be and bl.CameraSubject~=be then bl.CameraSubject=be;warn("Fixed camera not being focused on player")end;if bf and bf.Anchored==true then bf.Anchored=false end;Q:NewNotification("Fix game","Successfully fixed any issues. Check console for more details",4)end)end;do aL.OnEnable:Connect(function()local ce={}sethiddenproperty(game.Lighting,"Technology",Enum.Technology.Future)t(ce,A(workspace,"JH3-Nightmode"))t(ce,A(aV,"Spotlight"))t(ce,A(c,"JH3-Bloom"))for b5,bc in ipairs(ce)do bc:Destroy()end;c.Ambient=m(5,5,6)c.Brightness=0.1;c.GlobalShadows=true;c.TimeOfDay=1;local cf=Instance.new("Folder")cf.Name="JH3-Nightmode"cf.Parent=workspace;local cg=Instance.new("BloomEffect")cg.Intensity=1.2;cg.Threshold=0.8;cg.Size=500;cg.Name="JH3-Bloom"cg.Parent=c;local ch=Instance.new("Part")ch.Position=j(0,300,0)ch.Anchored=true;ch.Name="shadow"ch.CanCollide=false;ch.Transparency=0;ch.Color=m(0,0,0)ch.Size=j(3000,500,3000)ch.BottomSurface=Enum.SurfaceType.SmoothNoOutlines;ch.Parent=cf;local ci=Instance.new("Part")ci.Anchored=true;ci.CanCollide=false;ci.Name="aimball"ci.Transparency=1;ci.Size=j(1,1,1)ci.Position=j(0,20,0)ci.Parent=cf;local cj=Instance.new("SpotLight")cj.Color=m(255,255,253)cj.Brightness=1.7;cj.Range=999;cj.Shadows=true;cj.Angle=50;cj.Face=Enum.NormalId.Front;cj.Parent=ci;for ck=-3,3 do p(function()for bD=-3,3 do local N=Instance.new("Part")N.Anchored=true;N.Position=j(35*bD,60,35*ck)N.Name="1"N.CanCollide=false;N.Transparency=0;N.Color=m(2,2,8)N.Size=j(43,4,4)N.Rotation=j(ck*6,0,90)N.TopSurface=Enum.SurfaceType.Smooth;N.BottomSurface=Enum.SurfaceType.Smooth;N.Shape=Enum.PartType.Cylinder;N.Parent=cf;local cl=N:Clone()cl.Name="2"cl.Material=Enum.Material.Neon;cl.Size=j(1,3.5,3.5)cl.Anchored=false;cl.Shape=Enum.PartType.Cylinder;cl.Parent=N;local cm=Instance.new("Weld")cm.Part0=N;cm.Part1=cl;cm.C0=i(-21.5,0,0)cm.C1=i(0,0,0)cm.Parent=cl;local cj=Instance.new("SpotLight")cj.Color=m(255,255,245)cj.Brightness=0.4;cj.Range=70;cj.Shadows=true;cj.Angle=80;cj.Face=Enum.NormalId.Left;cj.Parent=cl;cl.Color=cj.Color;local cj=Instance.new("SpotLight")cj.Color=m(255,255,235)cj.Brightness=0.3;cj.Range=55;cj.Shadows=true;cj.Angle=85;cj.Face=Enum.NormalId.Left;cj.Parent=cl;n(0.05)cl.Anchored=true end end)end;p(function()while aL:IsEnabled()do n(0.1)F(ci,{CFrame=i(j(0,20,0),aV.Position+j(0,1,0))},1)end end)end)aL.OnDisable:Connect(function()local ce={}t(ce,A(workspace,"JH3-Nightmode"))t(ce,A(aV,"Spotlight"))t(ce,A(c,"JH3-Bloom"))for b5,bc in ipairs(ce)do bc:Destroy()end;sethiddenproperty(game.Lighting,"Technology",Enum.Technology.Compatibility)c.Brightness=1;c.Ambient=Color3.fromRGB(127,127,127)c.GlobalShadows=false;c.TimeOfDay=14 end)end;do local cn;aM.OnEnable:Connect(function()local b7=l(0,0.9,0.2)local b8=l(0.9,0,0.2)local co=aQ.PlayerScripts.Events.Player.Stamina.Stamina;local function c8(b0)cn=Instance.new("BillboardGui")cn.AlwaysOnTop=true;cn.Size=UDim2.fromScale(0,0.6)cn.StudsOffsetWorldSpace=j(0,1.25,0)cn.Parent=b0;local cp=Instance.new("Frame")cp.BackgroundColor3=l(0.13,0.13,0.15)cp.BorderColor3=l(0.03,0.03,0.05)cp.Size=UDim2.new(1,0,1,0)cp.BorderSizePixel=0;cp.ClipsDescendants=true;cp.ZIndex=2;cp.Parent=cn;local cq=Instance.new("Frame")cq.BackgroundColor3=l(0.03,0.03,0.05)cq.BorderColor3=l(0.13,0.13,0.15)cq.Size=UDim2.new(1,2,1,2)cq.Position=UDim2.new(0,-1,0,-1)cq.BorderSizePixel=1;cq.ClipsDescendants=false;cq.ZIndex=0;cq.Parent=cn;local ch=Instance.new("ImageLabel")ch.BackgroundTransparency=1;ch.Image="rbxassetid://7603818383"ch.ImageColor3=Color3.new(0,0,0)ch.ImageTransparency=0.15;ch.Position=UDim2.new(0.5,0,0.5,0)ch.AnchorPoint=k(0.5,0.5)ch.Size=UDim2.new(1,20,1,20)ch.SliceCenter=Rect.new(15,15,175,175)ch.SliceScale=1.3;ch.ScaleType=Enum.ScaleType.Slice;ch.ZIndex=0;ch.Parent=cq;local cr=Instance.new("Frame")cr.Position=UDim2.new(0,0,0,0)cr.Size=UDim2.new(1,0,0,5)cr.Position=UDim2.new(0,0,1,-5)cr.BorderSizePixel=0;cr.BackgroundColor3=l(0,0,0)cr.BackgroundTransparency=0.9;cr.ZIndex=15;cr.Parent=cp;local cs=Instance.new("Frame")cs.AnchorPoint=k(1,0)cs.Position=UDim2.new(1,0,0,0)cs.Size=UDim2.new(1,0,1,0)cs.BorderSizePixel=0;cs.BackgroundColor3=b7;cs.ZIndex=5;cs.Parent=cp;local ct=Instance.new("TextLabel")ct.Font=Enum.Font.Nunito;ct.Text="<i>100%</i>"ct.RichText=true;ct.TextColor3=l(0,0,0)ct.BackgroundTransparency=1;ct.TextTransparency=0.2;ct.TextStrokeTransparency=1;ct.TextXAlignment=Enum.TextXAlignment.Right;ct.Size=UDim2.new(1,0,1,0)ct.Position=UDim2.new(0,0,0,0)ct.TextScaled=true;ct.AnchorPoint=k(0,0)ct.Parent=cs;ct.ZIndex=6;F(cn,{Size=UDim2.fromScale(4,0.6)},0.3)aY["STAM1"]=co.Changed:Connect(function(bb)local cu=bb/1000;cs.Position=UDim2.new(cu,0,0,0)cs.BackgroundColor3=b8:Lerp(b7,cu)local cv=tostring(w(cu*100+0.5))ct.Text="<i>"..cv.."%</i>"if ct.Text:match("0")then ct.TextTransparency=0;F(ct,{TextTransparency=0.2},1)end;local D,E=y(w(bb)-495),y(w(bb)-505)if D<5 then F(ct,{Position=UDim2.new(0.3,0,0,0),TextColor3=l(1,1,1)},1)elseif E<5 then F(ct,{Position=UDim2.new(0,0,0,0),TextColor3=l(0,0,0)},1)end end)end;local b0=A(aQ.Character,"Head")if b0 then local b1=A(b0,"StaminaBar")if b1 then b1.Enabled=false end;c8(b0)end;aY["STAM2"]=aQ.CharacterAdded:Connect(function(b4)n(1)b0=b4:WaitForChild("Head",5)aY["STAM1"]:Disconnect()n(0.05)if b0 then local b1=b0:WaitForChild("StaminaBar",2)b1.Enabled=false;c8(b0)end end)end)aM.OnDisable:Connect(function()cn:Destroy()pcall(function()aY["STAM1"]:Disconnect()aY["STAM2"]:Disconnect()end)local b1=A(aQ.Character.Head,"StaminaBar")if b1 then if aj:IsEnabled()then return end;b1.Enabled=true end end)end;do aG.OnEnable:Connect(function()local cw=Q:GetScreenGUI()Q:NewMessagebox("Hide GUI","Chat \"/e enable\" to see the gui and \"/e disable\" to hide it",nil,70,-30)aY["HIDE1"]=aQ.Chatted:Connect(function(cx)cx=cx:lower()if cx:match("/e enable")then cw.Enabled=true elseif cx:match("/e disable")then cw.Enabled=false end end)end)aG.OnDisable:Connect(function()if aY"HIDE1"then aY["HIDE1"]:Disconnect()end end)aH.OnClick:Connect(function()for b5,E in ipairs(Q:GetAllToggles())do if E:GetText()~="Hide GUI"then E:Disable()end end end)end;do aJ.OnEnable:Connect(function()aY["DE"]=workspace.ChildAdded:Connect(function(cy)if cy.ClassName=="Sound"then cy.Volume=0;n(0.05)cy:Destroy()end end)end)aJ.OnDisable:Connect(function()aY["DE"]:Disconnect()end)end;do aB.OnEnable:Connect(function()local cz;local bk=aC:GetSelection()local bf=A(aQ.Character,"HumanoidRootPart")aY["TPB"]=aQ.CharacterAdded:Connect(function(b4)bf=b4:WaitForChild("HumanoidRootPart",5)end)if bk=="Always"then cz=function()bf.CFrame=aV.CFrame end elseif bk=="When not holding"then cz=function()if aV.Parent~=aQ.Character then bf.CFrame=aV.CFrame end end elseif bk=="When teams not holding"then cz=function()local b0=A(aV.Parent,"Head")if b0 then local P=a:GetPlayerFromCharacter(aV.Parent)if P.Team~=aQ.Team then bf.CFrame=aV.CFrame end else bf.CFrame=aV.CFrame end end elseif bk=="When other team holding"then cz=function()local b0=A(aV.Parent,"Head")if b0 then local P=a:GetPlayerFromCharacter(aV.Parent)if P.Team~=aQ.Team then bf.CFrame=aV.CFrame end end end else cz=function()end;Q:NewNotification("Oopsies","Invalid TP to ball mode (this message shouldn't appear, DM topit)",6)end;e:BindToRenderStep("JH3-TPB",600,function()pcall(cz)end)end)aB.OnDisable:Connect(function()e:UnbindFromRenderStep("JH3-TPB")aY["TPB"]:Disconnect()end)end;Q:Ready()Q.Exiting:Connect(function()for bc,bL in ipairs(Q:GetAllToggles())do if bL:IsEnabled()==true then bL:Disable()end end;for bc,bL in pairs(aY)do print("Disconnected",bc)bL:Disconnect()end end)do if false then local function cA(b4)n(1.5)local cB=b4:WaitForChild("Movement",5)local cC=cB and A(cB,"Constrain")or nil;if not cC then warn("[ANTICHEAT BYPASS] Couldn't find script")return end;if getscripthash then if getscripthash(cC):sub(1,15)~="45a54c7a09b3775"then warn("[ANTICHEAT BYPASS] Looks like anticheat updated, let topit know")end else Q:NewNotification("Script support","Your exploit may not support all features, check console for info")warn("[ANTICHEAT BYPASS] Missing function 'getscripthash', can't verify if the anticheat bypass will work")if getgc==nil then warn("[ANTICHEAT BYPASS] Missing function 'getgc', your exploit must be really shit")end;if debug==nil then warn("[ANTICHEAT BYPASS] Missing library 'debug', your exploit must be really shit")end;if getconnections==nil then warn("[ANTICHEAT BYPASS] Missing function 'getconnections', your exploit must be really shit")end;warn("[ANTICHEAT BYPASS] For better script support, use an exploit such as Comet, KRNL, Fluxus, or Synapse")end;s(r(function()local cD={}for b5,b6 in ipairs(getgc())do if islclosure(b6)then pcall(function()local b7=getconstant(b6,1)local b8=getconstant(b6,2)local cE=getconstant(b6,7)if b7=="Velocity"then if b8=="X"then if cE=="Magnitude"then t(cD,b6)end end;n(0.0001)end end)end end;for b5,bQ in ipairs(getconnections(e.Heartbeat))do for b5,b6 in ipairs(cD)do if bQ.Function==b6 then bQ:Disable()end end end;print("[ANTICHEAT BYPASS] Bypassed anticheat")cD=nil end))end;aY["AC_BYP1"]=aQ.CharacterAdded:Connect(cA)if aQ.Character then cA(aQ.Character)end end end;do local function cF()
-    local cG=aQ.PlayerScripts.Events.Player.IsAFK;local cH=aQ.PlayerScripts.Resetting.SetState;local cI=b.Player.AFK.IsReturning;local cJ=b.Player.AFK.IsAway;local cK=aQ.PlayerGui.AFK.Manual;local cL=aQ.PlayerGui.AFK.Automatic;
-    local cM=aQ.PlayerGui.Sidebar.Container;for b5,cy in ipairs(cM:GetChildren())do if cy.ClassName=="TextButton"then local bC=A(cy,"Top")if bC and bC.Text:match("AFK")then cM=cy;break end end end;if cM.ClassName~="TextButton"then cM=aQ.PlayerGui.Sidebar.Container;for b5,cy in ipairs(cM:GetChildren())do if cy.ClassName=="TextButton"then local bC=A(cy,"Top")if bC.Text:match("View")==nil and bC.Text:match("Wear")==nil then cM=cy;break end end end end;local cN=cM;cM=cN:Clone()
-    cM.Parent=aQ.PlayerGui.Sidebar.Container;cM.Position=UDim2.new(-2,0,2,20)do 
-        local D=A(cM,"ButtonActive")local E=A(cM,"Clicked")local b4=A(cM,"Arrow");(D and D.Destroy or warn)(D or"[CUSTOM AFK] Button missing ButtonActive boolvalue");(E and E.Destroy or warn)(E or"[CUSTOM AFK] Button missing Clicked bindable");(b4 and b4.Destroy or warn)(b4 or"[CUSTOM AFK] Button missing Arrow");end;
-    do local cO=m(255,170,0)local cP=m(229,153,0)local cQ=m(191,127,0)cM.MouseEnter:Connect(function()cM.Top.BackgroundColor3=cP;cM.Bottom.BackgroundColor3=cQ end)cM.MouseLeave:Connect(function()cM.Top.BackgroundColor3=cO;cM.Bottom.BackgroundColor3=cP;cM.Top.Position=UDim2.new(0,0,0,0)end)cM.MouseButton1Down:Connect(function()cM.Top.Position=UDim2.new(0,0,0.05,0)end)cM.MouseButton1Up:Connect(function()cM.Top.Position=UDim2.new(0,0,0,0)end)cM.MouseButton1Click:Connect(function()if aQ.Character then cG:Fire(true)cH:Fire("AFK",true)cJ:FireServer()cM.Top.Text="Click to return"else cG:Fire(false)cH:Fire("AFK",false)
-        cI:FireServer()cM.Top.Text="Click to go AFK"aQ.CharacterAdded:Wait()n(0.04)workspace.CurrentCamera.CameraSubject=A(aQ.Character,"Humanoid")end end)cM.Top.BackgroundColor3=cO;cM.Bottom.BackgroundColor3=cP end;p(function()local bC=F(cN,{Position=UDim2.new(-2,0,2,20)},0.5)bC.Completed:Wait()cN:Destroy()end)pcall(function()aQ.PlayerScripts.GameControl["AFK - Client"].Disabled=true end)o(0.7,function()F(cM,{Position=UDim2.new(0,0,2,20)},0.3)end)cK.Visible=true;cL.Visible=false;cK.Text="Welcome, "..aQ.DisplayName..".\nJeff Hoops custom AFK loaded."wait(4)cK.Visible=false end;cF()end
+---@diagnostic disable: trailing-space
+if not game:IsLoaded() then game.Loaded:Wait() end -- wait for game to load
+
+-- Jeff hoops
+-- Made by topit (jeff)
+-- better than monas, free, and open source
+
+
+-- { Microoptimizations } --
+
+local players = game:GetService("Players")
+local replicated = game:GetService("ReplicatedStorage")
+local lighting = game:GetService("Lighting")
+local uis = game:GetService("UserInputService")
+local rs = game:GetService("RunService")
+local ctx = game:GetService("ContextActionService")
+local vim = game:GetService("VirtualInputManager")
+local ts = game:GetService("TweenService")
+-- grab some stuff
+
+local cframe = CFrame.new
+local vector = Vector3.new
+local vector2 = Vector2.new
+local color3n = Color3.new
+local color3 = Color3.fromRGB
+local hsv = Color3.fromHSV
+
+local twait = task.wait
+local tdelay = task.delay
+local tspawn = task.spawn
+
+local ccreate = coroutine.create
+local cresume = coroutine.resume
+-- waaah waaah too many variables
+local tinsert = table.insert
+local tremove = table.remove
+local foreach = table.foreach
+
+local mfloor = math.floor
+local mceil = math.ceil
+local mabs = math.abs
+local mrandom = math.random
+local msin = math.sin
+
+local function FindFastChild(instance, name)
+    local a,b = pcall(function() return instance[name] end)
+
+    return (a and b) or nil
+end
+
+local function twn(object, dest, time)
+    local tween = ts:Create(object, TweenInfo.new(time, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), dest)
+    tween:Play()
+    return tween
+end
+
+
+local function RaycastVisibility(v1,v2,p1)
+	local rayResult = workspace:Raycast(v1, cframe(v1, v2).LookVector * 20,p1)
+	
+	if rayResult then
+		local p = rayResult.Instance
+		return not (p and true or false)
+		
+	end
+	return true
+end
+
+
+-- { UI } --
+
+local ui = loadstring(game:HttpGet('https://raw.githubusercontent.com/topitbopit/rblx/main/ui-stuff/jeff_2.lua'))()
+
+local offset = mrandom(0,4)*0.01
+local offset2 = offset + (mrandom(0,1)*0.01)
+ui:SetColors({
+    window         = Color3.new(0.03+offset,0.03+offset,0.03+offset2);
+    topbar         = Color3.new(0.04+offset,0.04+offset,0.04+offset2);
+    text           = Color3.new(1.00,1.00,1.00);
+    button         = Color3.new(0.12,0.12,0.13);
+    scroll         = Color3.new(0.22,0.22,0.23);
+    detail         = Color3.new(0.22,0.20,1.00);
+    enabledbright  = Color3.new(0.41,0.40,0.80);
+    enabled        = Color3.new(0.31,0.30,0.90);
+    textshade1     = Color3.new(1.00,0.00,0.50);
+    textshade2     = Color3.new(0.21,0.20,1.00);
+})
+ui.TooltipX = 25
+ui.ScrollSpeed = 250
+
+if game.PlaceId ~= 360589910 then 
+	ui:NewMessagebox("Oopsies","The game you're in isn't Hoops Demo. Teleport there?", {
+		{
+			Text = "Yes",
+			Callback = function(s)
+				s:FadeText("Hold on...","Trying to teleport...")
+				
+				local ts = game:GetService("TeleportService")
+				local w,m = pcall(function() 
+					ts:Teleport(360589910, players.LocalPlayer) 
+				end)
+				if w then
+					w:Close()
+				else
+					s:FadeText("Something went wrong","Couldn't teleport; "..m)
+				end
+			end
+		},
+		{
+			Text = "No",
+			Callback = function(s)
+				s:FadeText("Ok","See you later")
+				wait(2)
+				s:Close()
+			end
+		}
+	}, 80, -30)
+	return
+end
+
+local window = ui:NewWindow("Jeff Hoops", 400, 300)
+
+local m_home = window:NewMenu("Home")
+local m_ball = window:NewMenu("Ball")
+local m_player = window:NewMenu("Player")
+local m_misc = window:NewMenu("Misc")
+local m_handles = window:NewMenu("Fast handles")
+local m_config = window:NewMenu("Config")
+
+
+m_home:NewLabel("Jeff Hoops made by topit")
+  local h_discord = m_home:NewButton("Join the discord")
+  local h_changelog = m_home:NewButton("View changelog")
+  h_discord:SetTooltip("Click to copy the discord invite")
+  h_changelog:SetTooltip("View the changelog [WIP]")
+  m_home:NewLabel()
+  m_home:NewLabel("Daily message ("..os.date("%m/%d/%y").."):")
+  local dmsg = m_home:NewLabel("Loading...\n")
+    cresume(ccreate(function() 
+        local msg_id = os.date('%y_%m_%d')
+        local msgs = game:HttpGet('https://raw.githubusercontent.com/topitbopit/rblx/main/splash_text/hoops.lua')
+        local msg = msgs:match(msg_id..":\"([^\"\n]+)\"")
+        if msg then
+            dmsg:SetText(msg)
+        else
+            dmsg:SetText("No message for today :(")
+        end
+      
+      
+        pcall(function() 
+            game:HttpGet("ey wassup hows it going")
+        end)
+        pcall(function()
+            game:HttpGet("so anyways your mother is a guy")
+        end)
+    end))
+
+m_home:NewLabel()
+m_home:NewTrim()
+m_home:NewLabel("Version 3.0.0-BETA.8; UI version "..ui.Version)
+
+
+
+m_ball:NewSection("Aimbot / Auto green")
+  local b_aimbot = m_ball:NewToggle("Aimbot") --aimbot
+  local b_aimbotm = m_ball:NewDropdown("Aimbot mode",{"One press","Classic"}) --aimbot mode
+  local b_aimbotd = m_ball:NewToggle("Custom delay") --aimbot delay
+  local b_aimbotdamt = m_ball:NewSlider("Custom delay (MS)",475,550,505) --aimbot delay amount
+  local b_autogreen = m_ball:NewToggle("Auto green")
+  local b_autogreenm = m_ball:NewDropdown("Auto green method",{"Bar cutter","Public","Keyrelease"})
+  b_aimbotm:SetTooltip("Changes the aimbot method.\nOne press: fakes a jump shot\nClassic: hold R aimbot")
+  b_aimbot:SetTooltip("Tries to fake you getting a green. Doesn't work every time. Compatible with free throws!")
+  b_aimbotd:SetTooltip("Uses the inputted delay instead of predicting what the delay should be.")
+  b_autogreen:SetTooltip("Tries to get a green for you. Not always 100%, depends on ping and distance. Compatible with free throws!")
+  b_autogreenm:SetTooltip("Uses a different auto green method.\nBar cutter: Looks cool, just a mod of public\nPublic: Works the best\nKey: Uses keyrelease, only works if your shoot keybind is R + heavily depends on ping")
+  
+m_ball:NewSection("OP")
+  local b_powerdunk = m_ball:NewToggle("Power dunks")
+  local b_betterdunks = m_ball:NewToggle("Better dunks")
+  local b_fly = m_ball:NewToggle("Ball fly")
+  local b_autoinbound = m_ball:NewToggle("Auto inbound")
+  local b_autograb = m_ball:NewToggle("Auto grab")
+  b_powerdunk:SetTooltip("Classic power dunks, also lets you air strafe.")
+  b_betterdunks:SetTooltip("Gives you more consistent dunks. Works well with most dunk animations")
+  b_fly:SetTooltip("Flies you to the hoop when you pickup the ball")
+  b_autoinbound:SetTooltip("Teleports you to the inbound circle.")
+  b_autograb:SetTooltip("Sorta like an HBE, but way better.")
+
+m_ball:NewSection("Render")
+  local b_velocity = m_ball:NewToggle("Ball prediction")
+  local b_velocitymode = m_ball:NewDropdown("Prediction style",{"Drawing","Simple","GUI",--[["Numbers"]]})
+  local b_highlight = m_ball:NewToggle("Highlight")
+  local b_cam = m_ball:NewToggle("Ball cam")
+  b_velocity:SetTooltip("Shows where the ball is gonna land. Doesn't include collisions.")
+  b_velocitymode:SetTooltip("The prediction style.\nDrawing: Coolest but may lag, requires drawing library\nSimple: Simple mode that won't lag\nGUI: Uses billboard guis, has cool rotation effects")
+  b_highlight:SetTooltip("Highlights the ball so you know where it is at all times.")
+  b_cam:SetTooltip("Custom ball cam")
+
+  m_ball:NewSection("Troll")
+  local b_spamshoot = m_ball:NewToggle("Spam shoot")
+  b_spamshoot:SetTooltip("Spam shoots the ball when it can.\nNote that this will lag your game when used!")
+
+  m_ball:NewSection("Work in progress")
+  local b_autolayup = m_ball:NewToggle("Auto layup")
+  b_autolayup:SetTooltip("Automatically layups when you're close to the hoop. Gives 3 points for some reason.")
+
+
+
+m_player:NewSection("Movement")
+  local p_infstam = m_player:NewToggle("Infinite stamina")
+  local p_stamspeed = m_player:NewToggle("Custom stamina drain")
+  local p_stamspeedamt = m_player:NewSlider("Stamina drain speed",0,20,20)
+  local p_noslow = m_player:NewToggle("Noslowdown")
+  local p_cctp = m_player:NewToggle("Ctrl+Click teleport")
+  local p_speed = m_player:NewToggle("Legit speedhack")
+  local p_njcd = m_player:NewToggle("No jump cooldown")
+  local p_jumpboost = m_player:NewToggle("Jump boost")
+  local p_jumpboostamt = m_player:NewSlider("Jump boost amount", 1, 150, 75)
+  p_infstam:SetTooltip("Classic infinite stamina. Hides the stamina bar.")
+  p_stamspeed:SetTooltip("Changes how fast or slow your stamina drains.")
+  p_stamspeedamt:SetTooltip("How fast or slow your stamina drains. 0 would freeze stamina, 20 would make it normal.")
+  p_noslow:SetTooltip("Prevents you from being slowed down.")
+  p_cctp:SetTooltip("Classic ctrl + click tp.")
+  p_speed:SetTooltip("Speed thats slightly faster than normal sprinting.")
+  p_njcd:SetTooltip("Emulates a jump, bypassing the cooldown. Also has less jump delay (0.25s -> 0.02s).")
+
+  p_stamspeed:Assert('getconstant')
+  p_stamspeed:Assert("setconstant")
+  p_stamspeed:Assert('getgc')
+  p_stamspeed:Assert('islclosure')
+  
+m_player:NewSection("Steals")
+  local p_hbe = m_player:NewToggle("Hitbox expander")
+  local p_hbe2 = m_player:NewToggle("Hitbox expander [other team]")
+  local p_hbesize = m_player:NewSlider("Hitbox expander size", 5, 20, 5)
+  
+  local p_stealaura = m_player:NewToggle("Steal aura")
+  local p_antisteal = m_player:NewToggle("Anti-steal")
+  p_hbe:SetTooltip("Your average HBE, but more customizable.")
+  p_hbesize:SetTooltip("Controls the size of the HBE.")
+  p_stealaura:SetTooltip("Should make whoever you walk into drop the ball. Uses animations, so it might be obvious.")
+  p_antisteal:SetTooltip("Spam G when you're not shooting to prevent steals. Stop spamming before you shoot, or else it'll glitch.")
+  
+  p_stealaura:Assert("firetouchinterest")
+
+m_player:NewSection("OP")
+  local p_nodelay = m_player:NewToggle("No delay")
+  local p_autoblock = m_player:NewToggle("Auto block")
+  local p_autoblockfacecheck = m_player:NewToggle("Auto block facing check")
+  local p_autoblockrange = m_player:NewSlider("Auto block range",5,25,17)
+  p_nodelay:Assert("setconstant")
+  p_nodelay:SetTooltip("Removes steal delay. Will effect other things eventually.")
+  p_autoblock:SetTooltip("Automatically jumps towards players that are about to shoot")
+  p_autoblockfacecheck:SetTooltip("Only jumps towards the ball if you are facing towards the shooter, and not away")
+  p_autoblockrange:SetTooltip("Only jumps towards players within this radius (magnitude check)")
+
+m_player:NewSection("Troll")
+  local p_tptoball = m_player:NewToggle("TP to ball")
+  local p_tptoballmode = m_player:NewDropdown("TP to ball mode",{"Always","When not holding","When teams not holding","When other team holding"})
+  p_tptoball:SetTooltip("Teleports you to the ball")
+  local p_lookall = m_player:NewButton("Force everyone to face you")
+  p_lookall:SetTooltip("Makes everyone look at you as if you were passing to them")
+  
+m_player:NewSection("Misc")
+  local p_antivoid = m_player:NewToggle("Anti-void")
+  local p_bounds = m_player:NewToggle("Bounds")
+
+  
+m_misc:NewSection("Panic")
+  local m_hidegui = m_misc:NewToggle("Hide GUI")
+  local m_panic = m_misc:NewButton("Panic")
+  m_hidegui:SetTooltip("When enabled, the GUI gets disabled until untoggled (hotkey) or you say /e enable. Useful for screensharing")
+  m_panic:SetTooltip("Immediately disables all enabled modules")
+  
+m_misc:NewSection("Game")
+  local m_fixgame = m_misc:NewButton("Fix game")
+  local m_camfix = m_misc:NewToggle("Auto fix camera")
+  local m_deafen = m_misc:NewToggle("Deafen")
+  local m_antiplr = m_misc:NewToggle("Anti-playergrade")
+  m_fixgame:SetTooltip("Fixes a lot of issues the game may have.")
+  m_deafen:SetTooltip("Removes some loud game sounds, like the cheering and buzzer.")
+  m_antiplr:SetTooltip("Removes playergrade related remotes and scripts, possibly preventing player grade drops.")
+  m_camfix:SetTooltip("Prevents the camera from bugging out and not focusing on your character")
+
+m_misc:NewSection("Render")
+  local m_nightmode = m_misc:NewToggle("Nightmode")
+  local m_cstamgui = m_misc:NewToggle("Custom stamina bar")
+  m_nightmode:SetTooltip("Makes the court dark with lights")
+  m_cstamgui:SetTooltip("Uses a custom stamina bar")
+  m_nightmode:Assert("sethiddenproperty")
+  
+m_misc:NewSection("Server")
+  local m_rejoin = m_misc:NewButton("Rejoin")
+  local m_shop = m_misc:NewButton("Serverhop")
+  local m_priv = m_misc:NewButton("Join smallest server")
+
+p_antivoid:SetTooltip("If you fall under the map, you get kicked from the server. Antivoid teleports you up if you fall under.")
+p_bounds:SetTooltip("Makes boundaries around the court so you don't foul. Still a WIP")
+
+
+m_handles:NewLabel("WIP :(")
+m_handles:NewLabel("Use older jeff hoops for fast handles until then")
+
+m_config:NewLabel("WIP :(")
+m_config:NewLabel("Coming soon")
+
+
+b_cam:Hide("Unfinished")
+b_autolayup:Hide("Unfinished")
+p_antivoid:Hide("Unfinished")
+p_bounds:Hide("Unfinished")
+
+m_antiplr:Hide("Unfinished")
+m_rejoin:Hide("Unfinished")
+m_shop:Hide("Unfinished")
+m_priv:Hide("Unfinished")
+
+
+
+-- { Variables & Callbacks } --
+
+local plr = players.LocalPlayer
+local mouse = plr:GetMouse()
+
+local rimpositions = require(replicated.Modules.RimPositions)
+local loadanims = require(plr.PlayerScripts.Modules.LoadAnimations)
+
+local ballpointer = replicated.GameBall
+local gameball = ballpointer.Value
+
+local statepointer = replicated.Scoreboard.GameState
+
+local scall = (syn and syn.secure_call) or (secure_call or securecall) or warn("Your exploit doesn't support secure call!")
+-- secure call will definitely not be needed
+
+local ping = game:GetService("Stats").PerformanceStats.Ping
+
+local connections = {}
+
+
+connections["BUP"] = ballpointer:GetPropertyChangedSignal("Value"):Connect(function()
+    gameball = ballpointer.Value
+end)
+
+--home
+do 
+    h_discord.OnClick:Connect(function() 
+        setclipboard("https://discord.gg/Gn9vWr8DJC")
+        ui:NewNotification("Discord","Copied invite to clipboard!",3)
+    
+    end)
+end
+--stamina
+do
+
+    p_infstam.OnEnable:Connect(function()
+        -- get stamina value
+        local stamina = plr.PlayerScripts.Events.Player.Stamina.Stamina
+
+
+        rs:BindToRenderStep("JH3-IS", 600, function()
+            stamina.Value = 1050
+        end)
+
+        connections["IS"] = plr.CharacterAdded:Connect(function(chr)
+            local h = chr:WaitForChild("Head", 4)
+            if h then
+                -- how has nobody thought of this yet
+                -- makes it look better
+                
+                local bar1 = FindFastChild(h, "StaminaBar")
+                local bar2 = FindFastChild(h, "JHStaminaBar")
+                
+                if bar1 then bar1.Enabled = false end
+                if bar2 then bar2.Enabled = false end
+                
+                
+            else
+                warn("Oopsies; infinite stamina couldn't work properly")
+            end
+
+        end)
+
+        local h = FindFastChild(plr.Character, "Head")
+        if h then 
+            local bar1 = FindFastChild(h, "StaminaBar")
+            local bar2 = FindFastChild(h, "JHStaminaBar")
+            
+            if bar1 then bar1.Enabled = false end
+            if bar2 then bar2.Enabled = false end
+        end
+    end)
+
+    p_infstam.OnDisable:Connect(function()
+        rs:UnbindFromRenderStep("JH3-IS")
+        connections["IS"]:Disconnect()
+
+        local h = FindFastChild(plr.Character, "Head")
+        if h then 
+            if m_cstamgui:IsEnabled() then
+                local bar1 = FindFastChild(h, "StaminaBar")
+                local bar2 = FindFastChild(h, "JHStaminaBar")
+                
+                if bar1 then bar1.Enabled = false end
+                if bar2 then bar2.Enabled = true end
+            else
+                local bar1 = FindFastChild(h, "StaminaBar")
+                
+                if bar1 then bar1.Enabled = true end
+            end
+        end
+    end)
+end
+-- custom drain
+do 
+    local funcs = {}
+    p_stamspeed.OnEnable:Connect(function() 
+        --get script
+        
+        funcs = {}
+        connections["SS1"] = plr.CharacterAdded:Connect(function(c) 
+            p_stamspeed:Hide("Waiting...")
+            twait(0.5)
+            p_stamspeed:Unhide()
+            if connections["SS2"] then connections["SS2"]:Disconnect() end
+            
+            funcs = {}
+            
+            for _,proto in ipairs(getgc()) do
+                if type(proto) == "function" and islclosure(proto) then
+                    pcall(function() 
+                        local c1 = getconstant(proto, 1)
+                        local c2 = getconstant(proto, 2)
+                        local c3 = getconstant(proto, 3)
+                        local c4 = getconstant(proto, 4)
+                        
+                        if type(c4) == "number" and tostring(c3) == "wait" then
+                            if c2 == 0 and c1 == "Value" then
+                                tinsert(funcs, proto)
+                                setconstant(proto, 4, p_stamspeedamt:GetValue()*0.1)
+                            end
+                        end
+                    end)
+                end
+            end
+            
+            connections["SS2"] = p_stamspeedamt.OnValueChanged:Connect(function(val) 
+                for _,proto in ipairs(funcs) do
+                    setconstant(proto, 4, val*0.1)
+                end
+            end)
+        end)
+        
+        for i,proto in ipairs(getgc()) do
+            if type(proto) == "function" and islclosure(proto) then
+                pcall(function() 
+                    local c1 = getconstant(proto, 1)
+                    local c2 = getconstant(proto, 2)
+                    local c3 = getconstant(proto, 3)
+                    local c4 = getconstant(proto, 4)
+                    
+                    if type(c4) == "number" and tostring(c3) == "wait" then
+                        if c2 == 0 and c1 == "Value" then
+                            tinsert(funcs, proto)
+                            setconstant(proto, 4, p_stamspeedamt:GetValue()*0.1)
+                        end
+                    end
+                end)
+            end
+        end
+        
+        connections["SS2"] = p_stamspeedamt.OnValueChanged:Connect(function(val) 
+            for _,proto in ipairs(funcs) do
+                setconstant(proto, 4, val*0.1)
+            end
+        end)
+    end)
+    
+    p_stamspeed.OnDisable:Connect(function() 
+        for _,proto in ipairs(funcs) do
+            setconstant(proto, 4, 2.083)
+        end
+        
+        connections["SS1"]:Disconnect()
+        connections["SS2"]:Disconnect()
+        
+        funcs = {}
+    end)
+end
+--noslow
+do
+    p_noslow.OnEnable:Connect(function()
+        --get the events and stuff
+        local event = plr.PlayerScripts.Events.Player.DisableControls
+        local hum = FindFastChild(plr.Character, "Humanoid")
+        local humrp = FindFastChild(plr.Character, "HumanoidRootPart")
+        event:Fire(false)
+        
+
+        --microoptimization to update `hum` instead of index it per frame
+        connections["NS1"] = plr.CharacterAdded:Connect(function(chr)
+            hum = chr:WaitForChild("Humanoid",5)
+            humrp = FindFastChild(chr, "HumanoidRootPart")
+            
+            if not humrp then
+                twait(0.05)
+                humrp = FindFastChild(chr, "HumanoidRootPart")
+                
+                if not humrp then
+                    warn("[NOSLOW] Couldn't get humanoidrootpart; try resetting and re-enabling.")
+                end
+            end
+            
+            connections["NS2"]:Disconnect()
+            connections["NS2"] = humrp:GetPropertyChangedSignal("Anchored"):Connect(function()
+                humrp.Anchored = false
+            end)
+        end)
+        
+        
+        connections["NS2"] = humrp:GetPropertyChangedSignal("Anchored"):Connect(function()
+            humrp.Anchored = false
+        end)
+
+
+        rs:BindToRenderStep("JH3-NS", 605, function()
+            pcall(function() -- no error handling kek
+                if hum.WalkSpeed < 16 then
+                    hum.WalkSpeed = 16
+                end
+            end)
+        end)
+    end)
+
+    p_noslow.OnDisable:Connect(function()
+        rs:UnbindFromRenderStep("JH3-NS")
+        
+        connections["NS1"]:Disconnect()
+        connections["NS2"]:Disconnect()
+    end)
+end
+--autograb
+do
+    b_autograb.OnEnable:Connect(function()
+        -- get shit
+        local la = FindFastChild(plr.Character, "Left Arm")
+
+        -- update arm (noslow method)
+        connections["AG"] = plr.CharacterAdded:Connect(function(chr)
+            la = chr:WaitForChild("Left Arm", 4)
+        end)
+
+        rs:BindToRenderStep("JH3-AG", 700, function()
+            pcall(firetouchinterest, la, gameball, 1) -- fancy pcall ooh
+            pcall(firetouchinterest, la, gameball, 0)
+
+        end)
+    end)
+
+    b_autograb.OnDisable:Connect(function()
+        connections["AG"]:Disconnect()
+        rs:UnbindFromRenderStep("JH3-AG")
+    end)
+
+    b_autograb:Assert("firetouchinterest")
+end
+-- velocity
+do 
+    local objs = {}
+    local prevmode = 0
+    b_velocity.OnEnable:Connect(function()
+        local grav = vector(0, workspace.Gravity, 0)
+        local mode = b_velocitymode:GetSelection()
+        if mode == "Drawing" then
+            if Drawing == nil then
+                prevmode = 0
+                ui:NewNotification("Oopsies","Your exploit doesn't have Drawing!",3)
+                b_velocity:Disable()
+                return 
+            end
+            
+            prevmode = 1
+            
+            local cam = workspace.CurrentCamera
+            local func = cam.WorldToViewportPoint
+            
+            for i = 1, 25 do 
+                local line = Drawing.new("Line")
+                line.Color = color3n(0.2, 0.2, 1)
+                line.Thickness = 5
+                line.Visible = true 
+                
+                
+                tinsert(objs, line) 
+            end
+            
+            tspawn(function()
+                twait(0.1)
+                local params = RaycastParams.new()
+                --params.FilterDescendantsInstances = {workspace["Stadium"],workspace["Floor"]}
+                --params.FilterType = Enum.RaycastFilterType.Whitelist
+                
+                params.FilterDescendantsInstances = {gameball}
+                params.FilterType = Enum.RaycastFilterType.Blacklist
+                
+                twait(0.05)
+                
+                while b_velocity:IsEnabled() do
+                    --foreach(objs, function(_,obj) obj.Visible = false end)
+                    --for _,a in ipairs(objs) do a.Visible = false end
+                    
+                    for idx,obj in ipairs(objs) do
+                        -- get pseudo deltatime 
+                        local dt = idx*0.03
+                        -- calculate roughly where the ball should be for 1 step
+                        local pos_3d = gameball.Position + ((gameball.Velocity*1.4) * dt - (grav * dt^2))
+                        -- raycast to see if that position is visible
+                        local vis_3d = RaycastVisibility(pos_3d, cam.CFrame.Position, params)
+                        
+                        if vis_3d == false then 
+                            -- if its not then immediately cancel the loop, no more checks need to be done
+                            
+                            -- also make every line (inclusive of this one) invisible
+                            for i = idx, #objs do objs[i].Visible = false end
+                            
+                            -- break
+                            break 
+                        end
+                        -- otherwise "render" the vector to the screen
+                        local pos_2d,vis_2d = func(cam, pos_3d)
+                        if vis_2d == false then
+                            -- if that position isnt visible then break too
+                            for i = idx, #objs do objs[i].Visible = false end
+                            
+                            break 
+                        end
+                        
+                        
+                        -- get next steps pseudo deltatime
+                        local dt = (idx+1)*0.03
+                        -- calculate where the ball should be for the next step
+                        local pos2_3d = gameball.Position + ((gameball.Velocity*1.4) * dt - (grav * dt^2))
+                        -- raycast to see if that position is visible
+                        local vis2_3d = RaycastVisibility(pos2_3d, cam.CFrame.Position, params)
+                        
+                        if vis2_3d == false then
+                            -- same logic as before
+                            for i = idx, #objs do objs[i].Visible = false end
+                            break 
+                        end
+                        -- get 2d variants
+                        local pos2_2d,vis2_2d = func(cam, pos2_3d)
+                        
+                        if vis2_2d == false then
+                            for i = idx, #objs do objs[i].Visible = false end
+                            break 
+                        end
+                        
+                        obj.Visible = true
+                        obj.To = vector2(pos_2d.X, pos_2d.Y)
+                        obj.From = vector2(pos2_2d.X, pos2_2d.Y)
+                        -- and thats just for one line
+                        
+                    end
+                    twait()
+                    twait()
+                end
+            end)
+            
+        elseif mode == "Simple" then
+            prevmode = 2
+            
+            for i = 1, 30 do 
+                local e = Instance.new("Part")
+                e.Anchored = true
+                e.Transparency = 1
+                e.CanCollide = false
+                e.Size = vector(.1,.1,.1)
+                e.Position = vector(0, -5, 0)
+                e.Parent = workspace
+                
+        		local a = Instance.new("SelectionSphere")
+        		a.Adornee = e
+        		a.Transparency = 0.65
+        		a.Color3 = color3n(1,1,1)
+        		a.Parent = e
+        		tinsert(objs, e)
+            end
+
+
+
+            tspawn(function()
+                
+                local cam = workspace.CurrentCamera
+
+                while b_velocity:IsEnabled() do
+                    for idx,obj in ipairs(objs) do
+                        local dt = idx*0.04
+                        local pos_3d = gameball.Position + ((gameball.Velocity*1.4) * dt - (grav * dt^2))
+                        
+                        obj.Position = pos_3d
+                        
+                        if pos_3d.Y < -1 then
+                            for i = idx, #objs do
+                                objs[i].Position=vector(0,-5,0)
+                            end
+                            break
+                        end
+                    end
+                    twait()
+                end
+            end)
+        elseif mode == "GUI" then
+            prevmode = 3 
+            
+            local c1, c2 = hsv(mrandom(0,100)*0.01, 1, 1), hsv(mrandom(0,100)*0.01, 1, 1)
+            
+            for i = 1, 25 do 
+                local e = Instance.new("Part")
+                e.Anchored = true
+                e.Transparency = 1
+                e.CanCollide = false
+                e.Size = vector(.1,.1,.1)
+                e.Position = vector(0, -5, 0)
+                e.Parent = workspace
+                
+                local a = Instance.new("BillboardGui")
+                a.Size = UDim2.new(0.4, 6, 0.4, 6)
+                a.LightInfluence = 0
+                a.Enabled = true
+                a.Name = "g"
+                a.Parent = e 
+                
+                
+                local t = Instance.new("TextLabel")
+                t.BackgroundColor3 = c1:lerp(c2,i/25)
+                t.Rotation = 90*(i/25)
+                t.BorderColor3 = color3n(.1, .1, .1)
+                t.BorderSizePixel = 1
+                t.Size = UDim2.new(1, 0, 1, 0)
+                t.BackgroundTransparency = 0.1
+                t.Name = "f"
+                t.TextScaled = true
+                t.Font = Enum.Font.Nunito
+                t.TextColor3 = color3n(1,1,1)
+                t.TextStrokeTransparency = 0
+                t.Text = ""
+                t.Parent = a
+                
+                tinsert(objs, e) 
+            end
+            
+            
+            tspawn(function()
+                
+                local cam = workspace.CurrentCamera
+                local humrp = FindFastChild(plr.Character, "HumanoidRootPart")
+                if not humrp then
+                    b_velocity:Hide("Waiting for character spawn...")
+                    local c = plr.CharacterAdded:Wait()
+                    humrp = c:WaitForChild("HumanoidRootPart",3)
+                    b_velocity:Unhide()
+                end
+                
+                local magn
+                while b_velocity:IsEnabled() do
+                    pcall(function() 
+                        magn = humrp.Position
+                    end)
+                    for idx,obj in ipairs(objs) do
+                        local dt = idx*0.04
+                        local pos_3d = gameball.Position + ((gameball.Velocity*1.4) * dt - (grav * dt^2))
+                        
+                        obj['g']['f'].Rotation = (msin(tick()+idx*0.1)*90)
+                        obj.Position = pos_3d
+                        
+                        if pos_3d.Y < -1 then
+                            for i = idx, #objs do
+                                objs[i].Position=vector(0,-5,0)
+                            end
+                            break
+                        end
+                    end
+                    twait()
+                end
+            end)
+            
+            
+        elseif mode == "Numbers" then
+            prevmode = 4
+            
+            for i = 1, 25 do 
+                local e = Instance.new("Part")
+                e.Anchored = true
+                e.Transparency = 1
+                e.CanCollide = false
+                e.Size = vector(.1,.1,.1)
+                e.Position = vector(0, -5, 0)
+                e.Parent = workspace
+                
+                local a = Instance.new("BillboardGui")
+                a.Size = UDim2.new(0.7, 6, 0.7, 6)
+                a.LightInfluence = 0
+                a.Enabled = true
+                a.Name = "g"
+                a.Parent = e 
+                
+                local t = Instance.new("TextLabel")
+                t.TextColor3 = color3n(0,1,0):lerp(color3n(1,0,0),i/25)
+                t.TextStrokeColor3 = color3n(0,0,0)
+                t.BackgroundTransparency = 1
+                t.Size = UDim2.new(1, 0, 1, 0)
+                t.Name = "f"
+                t.TextScaled = true
+                t.Font = Enum.Font.Nunito
+                t.TextStrokeTransparency = 0
+                t.Text = i
+                t.Parent = a
+                
+                tinsert(objs, e) 
+            end
+
+
+            tspawn(function()
+                
+                local cam = workspace.CurrentCamera
+
+                while b_velocity:IsEnabled() do
+                    for idx,obj in ipairs(objs) do
+                        local dt = idx*0.04
+                        local pos_3d = gameball.Position + ((gameball.Velocity*1.4) * dt - (grav * dt^2))
+                        
+                        obj.Position = pos_3d
+                        
+                        if pos_3d.Y < -1 then
+                            for i = idx, #objs do
+                                objs[i].Position=vector(0,-5,0)
+                            end
+                            break
+                        end
+                    end
+                    twait()
+                end
+            end)
+        end
+    end)    
+    b_velocity.OnDisable:Connect(function() 
+        if prevmode == 1 then
+            twait(0.5)
+            for _,obj in ipairs(objs) do
+                for x=1,3 do
+                    pcall(function() 
+                        obj:Remove()
+                    end)
+                end
+            end
+            objs = {}
+        else
+            for _,obj in ipairs(objs) do
+                obj:Destroy() 
+            end
+            objs = {}
+        end
+    end)
+    
+    b_velocitymode.OnSelection:Connect(function() 
+        if b_velocity:IsEnabled() then
+            b_velocity:Disable()
+            b_velocity:Enable()
+        end
+    end)
+end
+--clicktp
+do
+    p_cctp.OnEnable:Connect(function()
+        connections["CCTP"] = mouse.Button1Down:Connect(function()
+            if uis:IsKeyDown(Enum.KeyCode.LeftControl) then
+                -- if click and left control then
+                -- do this shit
+
+                local hrp = FindFastChild(plr.Character, "HumanoidRootPart")
+                if not hrp then return end
+
+                pcall(function()
+                    mouse.TargetFilter = workspace.RestrictedCircle
+                end)
+
+                -- shouldve just pcalled kek
+                local lv = hrp.CFrame.LookVector
+                local p = mouse.Hit.Position + vector(0, 3, 0)
+                hrp.CFrame = cframe(p, p+lv)
+
+                -- overengineered but idc
+            end
+        end)
+
+    end)
+
+    p_cctp.OnDisable:Connect(function()
+        connections["CCTP"]:Disconnect()
+    end)
+end
+--spamthrow
+do
+    b_spamshoot.OnEnable:Connect(function()
+        -- shooting uses invokeserver which yields
+        -- until it gets a response so don't try
+        -- to shoot too often or else you'll lag
+        
+        local startShooting = replicated.Ball.StartShooting
+        local endShooting = replicated.Ball.EndShooting
+        
+        local threads = 0
+        while b_spamshoot:IsEnabled() do
+            -- start shooting
+            startShooting:FireServer()
+            -- increment how many threads are being made
+            threads += 1
+
+            cresume(ccreate(function()
+                -- end shooting
+                endShooting:InvokeServer(true, "Perfect")
+                -- dec threads (after server response)
+                threads -= 1
+            end))
+            twait(0.05)
+            if threads > 50 then
+                -- if too many yielding threads then wait
+                twait(0.1)
+            end
+        end
+    end)
+end
+--auto ib
+do 
+    b_autoinbound.OnEnable:Connect(function() 
+        connections["IB"] = workspace.ChildAdded:Connect(function(c) 
+            if c.Name == "ThrowIn" then
+                print("New circle")
+                -- if the ib thing gets spawned then
+                -- wait for the circle thing
+                local f = workspace:WaitForChild("RestrictedCircle", 5)
+                -- if the circle exists then check for 
+                -- if it's for your team
+                if f.Display.BrickColor == plr.TeamColor then
+                    print("Is on team")
+                    -- shoddy method but idc
+                    -- i'll probably refactor this at some point
+
+                    local humrp = FindFastChild(plr.Character, "HumanoidRootPart")
+                    if not humrp then
+                        warn("Can't inbound; character not alive")
+                        ui:NewNotification("Inbound","Couldn't take inbound, character's not alive", 4)
+                        return
+                    end
+
+                    
+                    if gameball.Parent == workspace then
+                        -- i would use some variable shit but
+                        -- the ball gets reset every new game
+                        -- this is easier
+                        humrp.CFrame = c.CFrame
+
+                    end
+
+                    -- print("Inbounded") --just in case i need to test
+                end
+            end
+        end)
+    end)
+
+    b_autoinbound.OnDisable:Connect(function()
+        connections["IB"]:Disconnect()
+    end)
+
+    b_autoinbound:Assert("firetouchinterest")
+end
+--power dunks
+do 
+    b_powerdunk.OnEnable:Connect(function() 
+        local new = PhysicalProperties.new(100, 0.3, 0.5)
+        
+        -- whoever made power dunks originally
+        -- just pasted inf yield kek
+
+        while b_powerdunk:IsEnabled() do
+            for i,v in ipairs(plr.Character:GetChildren()) do
+                if FindFastChild(v, "CustomPhysicalProperties") then
+                    v.CustomPhysicalProperties = new
+                end
+            end
+
+            
+            twait(10) 
+            -- change properties on spawn and on enable is better
+            -- but it's easier this way and is still more performant
+            -- than < 3.0.0
+        end
+    end)
+
+    b_powerdunk.OnDisable:Connect(function() 
+        local new = PhysicalProperties.new(0.7, 0.3, 0)
+
+        for i,v in ipairs(plr.Character:GetChildren()) do
+            if FindFastChild(v, "CustomPhysicalProperties") then
+                v.CustomPhysicalProperties = new
+            end
+        end
+    end)
+end
+--ball fly
+do 
+    local ballfly
+    
+    b_fly.OnEnable:Connect(function() 
+        local g = rimpositions.GetOffensiveRim(plr)
+
+        ballfly = Instance.new("BodyPosition")
+        ballfly.Parent = gameball
+        ballfly.D = 125
+        ballfly.MaxForce = vector(999999, 999999, 999999)
+        ballfly.Position = vector(g.X / 1.1, g.Y, g.Z)
+        
+        while b_fly:IsEnabled() do
+            pcall(function() 
+                local g = rimpositions.GetOffensiveRim(plr)
+                
+                ballfly.Position = vector(g.X / 1.1, g.Y, g.Z)
+                ballfly.Parent = gameball
+            end)
+            twait(20)
+        end 
+    end)
+
+    b_fly.OnDisable:Connect(function() 
+        ballfly:Destroy()
+    end)
+end
+-- no delay
+do
+    p_nodelay.OnEnable:Connect(function() 
+        local chr = plr.Character
+
+        connections["ND"] = plr.CharacterAdded:Connect(function(c) 
+            
+        end)
+
+        if not FindFastChild(chr, "BallControl") then 
+            warn("[ND] No character, waiting until next spawn to enable") 
+            return 
+        end
+        local s = getsenv(chr["BallControl"]["Defense - Client"])["Steal_Ball"]
+        setconstant(s, 31, 0)
+
+    end)
+    p_nodelay.OnDisable:Connect(function() 
+        connections["ND"]:Disconnect()
+
+        local chr = plr.Character
+        if not FindFastChild(chr, "BallControl") then
+            ui:NewMessagebox("Oopsies","You have to be spawned in!")
+            p_nodelay:Disable()
+            return
+        end
+
+        local s = getsenv(chr["BallControl"]["Defense - Client"])["Steal_Ball"]
+        setconstant(s, 31, 1.2)
+    end)
+end
+-- hbe
+do 
+    p_hbe.OnEnable:Connect(function() 
+        if not plr.Character then
+            p_hbe:Hide("Waiting for character spawn...")
+            plr.CharacterAdded:Wait()
+            p_hbe:Unhide()
+            twait(0.35)
+        end
+        
+        
+        local h = FindFastChild(plr.Character, "HumanoidRootPart")
+        
+        
+        connections["HBE1"] = plr.CharacterAdded:Connect(function(c)
+            local h = c:WaitForChild("HumanoidRootPart", 3)
+            if not h then 
+                warn("[HBE] Couldn't apply HBE properly! Try resetting")
+                ui:NewNotification("Oopsies","Something went wrong, check your console " .. (syn and getsynasset and "(internal synapse ui)" or "(F9 or insert)"), 3)
+                return 
+            end 
+            
+			local size = p_hbesize:GetValue()
+			h.Size = vector(size, 2, size)
+			h.Transparency = 0.7
+
+			connections["HBE2"]:Disconnect()
+			twait()
+			connections["HBE2"] = p_hbesize.OnValueChanged:Connect(function(size) 
+            	h.Size = vector(size, 2, size)
+        	end)
+        end)
+
+        if not h then 
+            warn("[HBE] No character, waiting until respawn")
+            return 
+        end
+        
+        local size = p_hbesize:GetValue()
+        h.Size = vector(size, 2, size)
+        h.Transparency = 0.7
+        
+        connections["HBE2"] = p_hbesize.OnValueChanged:Connect(function(size) 
+            h.Size = vector(size, 2, size)
+        end)
+        
+    end)
+    p_hbe.OnDisable:Connect(function() 
+        local h = FindFastChild(plr.Character, "HumanoidRootPart")
+        if h then
+            h.Size = vector(2, 2, 1)
+            h.Transparency = 1  
+        end
+        
+        connections["HBE1"]:Disconnect()
+        connections["HBE2"]:Disconnect()
+    end)
+    
+    local hbe2cons = {}
+    p_hbe2.OnEnable:Connect(function()
+        for _,p in ipairs(players:GetPlayers()) do
+            if p == plr then continue end
+            
+            local con = p.CharacterAdded:Connect(function(c) 
+                if p.Team ~= plr.Team then
+                    local humrp = c:WaitForChild("HumanoidRootPart", 5)
+                    humrp.Size = vector(p_hbesize:GetValue(), 2, p_hbesize:GetValue())
+                    humrp.Transparency = 0.7
+                end
+            end)
+            
+            tinsert(hbe2cons, con)
+            
+            local humrp = FindFastChild(p.Character, "HumanoidRootPart")
+            if humrp and p.Team ~= plr.Team then
+                humrp.Size = vector(p_hbesize:GetValue(), 2, p_hbesize:GetValue())
+                humrp.Transparency = 0.7
+            end
+        end
+        
+        connections["OHBE1"] = p_hbesize.OnValueChanged:Connect(function() 
+            for _,p in ipairs(players:GetPlayers()) do
+                if p == plr then continue end
+                local humrp = FindFastChild(p.Character, "HumanoidRootPart")
+                if humrp and p.Team ~= plr.Team then
+                    humrp.Size = vector(p_hbesize:GetValue(), 2, p_hbesize:GetValue())
+                    humrp.Transparency = 0.7
+                end
+            end
+        end)
+        
+    end)
+    p_hbe2.OnDisable:Connect(function() 
+        for _,con in ipairs(hbe2cons) do con:Disconnect() end
+        for _,p in ipairs(players:GetPlayers()) do 
+            if p == plr then continue end
+            local humrp = FindFastChild(p.Character, "HumanoidRootPart")
+            if humrp then 
+                humrp.Size = vector(2,2,1) 
+                humrp.Transparency = 1 
+            end
+        end
+        if connections["OHBE1"] then
+            connections["OHBE1"]:Disconnect()
+        end
+        
+        
+    end)
+end
+-- speedhack
+do 
+    p_speed.OnEnable:Connect(function()
+        local hum = FindFastChild(plr.Character, "Humanoid")
+        connections["SPD"] = plr.CharacterAdded:Connect(function(c) 
+            hum = c:WaitForChild("Humanoid", 4)
+            if not hum then
+                warn("[SPD] Humanoid not found; speedhack won't work. Try resetting.") 
+            end
+        end)
+        rs:BindToRenderStep("JH3-SPD", 1400, function() 
+            pcall(function() 
+                hum.WalkSpeed = 21
+            end)
+        end)
+    end)
+    
+    p_speed.OnDisable:Connect(function()
+        rs:UnbindFromRenderStep("JH3-SPD")
+        
+        local hum = FindFastChild(plr.Character, "Humanoid")
+        if not hum then return end 
+        
+        if uis:IsKeyDown("LeftShift") then -- Enum.KeyCode.LeftShift
+            hum.WalkSpeed = 20
+        else
+            hum.WalkSpeed = 16
+        end
+        
+    end)
+end
+-- njcd
+do 
+    local leftside = workspace.Floor.LeftSide.Stand.Hoop.GoalDetection
+    local rightside = workspace.Floor.RightSide.Stand.Hoop.GoalDetection
+    
+    -- this is a completely scuffed method
+    -- but i dont want to deal with debug library shit
+    -- when its not as good or as compatible
+    
+    
+    p_njcd.OnEnable:Connect(function() 
+        -- get hum
+        local function hook(c) 
+            local hum = FindFastChild(c, "Humanoid") or c:WaitForChild("Humanoid", 3)
+            local humrp = FindFastChild(c, "HumanoidRootPart")
+            local anim = hum:LoadAnimation(c.BallControl["Defense - Client"].Block)
+            
+            if not hum then
+                warn("[NJCD] Oopsies; something went wrong. Try disabling no jump cd, resetting, and re-enabling. [1]") 
+            end
+            if not humrp then
+                warn("[NJCD] Oopsies; something went wrong. Try disabling no jump cd, resetting, and re-enabling. [2]") 
+            end
+            if not anim then 
+                warn("[NJCD] Oopsies; something went wrong. Try disabling no jump cd, resetting, and re-enabling. [3]") 
+            end
+            
+            ctx:UnbindAction("JH3-NJCD")
+            
+            ctx:BindActionAtPriority("JH3-NJCD",function(_,is) 
+                if is == Enum.UserInputState.Begin then
+                    if hum.FloorMaterial == Enum.Material.Air then
+                        return
+                    end 
+                    
+                    
+                    anim:play(0.25)
+                    twait(0.02)
+                    
+                    if (humrp.Position - leftside.Position).Magnitude < 10 then
+                        hum.JumpPower = 21.52
+                    elseif (humrp.Position - rightside.Position).Magnitude < 10 then
+                        hum.JumpPower = 21.52
+                    else
+                        hum.JumpPower = 18.64
+                    end
+                    
+                    hum.Jump = true
+                    twait(0.02)
+                    hum.JumpPower = 0
+                    
+                end
+            end, false, 999999, Enum.KeyCode.Space)
+        end
+        
+        connections["NJCD2"] = plr.CharacterAdded:Connect(function(c) 
+            hook(c)
+            
+            
+        end)
+        
+        if FindFastChild(plr.Character, "Humanoid") then         
+            hook(plr.Character) 
+        end 
+    end)
+    
+    p_njcd.OnDisable:Connect(function() 
+        ctx:UnbindAction("JH3-NJCD")
+        connections["NJCD2"]:Disconnect()
+    end)
+end
+-- AUTO GREEN
+do 
+    b_autogreen.OnEnable:Connect(function() 
+        local stop = replicated.Ball.EndShooting
+        local m = b_autogreenm:GetSelectedOption()
+        
+        if m == "Keyrelease" then
+            connections["AG1"] = workspace.ChildAdded:Connect(function(c) 
+                if c.Name ~= "ShotMeter" then return end
+                if FindFastChild(plr.Character, "Basketball") or statepointer.Value == "Free Throw" then
+                    local circle = (
+                        FindFastChild(c, "SurfaceGui") or 
+                        c:WaitForChild("SurfaceGui", 3)
+                    )
+                    circle = (
+                        FindFastChild(circle, "Circle") or 
+                        circle:WaitForChild("Circle", 3)
+                    )
+                    
+                    
+                    local pointer
+                    
+                    twait(0.02)
+                    local children = circle:GetChildren()
+                    for i,v in pairs(children) do
+                        if v.BackgroundColor3.R == 1 then
+                            if tonumber(v.Name) > 15 then
+                                pointer = circle[v.Name-3]
+                                break
+                            end
+                        end
+                    end
+                    
+                    if not pointer then pointer = circle["130"] end
+                    
+                    
+                    pointer.BackgroundColor3 = color3n(0.27, 0.14, 0.76)
+                    connections["AG2"] = pointer:GetPropertyChangedSignal("BackgroundColor3"):Connect(function()
+                        
+                        
+                        
+                        keyrelease(0x52)
+                        --vim:SendKeyEvent(false, Enum.KeyCode.R, false, nil)
+                        connections["AG2"]:Disconnect()
+                    end)
+                    
+            
+                end
+            end)
+            
+        elseif m == "Bar cutter" then
+            connections["AG1"] = workspace.ChildAdded:Connect(function(c) 
+                if c.Name ~= "ShotMeter" then return end
+                if FindFastChild(plr.Character, "Basketball") or statepointer.Value == "Free Throw" then
+                    
+                    local circle = (
+                        FindFastChild(c, "SurfaceGui") or 
+                        c:WaitForChild("SurfaceGui", 3)
+                    )
+                    circle = (
+                        FindFastChild(circle, "Circle") or 
+                        circle:WaitForChild("Circle", 3)
+                    )
+                    circle:WaitForChild("1",2)
+                    circle.Visible = false
+                    
+                    local pointer
+                    
+                    twait(0.02)
+                    
+                    local children = circle:GetChildren()
+                    for i,v in ipairs(children) do
+                        if v.BackgroundColor3.R == 1 then
+                            if tonumber(v.Name) > 15 then
+                                pointer = circle[v.Name]
+                                break
+                            end
+                        end
+                    end
+                    if not pointer then pointer = circle["134"] end
+                    
+                    twait()
+                    
+                    for x = pointer.Name, 200 do
+                        circle[x]:Destroy()
+                    end
+                    circle.Visible = true
+                end
+            end)
+            
+        elseif m == "Public" then
+            connections["AG1"] = workspace.ChildAdded:Connect(function(c) 
+                if c.Name ~= "ShotMeter" then return end
+                if FindFastChild(plr.Character, "Basketball") or statepointer.Value == "Free Throw" then
+                    local circle = (
+                        FindFastChild(c, "SurfaceGui") or 
+                        c:WaitForChild("SurfaceGui", 3)
+                    )
+                    circle = (
+                        FindFastChild(circle, "Circle") or 
+                        circle:WaitForChild("Circle", 3)
+                    )
+                    
+                    
+                    local pointer
+                    
+                    twait(0.02)
+                    local children = circle:GetChildren()
+                    for i,v in pairs(children) do
+                        if v.BackgroundColor3.R == 1 then
+                            if tonumber(v.Name) > 15 then
+                                pointer = circle[v.Name]
+                                break
+                            end
+                        end
+                    end
+                    
+                    if not pointer then pointer = circle["134"] end
+                    
+                    
+                    pointer.BackgroundColor3 = color3n(0.27, 0.14, 0.76)
+                    pointer.Name = "amoung pequeno"
+                end
+            end)
+            
+        end
+    end)
+
+    b_autogreen.OnDisable:Connect(function() 
+        connections["AG1"]:Disconnect()
+    end)
+    
+    b_autogreenm.OnSelection:Connect(function(n) 
+        if b_autogreen:IsEnabled() then
+            b_autogreen:Disable()
+            b_autogreen:Enable()
+        end
+    end)
+
+end
+-- AIMBOT
+do 
+    b_aimbot.OnEnable:Connect(function() 
+        local mode = b_aimbotm:GetSelection()
+        local humrp = FindFastChild(plr.Character, "HumanoidRootPart")
+        if not humrp then
+            b_aimbot:Hide("Waiting for respawn...")
+            local c = plr.CharacterAdded:Wait()
+            b_aimbot:Unhide()
+            
+            humrp = c:WaitForChild("HumanoidRootPart",2)
+        end
+        
+        connections["AIM1"] = plr.CharacterAdded:Connect(function(c) 
+            humrp = c:WaitForChild("HumanoidRootPart",3)
+        end)
+        
+        
+        local freethrow_end = replicated.Player.Shooting.FreeThrow.EndShooting
+        local freethrow_start = replicated.Player.Shooting.FreeThrow.StartShooting
+        
+        local shoot_end = replicated.Ball.EndShooting
+        local shoot_start = replicated.Ball.StartShooting
+        
+        local layup_end = replicated.Ball.Layup
+
+        
+        
+        local color_table = {
+            Great = color3n(1,1,0),
+            Good = color3(255,170,0),
+            Bad = color3(120,0,0),
+            _ = color3n(0,1,0),
+        }
+        
+        
+        
+        
+        if connections["AIM2"] then connections["AIM2"]:Disconnect() end
+        if mode == "Classic" then
+            connections["AIM2"] = uis.InputBegan:Connect(function(io,gpe) 
+                if io.KeyCode == Enum.KeyCode.R then
+                    local g = rimpositions.GetOffensiveRim(plr)
+                    local d = (humrp.Position - g).Magnitude
+                    local delay = (b_aimbotd:IsEnabled() and b_aimbotdamt:GetValue()*0.001) or (0.499 + (d * 0.0001))
+                    
+                    if statepointer.Value == "Free Throw" then 
+                        freethrow_start:FireServer()
+                        twait(delay)
+                        freethrow_end:InvokeServer(true,"Perfect")
+                        
+                        foreach(workspace.ShotMeter.SurfaceGui.Circle:GetChildren(), function(_,v) 
+                            v.BackgroundColor3 = color3n(0,1,0)
+                        end)
+                        
+                    else
+                        if gameball.Parent ~= plr.Character then
+                            return        
+                        end
+                        
+                        shoot_start:FireServer()
+                        twait(delay)
+                        local invoke = shoot_end:InvokeServer(true,"Perfect")
+                        
+                        local surf = workspace.ShotMeter.SurfaceGui
+                        local cl = surf:Clone()
+                        surf.Enabled = false
+                        
+                        local color = color_table[invoke] or color_table['_']
+                        foreach(cl.Circle:GetChildren(), function(_,v) 
+                            v.BackgroundColor3 = color
+                            v.BorderColor3 = color
+                        end)
+                        
+                        cl.Parent = surf.Parent
+                    
+                        ui:NewNotification("Aimbot",
+                            "Delay:"..tostring(delay):sub(1,10)..
+                            "\nAccuracy:"..tostring(invoke)..
+                            "\nPing:"..tostring(ping:GetValue()):sub(1,10)..
+                            "\nDistance:"..tostring(d):sub(1,10)
+                        ,2)
+                    end
+                end
+            end)
+        end
+        
+    end)
+    
+    b_aimbot.OnDisable:Connect(function()
+        if connections["AIM2"] then connections["AIM2"]:Disconnect() end
+        if connections["AIM1"] then connections["AIM1"]:Disconnect() end
+    end)
+    
+    b_aimbotm.OnSelection:Connect(function() 
+        
+    end)
+end
+-- stealaura
+do 
+    local going = false
+    p_stealaura.OnEnable:Connect(function() 
+        local c = plr.Character
+        local h = FindFastChild(c, "Humanoid")
+        local humrp = FindFastChild(c, "HumanoidRootPart")
+        
+        connections["STA"] = plr.CharacterAdded:Connect(function(c) 
+            going = true
+            
+            h = c:WaitForChild("Humanoid",3)
+            humrp = c:WaitForChild("HumanoidRootPart",3)
+            twait(0.1)
+            
+            local a = h:LoadAnimation(c.BallControl["Defense - Client"].Steal.Left)
+            local b = h:LoadAnimation(c.BallControl["Defense - Client"].Steal.Right)
+            tspawn(function()
+                while going do
+                    a:Play(0, 0.1, 0.2)
+                    twait(0.001)
+                    b:Play(0, 0.1, 0.2)
+                    for _,p in ipairs(players:GetPlayers()) do
+                        if p == plr then continue end
+                        pcall(function() 
+                            local humrp2 = p.Character.HumanoidRootPart
+                            firetouchinterest(humrp, humrp2, 1)
+                            firetouchinterest(humrp, humrp2, 0)
+                        end) 
+                    end
+                    twait(0.001)
+                end
+            end)
+        end)
+        
+        if h then 
+            going = true
+            local a = h:LoadAnimation(c.BallControl["Defense - Client"].Steal.Left)
+            local b = h:LoadAnimation(c.BallControl["Defense - Client"].Steal.Right)
+            tspawn(function()
+                while going do
+                    a:Play(0, 0.05, 0.2)
+                    twait()
+                    b:Play(0, 0.05, 0.2)
+                    for _,p in ipairs(players:GetPlayers()) do
+                        if p == plr then continue end
+                        pcall(function() 
+                            local humrp2 = p.Character.HumanoidRootPart
+                            firetouchinterest(humrp, humrp2, 1)
+                            firetouchinterest(humrp, humrp2, 0)
+                        end) 
+                    end
+                    twait()
+                end
+            end)
+        end
+    end) 
+    p_stealaura.OnDisable:Connect(function() 
+        going = false
+        if connections["STA"] then
+            connections["STA"]:Disconnect() 
+        end
+    end)
+    
+    
+    
+end
+-- antisteal
+do 
+    p_antisteal.OnEnable:Connect(function() 
+        local start = replicated.Ball.StartShooting
+        local stop = replicated.Ball.EndShooting
+        
+        connections["AS1"] = uis.InputBegan:Connect(function(io, gpe) 
+            if io.KeyCode == Enum.KeyCode.G then 
+                if gpe then return end
+                tspawn(function() 
+                    local id = mrandom(0,1500)
+                    --warn("[AS] New thread",id)
+                    start:FireServer()
+                    stop:InvokeServer()
+                    start:FireServer()
+                    stop:InvokeServer()
+                    --warn("[AS] Ended",id)
+                end)
+            end
+        end)
+        
+        ui:NewNotification("Antisteal","Spam G while you aren't shooting to prevent steals.",3)
+    end)
+
+    p_antisteal.OnDisable:Connect(function() 
+        connections["AS1"]:Disconnect()
+    
+    
+    end)
+end
+--auto block
+do 
+    p_autoblock.OnEnable:Connect(function() 
+        local c = plr.Character
+        
+        local hum = FindFastChild(c, "Humanoid")
+        local humrp = FindFastChild(c, "HumanoidRootPart")
+        local anim
+        
+        if not hum then 
+            p_autoblock:Hide("Waiting for character spawn...")
+            plr.CharacterAdded:Wait()
+            p_autoblock:Unhide()
+            
+            twait(0.35)
+            c = plr.Character
+            hum = FindFastChild(c, "Humanoid") or c:WaitForChild("Humanoid",4)
+            humrp = FindFastChild(c, "HumanoidRootPart")
+        end
+        
+        anim = hum:LoadAnimation(c["BallControl"]["Defense - Client"].Block)
+        
+        connections["AB1"] = plr.CharacterAdded:Connect(function(c) 
+            -- get humanoid
+            hum = c:WaitForChild("Humanoid", 3)
+            -- wait for other instances
+            twait(0.05)
+            -- get humrp and load anim
+            humrp = FindFastChild(plr.Character, "HumanoidRootPart")
+            anim = hum:LoadAnimation(c:WaitForChild("BallControl", 3)["Defense - Client"].Block)
+        end)
+        
+        local function jump() 
+            if hum.FloorMaterial == Enum.Material.Air then
+                return
+            end 
+            
+            rs:BindToRenderStep("JH3-AB",900,function() 
+                hum:Move(cframe(humrp.Position, gameball.Position).LookVector)
+            end)
+            twait(0.1)
+            anim:play(0.25)
+            twait(0.02)
+            
+            hum.JumpPower = 18.64
+            hum.Jump = true
+            twait(0.02)
+            hum.JumpPower = 0
+            twait(0.2)
+            rs:UnbindFromRenderStep("JH3-AB")
+        end
+        
+        
+        tspawn(function() 
+            while p_autoblock:IsEnabled() do
+                twait(0.02)
+                for _,p in ipairs(players:GetPlayers()) do
+                    if p == plr then continue end
+                    if p.TeamColor == plr.TeamColor then 
+                        continue 
+                    end 
+                    
+                    pcall(function()
+                        local h = p.Character.HumanoidRootPart 
+                        if (h.Position - humrp.Position).Magnitude < p_autoblockrange:GetValue() then
+                            local hum = p.Character.Humanoid
+                            
+                            for _,track in ipairs(hum:GetPlayingAnimationTracks()) do
+                                local id = track.Animation.AnimationId
+                                if id:match("376938580") or id:match("470725369") or id:match("125750702") then
+                                    if (gameball.PlayerWhoShot.Value ~= plr and gameball.Parent ~= plr.Character) then 
+                                        print("[AUTO BLOCK] False positive, cancelling + delaying")
+                                        twait(0.15)
+                                        return
+                                    end
+                                    if p_autoblockfacecheck:IsEnabled() then
+                                        local cross = humrp.CFrame.LookVector:Cross(h.CFrame.LookVector).Magnitude
+                                        if cross > 0.5 then
+                                            print("[AUTO BLOCK] Face check failed")
+                                            return
+                                        end
+                                    end
+                                    if statepointer.Value == "Free Throw" then
+                                        print("[AUTO BLOCK] In free throws, cancelled jump")
+                                        twait(0.15)
+                                        return
+                                    end
+                                    --they're jumpshotting so jump after them
+                                    twait(0.17)
+                                    jump()
+                                    twait(1)
+                                    break
+                                end
+                            end
+                        end
+                    end)
+                end
+            end
+        end)
+    end)
+    
+    p_autoblock.OnDisable:Connect(function() 
+        rs:UnbindFromRenderStep("JH3-AB")
+        connections["AB1"]:Disconnect()
+        
+    end)
+end
+--better dunks
+do 
+    b_betterdunks.OnEnable:Connect(function()
+        
+        if not plr.Character then
+            b_betterdunks:Hide("Waiting for character spawn...")
+            plr.CharacterAdded:Wait()
+            b_betterdunks:Unhide()
+            twait(0.35)
+            
+        end
+        
+        local hum = FindFastChild(plr.Character, "Humanoid")
+        local ev = replicated.Ball.Dunk.End
+        
+        
+        
+        local function enable(h) 
+            connections["bd2"] = h.AnimationPlayed:Connect(function(at) 
+                if not at then
+                    return
+                end
+                local id = at.Animation.AnimationId
+                if id:match("470209556") or id:match("470698510") then
+                    twait(0.3)
+                    ev:FireServer()
+                end
+            end)
+        
+        
+        end
+        
+        
+        connections["bd1"] = plr.CharacterAdded:Connect(function(c) 
+            hum = c:WaitForChild("Humanoid", 4)
+            connections["bd2"]:Disconnect()
+            enable(hum)
+            
+        end)        
+
+        if hum then enable(hum) end
+    end)
+
+    b_betterdunks.OnDisable:Connect(function() 
+        if connections["bd2"] then
+            connections["bd2"]:Disconnect()
+        end
+        if connections["bd1"] then
+            connections["bd1"]:Disconnect()
+        end
+    
+    end)
+end
+--face all
+do 
+    local force = replicated.Player.Passing.ForceReceiverLook
+    
+    p_lookall.OnClick:Connect(function() 
+        for _,p in ipairs(players:GetPlayers()) do
+            force:FireServer(p)
+        end
+    end)
+end
+-- jump boost
+do
+    local booster = Instance.new("BodyForce")
+    booster.Force = vector(0, p_jumpboostamt:GetValue(), 0)
+    booster.Name = "艺簋蚉缉詢綄胹證"
+    
+    
+    p_jumpboost.OnEnable:Connect(function()
+        if booster == nil then
+            -- failsafe
+            booster = Instance.new("BodyForce")
+            booster.Force = vector(0, p_jumpboostamt:GetValue(), 0)
+            booster.Name = "艺簋蚉缉詢綄胹證" 
+        end
+        
+        
+        connections["BOOST1"] = plr.CharacterAdded:Connect(function(c) 
+            booster.Parent = c:WaitForChild("HumanoidRootPart",5)
+            hook(c)
+        end)
+        
+        local function hook(c) 
+            if connections["BOOST2"] then
+                connections["BOOST2"]:Disconnect()
+            end
+            
+            connections["BOOST2"] = c.ChildAdded:Connect(function(nc) 
+                if nc.Name == "Basketball" then
+                    
+                    booster.Parent = nil
+                    
+                    local sc = true
+                    
+                    while sc do
+                        local nc = c.ChildRemoved:Wait()
+                        if nc.Name == "Basketball" then
+                            twait(0.6)
+                            booster.Parent = c.HumanoidRootPart 
+                            
+                            sc = false
+                            break
+                        end
+                    end
+                end
+            end)
+        end
+        
+        local c = plr.Character
+        if c then
+            hook(c)
+            local b = FindFastChild(c, "Basketball")
+            if not b then
+                booster.Parent = c.HumanoidRootPart
+            end
+        end
+        
+    end) 
+    
+    p_jumpboost.OnDisable:Connect(function()
+        
+        booster.Parent = nil
+        connections["BOOST1"]:Disconnect()
+        connections["BOOST2"]:Disconnect()
+    end)
+    
+    p_jumpboostamt.OnValueChanged:Connect(function(v) 
+        booster.Force = vector(0, v, 0)
+    end)
+    
+end
+-- fix game
+do 
+
+    m_fixgame.OnClick:Connect(function() 
+        local cam = workspace.CurrentCamera
+        local hum = FindFastChild(plr.Character, "Humanoid")
+        local humrp = FindFastChild(plr.Character, "HumanoidRootPart")
+        
+        if hum and cam.CameraSubject ~= hum then
+            cam.CameraSubject = hum
+            warn("Fixed camera not being focused on player")
+        end
+        
+        if humrp and humrp.Anchored == true then
+            humrp.Anchored = false
+            warn("Fixed character being stuck")
+        end
+            
+        
+        ui:NewNotification("Fix game","Successfully fixed any issues. Check console for more details",4)
+    end)
+    
+end
+-- nightmode
+do 
+    
+    m_nightmode.OnEnable:Connect(function() 
+        local d = {}
+        sethiddenproperty(game.Lighting, "Technology",Enum.Technology.Future)
+        
+        tinsert(d,FindFastChild(workspace,"JH3-Nightmode"))
+        tinsert(d,FindFastChild(gameball,"Spotlight"))
+        tinsert(d,FindFastChild(lighting,"JH3-Bloom"))
+        for _,i in ipairs(d) do i:Destroy()end
+        
+        lighting.Ambient = color3(5, 5, 6)
+        lighting.Brightness = 0.1
+        lighting.GlobalShadows = true
+        lighting.TimeOfDay = 1
+        
+        local jhfolder = Instance.new("Folder")
+        jhfolder.Name = "JH3-Nightmode"
+        jhfolder.Parent = workspace
+        
+        local bloom = Instance.new("BloomEffect")
+        bloom.Intensity = 1.2
+        bloom.Threshold = 0.8
+        bloom.Size = 500
+        bloom.Name = "JH3-Bloom"
+        bloom.Parent = lighting
+        
+        local shadow = Instance.new("Part")
+        shadow.Position = vector(0,300,0)
+        shadow.Anchored = true
+        shadow.Name = "shadow"
+        shadow.CanCollide = false
+        shadow.Transparency = 0
+        shadow.Color = color3(0, 0, 0)
+        shadow.Size = vector(3000, 500, 3000)
+        shadow.BottomSurface = Enum.SurfaceType.SmoothNoOutlines
+        shadow.Parent = jhfolder
+        
+        local spot = Instance.new("Part")
+        spot.Anchored = true
+        spot.CanCollide = false
+        spot.Name = "aimball"
+        spot.Transparency = 1 
+        spot.Size = vector(1,1,1)
+        spot.Position = vector(0, 20, 0)
+        spot.Parent = jhfolder
+        
+        local light = Instance.new("SpotLight")
+        light.Color = color3(255, 255, 253)
+        light.Brightness = 1.7
+        light.Range = 999
+        light.Shadows = true
+        light.Angle = 50
+        light.Face = Enum.NormalId.Front
+        light.Parent = spot
+        
+        for z = -3, 3 do 
+            tspawn(function()
+                for x = -3, 3 do
+                    local p1 = Instance.new("Part")
+                    p1.Anchored = true
+                    p1.Position = vector(35 * x, 60, 35 * z)
+                    p1.Name = "1"
+                    p1.CanCollide = false
+                    p1.Transparency = 0
+                    p1.Color = color3(2,2,8)
+                    p1.Size = vector(43, 4, 4)
+                    p1.Rotation = vector(z*6, 0, 90)
+                    p1.TopSurface = Enum.SurfaceType.Smooth
+                    p1.BottomSurface = Enum.SurfaceType.Smooth
+                    p1.Shape = Enum.PartType.Cylinder
+                    p1.Parent = jhfolder
+                    
+                    local p2 = p1:Clone()
+                    p2.Name = "2"
+                    p2.Material = Enum.Material.Neon
+                    p2.Size = vector(1, 3.5, 3.5)
+                    p2.Anchored = false
+                    p2.Shape = Enum.PartType.Cylinder
+                    p2.Parent = p1
+                    
+                    local weld = Instance.new("Weld")
+                    weld.Part0 = p1
+                    weld.Part1 = p2
+                    weld.C0 = cframe(-21.5,0,0)
+                    weld.C1 = cframe(0,0,0)
+                    weld.Parent = p2
+                    
+                    local light = Instance.new("SpotLight")
+                    light.Color = color3(255, 255, 245)
+                    light.Brightness = 0.4
+                    light.Range = 70
+                    light.Shadows = true
+                    light.Angle = 80
+                    light.Face = Enum.NormalId.Left
+                    light.Parent = p2
+                    
+                    p2.Color = light.Color
+                    
+                    local light = Instance.new("SpotLight")
+                    light.Color = color3(255, 255, 235)
+                    light.Brightness = 0.3
+                    light.Range = 55
+                    light.Shadows = true
+                    light.Angle = 85
+                    light.Face = Enum.NormalId.Left
+                    light.Parent = p2
+                    
+                    
+                    twait(0.05)
+                    p2.Anchored = true
+                    
+                    
+                end
+            end)
+        end 
+        
+        tspawn(function() 
+            while m_nightmode:IsEnabled() do
+                twait(0.1)
+                twn(spot, 
+                {CFrame = cframe(
+                    vector(0, 20, 0), 
+                    gameball.Position+vector(0,1,0)
+                )}, 1)
+                
+            end
+        end)
+    end)
+    
+    
+    m_nightmode.OnDisable:Connect(function() 
+        local d = {}
+        tinsert(d,FindFastChild(workspace,"JH3-Nightmode"))
+        tinsert(d,FindFastChild(gameball,"Spotlight"))
+        tinsert(d,FindFastChild(lighting,"JH3-Bloom"))
+        for _,i in ipairs(d) do i:Destroy()end
+        sethiddenproperty(game.Lighting, "Technology",Enum.Technology.Compatibility)
+        
+        lighting.Brightness = 1
+        lighting.Ambient = Color3.fromRGB(127, 127, 127)
+        lighting.GlobalShadows = false
+        lighting.TimeOfDay = 14
+    
+    
+    end)
+end
+-- custom stamina 
+do 
+    local stambarui
+    m_cstamgui.OnEnable:Connect(function() 
+        local c1 = color3n(0, 0.9, 0.2)--color3n(0, 0.9, 0.1)
+        local c2 = color3n(0.9, 0, 0.2)--color3n(0.9, 0, 0.1)
+
+        local staminavalue = plr.PlayerScripts.Events.Player.Stamina.Stamina
+        
+        local function enable(h) 
+            stambarui = Instance.new("BillboardGui")
+            stambarui.AlwaysOnTop = true
+            stambarui.Size = UDim2.fromScale(0, 0.6)
+            stambarui.StudsOffsetWorldSpace = vector(0, 1.25, 0)
+            stambarui.Parent = h
+            
+            local bg = Instance.new("Frame")
+            bg.BackgroundColor3 = color3n(0.13, 0.13, 0.15)
+            bg.BorderColor3 = color3n(0.03, 0.03, 0.05)
+            bg.Size = UDim2.new(1, 0, 1, 0)
+            bg.BorderSizePixel = 0
+            bg.ClipsDescendants = true
+            bg.ZIndex = 2
+            bg.Parent = stambarui
+            
+            local backframe = Instance.new("Frame")
+            backframe.BackgroundColor3 = color3n(0.03, 0.03, 0.05)
+            backframe.BorderColor3 = color3n(0.13, 0.13, 0.15)
+            backframe.Size = UDim2.new(1, 2, 1, 2)
+            backframe.Position = UDim2.new(0, -1, 0, -1)
+            backframe.BorderSizePixel = 1
+            backframe.ClipsDescendants = false
+            backframe.ZIndex = 0
+            backframe.Parent = stambarui
+            
+            local shadow = Instance.new("ImageLabel")
+            shadow.BackgroundTransparency = 1
+            shadow.Image = "rbxassetid://7603818383"
+            shadow.ImageColor3 = Color3.new(0, 0, 0)
+            shadow.ImageTransparency = 0.15
+            shadow.Position = UDim2.new(0.5, 0, 0.5, 0)
+            shadow.AnchorPoint = vector2(0.5, 0.5)
+            shadow.Size = UDim2.new(1, 20, 1, 20)
+            shadow.SliceCenter = Rect.new(15, 15, 175, 175)
+            shadow.SliceScale = 1.3
+            shadow.ScaleType = Enum.ScaleType.Slice
+            shadow.ZIndex = 0
+            shadow.Parent = backframe
+            
+            local shade = Instance.new("Frame")
+            shade.Position = UDim2.new(0, 0, 0, 0)
+            shade.Size = UDim2.new(1, 0, 0, 5)
+            shade.Position = UDim2.new(0, 0, 1, -5)
+            shade.BorderSizePixel = 0
+            shade.BackgroundColor3 = color3n(0, 0, 0)
+            shade.BackgroundTransparency = 0.9
+            shade.ZIndex = 15
+            shade.Parent = bg
+            
+            local stambar = Instance.new("Frame")
+            stambar.AnchorPoint = vector2(1, 0)
+            stambar.Position = UDim2.new(1, 0, 0, 0)
+            stambar.Size = UDim2.new(1, 0, 1, 0)
+            stambar.BorderSizePixel = 0
+            stambar.BackgroundColor3 = c1
+            stambar.ZIndex = 5
+            stambar.Parent = bg
+    
+            local tlabel = Instance.new("TextLabel")
+            tlabel.Font = Enum.Font.Nunito
+            tlabel.Text = "<i>100%</i>"
+            tlabel.RichText = true
+            tlabel.TextColor3 = color3n(0, 0, 0)
+            tlabel.BackgroundTransparency = 1
+            tlabel.TextTransparency = 0.2
+            tlabel.TextStrokeTransparency = 1
+            tlabel.TextXAlignment = Enum.TextXAlignment.Right
+            tlabel.Size = UDim2.new(1, 0, 1, 0)
+            tlabel.Position = UDim2.new(0, 0, 0, 0)
+            tlabel.TextScaled = true
+            tlabel.AnchorPoint = vector2(0, 0)
+            tlabel.Parent = stambar
+            tlabel.ZIndex = 6
+    
+            twn(stambarui, {Size = UDim2.fromScale(4, 0.6)}, 0.3)
+            
+            connections["STAM1"] =  staminavalue.Changed:Connect(function(val) 
+                local amnt = val / 1000
+                
+                stambar.Position = UDim2.new(amnt, 0, 0, 0)
+                stambar.BackgroundColor3 = c2:Lerp(c1, amnt)
+                
+                local n = tostring(mfloor((amnt*100)+0.5))
+    
+                tlabel.Text = "<i>"..n.."%</i>" 
+                
+                if tlabel.Text:match("0") then
+                    tlabel.TextTransparency = 0
+                    twn(tlabel, {TextTransparency = 0.2}, 1) 
+                    
+                end
+                
+                local a,b = mabs(mfloor(val) - 495), mabs(mfloor(val) - 505)
+                
+                if a < 5 then
+                    twn(tlabel, {Position = UDim2.new(0.3, 0, 0, 0), TextColor3 = color3n(1, 1, 1)}, 1)
+                elseif b < 5 then
+                    twn(tlabel, {Position = UDim2.new(0, 0, 0, 0), TextColor3 = color3n(0, 0, 0)}, 1)
+                end
+            end)
+        end
+        
+        local h = FindFastChild(plr.Character, "Head")
+        if h then
+            local bar1 = FindFastChild(h, "StaminaBar")
+            if bar1 then bar1.Enabled = false end
+        
+            enable(h)
+        end
+        
+        connections["STAM2"] = plr.CharacterAdded:Connect(function(c) 
+            twait(1)
+            h = c:WaitForChild("Head", 5)
+            connections["STAM1"]:Disconnect()
+            
+            twait(0.05)
+            if h then
+                local bar1 = h:WaitForChild("StaminaBar",2)
+                bar1.Enabled = false
+                
+                enable(h)
+            end
+        end)
+    end)
+
+    m_cstamgui.OnDisable:Connect(function() 
+        stambarui:Destroy()
+        pcall(function() 
+            connections["STAM1"]:Disconnect()
+            connections["STAM2"]:Disconnect()
+        end)
+        
+        local bar1 = FindFastChild(plr.Character.Head, "StaminaBar")
+        
+        if bar1 then 
+            if p_infstam:IsEnabled() then return end
+            bar1.Enabled = true 
+        end
+        
+    end)
+
+end
+-- screenshare protect
+do 
+    m_hidegui.OnEnable:Connect(function() 
+        local screen = ui:GetScreenGUI()
+        ui:NewMessagebox("Hide GUI","Chat \"/e enable\" to see the gui and \"/e disable\" to hide it",nil,70,-30)
+        
+        connections["HIDE1"] = plr.Chatted:Connect(function(msg) 
+            msg=msg:lower()
+            if msg:match("/e enable") then
+                screen.Enabled = true
+            elseif msg:match("/e disable") then
+                screen.Enabled = false
+            end
+        end)
+    end)
+    
+    m_hidegui.OnDisable:Connect(function() 
+        if connections"HIDE1" then
+            connections["HIDE1"]:Disconnect()
+        end
+    end)
+    
+    m_panic.OnClick:Connect(function() 
+        for _,b in ipairs(ui:GetAllToggles()) do
+            if b:GetText() ~= "Hide GUI" then 
+                b:Disable()    
+            end
+        end
+    end)
+    
+end
+-- deafen
+do 
+    m_deafen.OnEnable:Connect(function() 
+        connections["DE"] = workspace.ChildAdded:Connect(function(child) 
+            if child.ClassName == "Sound" then
+                child.Volume = 0
+                twait(0.05)
+                child:Destroy()
+            end
+        end)
+    end)
+    m_deafen.OnDisable:Connect(function() 
+        connections["DE"]:Disconnect()
+    end)
+end
+-- tp to ball
+do 
+    p_tptoball.OnEnable:Connect(function() 
+        local tptoball
+        local mode = p_tptoballmode:GetSelection()
+        
+        local humrp = FindFastChild(plr.Character, "HumanoidRootPart")
+        connections["TPB"] = plr.CharacterAdded:Connect(function(c) 
+            humrp = c:WaitForChild("HumanoidRootPart",5)
+        end)
+        
+        
+        
+        if mode == "Always" then
+            tptoball = function()
+                humrp.CFrame = gameball.CFrame
+            end
+            
+        elseif mode == "When not holding" then
+            tptoball = function() 
+                if gameball.Parent ~= plr.Character then
+                    humrp.CFrame = gameball.CFrame
+                end
+            end
+            
+        elseif mode == "When teams not holding" then
+            tptoball = function()
+                local h = FindFastChild(gameball.Parent, "Head")
+                if h then
+                    local p = players:GetPlayerFromCharacter(gameball.Parent)
+                    if p.Team ~= plr.Team then
+                        humrp.CFrame = gameball.CFrame
+                    end
+                else
+                    humrp.CFrame = gameball.CFrame 
+                end
+            end
+            
+        elseif mode == "When other team holding" then
+            tptoball = function()
+                local h = FindFastChild(gameball.Parent, "Head")
+                if h then
+                    local p = players:GetPlayerFromCharacter(gameball.Parent)
+                    if p.Team ~= plr.Team then
+                        humrp.CFrame = gameball.CFrame
+                    end
+                end
+            end
+            
+        else
+            tptoball = function() end
+            ui:NewNotification("Oopsies","Invalid TP to ball mode (this message shouldn't appear, DM topit)",6) 
+        end
+        
+        
+        rs:BindToRenderStep("JH3-TPB",600,function() 
+            pcall(tptoball)
+        end)
+    end)
+
+    p_tptoball.OnDisable:Connect(function() 
+        rs:UnbindFromRenderStep("JH3-TPB")
+        connections["TPB"]:Disconnect()
+        
+    end)    
+end
+--highlight
+do 
+    local highlight
+    b_highlight.OnEnable:Connect(function() 
+        
+        
+		highlight = Instance.new("SphereHandleAdornment")
+		highlight.Name = "瞁礼窣聽縶符眱"
+		highlight.Adornee = gameball
+		highlight.AlwaysOnTop = true
+		highlight.ZIndex = 10
+		highlight.Radius = gameball.Size.X
+		highlight.Transparency = 0.65
+		highlight.Color3 = color3n(1,1,1)
+		highlight.Parent = gameball
+		
+		local pick = mrandom(1,3) do
+		    if pick == 1 then
+        		local cl = 0
+        		rs:BindToRenderStep("JH3-BH", 1888, function(dt)
+        		    cl = (cl>10 and 0 or (cl + dt*2))
+        		    
+        		    highlight.Color3 = hsv(cl*0.1, 1, 1)
+        		    
+        		end)
+		    elseif pick == 2 then
+    	        highlight.Color3 = color3n(1,1,1)
+    	    else
+        		local cl = 0
+        		rs:BindToRenderStep("JH3-BH", 1888, function(dt)
+        		    cl = msin(tick())*0.1
+        		    highlight.Color3 = hsv(0.7+cl, 1, 1)
+        		    
+        		end)
+            end
+		end
+    end)
+    
+    b_highlight.OnDisable:Connect(function() 
+        highlight:Destroy()
+        
+        rs:UnbindFromRenderStep("JH3-BH")
+        print("Disabled")
+    end)
+end
+-- cam fix
+do 
+    m_camfix.OnEnable:Connect(function() 
+        local cam = workspace.CurrentCamera
+        
+        if cam.CameraType == Enum.CameraType.Custom then
+            pcall(function() 
+                cam.CameraSubject = plr.Character.Humanoid
+            end)
+        end
+        connections["CF1"] = cam:GetPropertyChangedSignal("CameraType"):Connect(function() 
+            twait(0.02)
+            pcall(function() 
+                cam.CameraSubject = plr.Character.Humanoid
+            end)
+        end)
+    end)
+    
+    m_camfix.OnDisable:Connect(function() 
+        if connections["CF1"] then connections["CF1"]:Disconnect() end
+    end)
+    
+    m_camfix:Enable()
+end
+
+-- { Finish } --
+
+
+ui:Ready()
+
+
+
+ui.Exiting:Connect(function() 
+    for i,v in ipairs(ui:GetAllToggles()) do
+        if v:IsEnabled() == true then
+            v:Disable() 
+        end
+    end
+    for i,v in pairs(connections) do
+        print("Disconnected",i)
+        v:Disconnect() 
+    end
+end)
+
+b_aimbotm:Select(2)
+b_aimbotm.OnSelection:Connect(function(val,idx) 
+    if val == "One press" then
+        b_aimbot:Hide("Unfinished")
+    else
+        b_aimbot:Unhide()
+    end
+end)
+
+-- bypass """""anticheat"""""
+do
+    local function BypassAnticheat(c) 
+        twait(1.5)
+        local move = c:WaitForChild("Movement",5)
+        local script = (move and FindFastChild(move, "Constrain")) or nil
+        
+        if not script then 
+            warn("[ANTICHEAT BYPASS] Couldn't find script")
+            return 
+        end
+        if getscripthash then
+            if getscripthash(script):sub(1,15) ~= "45a54c7a09b3775" then
+                warn("[ANTICHEAT BYPASS] Looks like anticheat updated, let topit know")
+            end
+        else
+            script.Disabled = true
+            print("[ANTICHEAT BYPASS] Bypassed anticheat")
+            --[[
+            ui:NewNotification("Script support","Your exploit may not support all features, check console for info")
+            warn("[ANTICHEAT BYPASS] Missing function 'getscripthash', can't verify if the anticheat bypass will work")
+            
+            if getgc == nil then
+                warn("[ANTICHEAT BYPASS] Missing function 'getgc', your exploit must be really shit")
+            end
+            if debug == nil then
+                warn("[ANTICHEAT BYPASS] Missing library 'debug', your exploit must be really shit")
+            end
+            if getconnections == nil then
+                warn("[ANTICHEAT BYPASS] Missing function 'getconnections', your exploit must be really shit")
+            end
+            
+            
+            warn("[ANTICHEAT BYPASS] For better script support, use an exploit such as Comet, KRNL, Fluxus, or Synapse")]]
+        end
+        --[[
+        cresume(ccreate(function()
+            local matches = {}
+            for _,proto in ipairs(getgc()) do
+                if islclosure(proto) then
+                    pcall(function() 
+                        local c1 = getconstant(proto, 1)
+                        local c2 = getconstant(proto, 2)
+                        local c7 = getconstant(proto, 7)
+                        
+                        
+                        if c1 == "Velocity" then
+                            if c2 == "X" then
+                                if c7 == "Magnitude" then
+                                    tinsert(matches, proto) 
+                                end
+                            end
+                            twait(0.0001)
+                        end
+                        
+                        
+                    end) 
+                end
+            end
+            
+            
+            for _,con in ipairs(getconnections(rs.Heartbeat)) do
+                for _,proto in ipairs(matches) do 
+                    if con.Function == proto then
+                        con:Disable()
+                    end
+                end
+            end
+            
+            print("[ANTICHEAT BYPASS] Bypassed anticheat")
+            matches = nil
+        end))]]
+        
+    end
+    
+    
+    
+    connections["AC_BYP1"] = plr.CharacterAdded:Connect(BypassAnticheat) 
+    if plr.Character then
+        BypassAnticheat(plr.Character) 
+    end
+end
+-- custom afk
+do 
+    
+    local function handle() 
+        -- get remotes and other stuff
+        local clientafk1 = plr.PlayerScripts.Events.Player.IsAFK -- bindables that do clientside
+        local clientafk2 = plr.PlayerScripts.Resetting.SetState -- afk handling
+        
+        local returning = replicated.Player.AFK.IsReturning -- server remotes that 
+        local away = replicated.Player.AFK.IsAway -- actually make you afk
+        
+        local afktext1 = plr.PlayerGui.AFK.Manual -- the afk messages 
+        local afktext2 = plr.PlayerGui.AFK.Automatic -- that might show up
+        
+        
+        -- get where sidebuttons are located
+        local afkbutton = plr.PlayerGui.Sidebar.Container
+        
+        
+        for _,child in ipairs(afkbutton:GetChildren()) do
+            if child.ClassName == "TextButton" then
+                local t = FindFastChild(child, "Top")
+                
+                -- check for a button with AFK (normal hoops text)
+                if t and t.Text:match("AFK") then
+                    afkbutton = child
+                    break
+                end
+            end
+        end
+        
+        
+        if afkbutton.ClassName ~= "TextButton" then
+            -- if button isnt found then check again
+            
+            afkbutton = plr.PlayerGui.Sidebar.Container
+            for _,child in ipairs(afkbutton:GetChildren()) do
+                if child.ClassName == "TextButton" then
+                    local t = FindFastChild(child, "Top")
+                    
+                    if t.Text:match("View") == nil and t.Text:match("Wear") == nil then
+                        
+                        -- if the text doesnt have View and Wear then
+                        -- its probably the afk button
+                        
+                        afkbutton = child
+                        break
+                    end
+                end
+            end
+        end
+        
+        -- get the old button
+        local old = afkbutton
+        
+        -- copy it to a new button and parent the new button to container
+        afkbutton = old:Clone()
+        afkbutton.Parent = plr.PlayerGui.Sidebar.Container
+        -- hide it 
+        afkbutton.Position = UDim2.new(-2, 0, 2, 20)
+        
+        -- handle deleting some instances if found and warning if not
+        do 
+            local a = FindFastChild(afkbutton, "ButtonActive");
+            local b = FindFastChild(afkbutton, "Clicked");
+            local c = FindFastChild(afkbutton, "Arrow");
+            
+            (a and a.Destroy or warn)(a or "[CUSTOM AFK] Button missing ButtonActive boolvalue");
+            (b and b.Destroy or warn)(b or "[CUSTOM AFK] Button missing Clicked bindable");
+            (c and c.Destroy or warn)(c or "[CUSTOM AFK] Button missing Arrow");
+        end
+        
+        -- handle mouse events, self explanatory
+        do 
+            local bcolor1 = color3(255, 170, 0)
+            local bcolor2 = color3(229, 153, 0)
+            local bcolor3 = color3(191, 127, 0)
+            
+            afkbutton.MouseEnter:Connect(function() 
+                afkbutton.Top.BackgroundColor3 = bcolor2
+                afkbutton.Bottom.BackgroundColor3 = bcolor3
+            end)
+            
+            afkbutton.MouseLeave:Connect(function() 
+                afkbutton.Top.BackgroundColor3 = bcolor1
+                afkbutton.Bottom.BackgroundColor3 = bcolor2
+                
+                afkbutton.Top.Position = UDim2.new(0, 0, 0, 0)
+            end)
+            
+            
+            afkbutton.MouseButton1Down:Connect(function() 
+                afkbutton.Top.Position = UDim2.new(0, 0, 0.05, 0)
+            end)
+            
+            afkbutton.MouseButton1Up:Connect(function() 
+                afkbutton.Top.Position = UDim2.new(0, 0, 0, 0)
+            end)
+            
+            afkbutton.MouseButton1Click:Connect(function() 
+                if plr.Character then
+                    clientafk1:Fire(true)
+                    clientafk2:Fire("AFK", true)
+                    away:FireServer()
+                    
+                    afkbutton.Top.Text = "Click to return"
+                else 
+                    clientafk1:Fire(false)
+                    clientafk2:Fire("AFK", false)
+                    returning:FireServer()
+                    
+                    afkbutton.Top.Text = "Click to go AFK"
+                    
+                    plr.CharacterAdded:Wait()
+                    twait(0.04)
+                    workspace.CurrentCamera.CameraSubject = FindFastChild(plr.Character, "Humanoid")
+                end
+            end)
+            
+            afkbutton.Top.BackgroundColor3 = bcolor1
+            afkbutton.Bottom.BackgroundColor3 = bcolor2
+            
+        end
+        
+        -- animate the older button out and delete it
+        tspawn(function()
+            local t = twn(old,{Position = UDim2.new(-2, 0, 2, 20)}, 0.5)
+            t.Completed:Wait()
+            old:Destroy()
+        end)
+        -- disable the normal afk script
+        pcall(function() 
+            plr.PlayerScripts.GameControl["AFK - Client"].Disabled = true
+        end)
+        -- animate the newer button in after a short delay
+        tdelay(0.7, function() twn(afkbutton, {Position = UDim2.new(0, 0, 2, 20)}, 0.3) end)
+        
+        
+        
+        -- override afk message
+        afktext1.Visible = true
+        afktext2.Visible = false
+        afktext1.Text = "Welcome, "..plr.DisplayName..".\nJeff Hoops custom AFK loaded."
+        
+        wait(4)
+        
+        afktext1.Visible = false
+    end
+    
+    -- finish
+    handle()
+end
+
+
